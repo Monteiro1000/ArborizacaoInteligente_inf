@@ -2818,7 +2818,9 @@ img {
 }
 
 .solution-section .eyebrow-dark {
-  color: #12b674;
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 
@@ -2924,17 +2926,18 @@ img {
 
 .plans-badge {
   display: inline-block;
-  padding: 0.4rem 1.1rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(8px);
+  border: none;
   font-weight: 700;
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .plans-title-wrapper h3 {
@@ -3612,7 +3615,9 @@ img {
 }
 
 .events-section .eyebrow-dark {
-  color: #a3ffd1;
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 
@@ -3863,7 +3868,9 @@ img {
 }
 
 .contact-section .eyebrow-dark {
-  color: #12b674;
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 
@@ -5678,15 +5685,17 @@ img {
 
 .arb-invite-badge {
   display: inline-block;
-  padding: 0.28rem 0.85rem;
-  border-radius: 999px;
-  background: rgba(22, 190, 125, 0.18);
-  border: 1px solid rgba(22, 190, 125, 0.55);
-  color: var(--arb-emerald);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  color: var(--arb-white);
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .arb-invite-text {
@@ -5907,11 +5916,13 @@ img {
   font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: var(--arb-gold);
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  background: rgba(232, 190, 80, 0.14);
-  border: 1px solid rgba(232, 190, 80, 0.4);
+  color: var(--arb-white);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .arb-card-suit {
@@ -6417,16 +6428,18 @@ img {
 
 .arvplanos-badge {
   display: inline-block;
-  padding: 0.38rem 1.05rem;
-  border-radius: 999px;
-  background: rgba(22, 190, 125, 0.16);
-  border: 1px solid rgba(232, 190, 80, 0.55);
-  color: var(--arv-gold);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  color: var(--arv-white);
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   margin-bottom: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .arvplanos-title {
