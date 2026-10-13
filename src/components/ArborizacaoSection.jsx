@@ -1,8 +1,179 @@
-import React from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ARBOR_CARDS } from '../data/arborData';
 
+/**
+ * Seção Arborização - Dinâmica Interativa de Cartas de Baralho
+ * Máquina de estados:
+ * - 'stacked' (Estado 1): Baralho empilhado com carta-convite no topo
+ * - 'fanned'  (Estado 2): Carta-convite sai e as 3 cartas abrem em leque (desktop) / pilha (mobile)
+ * - 'reading' (Estado 3): Uma carta vira em Flip 3D e exibe o conteúdo completo; apenas 1 aberta por vez
+ */
 export default function ArborizacaoSection() {
-  const renderIcon = (type) => {
+  const [deckState, setDeckState] = useState('stacked'); // 'stacked' | 'fanned' | 'reading'
+  const [openCardIndex, setOpenCardIndex] = useState(null); // null | 0 | 1 | 2
+  const [inView, setInView] = useState(false);
+  const [liveAnnouncement, setLiveAnnouncement] = useState(
+    'Baralho do conhecimento da arborização fechado. Clique na carta do topo para distribuir as cartas.'
+  );
+
+  const sectionRef = useRef(null);
+  const inviteBtnRef = useRef(null);
+  const cardBtnRefs = useRef([]);
+  const closeBtnRefs = useRef([]);
+
+  // IntersectionObserver para disparar a entrada da seção apenas uma vez
+  useEffect(() => {
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setInView(true);
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(sectionEl);
+    return () => observer.disconnect();
+  }, []);
+
+  // Transição Estado 1 -> Estado 2 (Distribuir cartas em leque)
+  const handleDealCards = useCallback(() => {
+    setDeckState('fanned');
+    setOpenCardIndex(null);
+    setLiveAnnouncement(
+      'Cartas distribuídas. Três cartas disponíveis: escolha uma carta para ler seu conteúdo.'
+    );
+    setTimeout(() => {
+      cardBtnRefs.current[0]?.focus();
+    }, 320);
+  }, []);
+
+  // Transição Estado 2 -> Estado 3 (Abrir/virar uma carta específica)
+  const handleSelectCard = useCallback((index) => {
+    setOpenCardIndex((prevIndex) => {
+      if (prevIndex === index) {
+        setDeckState('fanned');
+        setLiveAnnouncement(`Carta ${ARBOR_CARDS[index].title} fechada.`);
+        setTimeout(() => {
+          cardBtnRefs.current[index]?.focus();
+        }, 50);
+        return null;
+      }
+      setDeckState('reading');
+      setLiveAnnouncement(`Carta aberta: ${ARBOR_CARDS[index].title}.`);
+      setTimeout(() => {
+        closeBtnRefs.current[index]?.focus();
+      }, 150);
+      return index;
+    });
+  }, []);
+
+  // Fechar a carta ativa e voltar ao Estado 2 (Leque)
+  const handleCloseActiveCard = useCallback(
+    (e) => {
+      if (e) e.stopPropagation();
+      const lastIndex = openCardIndex;
+      setOpenCardIndex(null);
+      setDeckState('fanned');
+      setLiveAnnouncement('Carta fechada. Você está na visualização em leque.');
+      if (lastIndex !== null) {
+        setTimeout(() => {
+          cardBtnRefs.current[lastIndex]?.focus();
+        }, 50);
+      }
+    },
+    [openCardIndex]
+  );
+
+  // Botão Reembaralhar -> Volta tudo ao Estado 1 (Pilha inicial)
+  const handleReshuffle = useCallback(() => {
+    setOpenCardIndex(null);
+    setDeckState('stacked');
+    setLiveAnnouncement(
+      'Baralho reembaralhado. Clique na carta-convite para distribuir novamente.'
+    );
+    setTimeout(() => {
+      inviteBtnRef.current?.focus();
+    }, 250);
+  }, []);
+
+  // Fechar carta com tecla ESC
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && deckState === 'reading') {
+        handleCloseActiveCard();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [deckState, handleCloseActiveCard]);
+
+  // SVG do circuito-árvore (padrão da logo no verso das cartas)
+  const renderCircuitTreeEmblem = () => (
+    <svg
+      className="arb-emblem-svg"
+      viewBox="0 0 120 120"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle
+        cx="60"
+        cy="60"
+        r="52"
+        stroke="#e8be50"
+        strokeWidth="1.2"
+        strokeDasharray="6 4"
+        opacity="0.65"
+      />
+      <circle
+        cx="60"
+        cy="60"
+        r="42"
+        stroke="#16be7d"
+        strokeWidth="1.2"
+        opacity="0.45"
+      />
+      {/* Tronco e trilhas de circuito */}
+      <path
+        d="M60 95 V55 M60 72 L40 54 V40 M60 64 L80 46 V34 M60 55 L48 38 M60 55 L72 38"
+        stroke="#16be7d"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Nós de circuito dourados e esmeralda */}
+      <circle cx="40" cy="40" r="4" fill="#e8be50" />
+      <circle cx="80" cy="34" r="4" fill="#e8be50" />
+      <circle cx="48" cy="38" r="3.5" fill="#16be7d" />
+      <circle cx="72" cy="38" r="3.5" fill="#16be7d" />
+      <circle cx="60" cy="28" r="4.5" fill="#e8be50" />
+      <path d="M60 55 V28" stroke="#16be7d" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Folhas estilizadas */}
+      <path
+        d="M34 54 C24 50 22 38 32 36 C38 42 38 50 34 54 Z"
+        fill="#16be7d"
+        opacity="0.85"
+      />
+      <path
+        d="M86 48 C96 44 98 32 88 30 C82 36 82 44 86 48 Z"
+        fill="#16be7d"
+        opacity="0.85"
+      />
+    </svg>
+  );
+
+  const renderCardIcon = (type) => {
     switch (type) {
       case 'tree':
         return (
@@ -33,123 +204,265 @@ export default function ArborizacaoSection() {
   };
 
   return (
-    <section className="arborizacao-section" id="arborizacao">
-      <div className="container">
-        <div className="section-header text-center">
-          <h2>Arborização: O que é e por que é um desafio urgente?</h2>
-          <p className="section-text">
-            Compreenda a importância vital da cobertura arbórea urbana e o cenário alarmante enfrentado no Brasil, na região Nordeste e especialmente no estado de Sergipe.
+    <section
+      ref={sectionRef}
+      className="arb-section"
+      id="arborizacao"
+      data-deck-state={deckState}
+      data-in-view={inView ? 'true' : 'false'}
+      aria-labelledby="arb-section-title"
+    >
+      {/* Região aria-live para leitores de tela anunciarem mudanças de estado */}
+      <div className="arb-sr-only" aria-live="polite" aria-atomic="true">
+        {liveAnnouncement}
+      </div>
+
+      {/* Backdrop invisível para fechar ao clicar fora quando uma carta está aberta (Estado 3) */}
+      {deckState === 'reading' && (
+        <div
+          className="arb-reading-backdrop"
+          onClick={handleCloseActiveCard}
+          aria-hidden="true"
+        />
+      )}
+
+      <div className="container arb-container">
+        <header className="arb-header">
+          <h2 id="arb-section-title" className="arb-title">
+            Arborização: O que é e por que é um desafio urgente?
+          </h2>
+          <p className="arb-subtitle">
+            Compreenda a importância vital da cobertura arbórea urbana e o cenário enfrentado no Brasil, no Nordeste e em Sergipe.
           </p>
+        </header>
+
+        {/* Barra de controle quando o baralho está aberto (Estados 2 e 3) */}
+        <div
+          className={`arb-controls ${deckState !== 'stacked' ? 'is-visible' : ''}`}
+        >
+          <p className="arb-instruction">
+            {deckState === 'fanned'
+              ? 'Selecione uma carta abaixo para virar e ler o diagnóstico completo:'
+              : 'Clique em outra carta para alternar ou feche para voltar ao leque:'}
+          </p>
+          <button
+            type="button"
+            className="arb-reshuffle-btn"
+            onClick={handleReshuffle}
+            aria-label="Reembaralhar cartas e voltar ao monte inicial"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="16 3 21 3 21 8" />
+              <line x1="4" y1="20" x2="21" y2="3" />
+              <polyline points="21 16 21 21 16 21" />
+              <line x1="15" y1="15" x2="21" y2="21" />
+              <line x1="4" y1="4" x2="9" y2="9" />
+            </svg>
+            <span>Reembaralhar</span>
+          </button>
         </div>
 
-        <div className="arborizacao-grid">
-          {ARBOR_CARDS.map((card) => {
-            const cardClasses = `arbor-card ${card.isHighlight ? 'highlight-card ' : ''}reveal`;
-            const iconClasses = `arbor-icon-wrapper ${card.iconType === 'warning' ? 'warning' : card.iconType === 'danger' ? 'danger' : ''}`.trim();
+        {/* Palco do Baralho */}
+        <div className="arb-stage">
+          {/* CARTA-CONVITE (Topo da pilha no Estado 1) */}
+          <button
+            ref={inviteBtnRef}
+            type="button"
+            className={`arb-invite-card ${deckState !== 'stacked' ? 'is-dismissed' : ''}`}
+            onClick={handleDealCards}
+            aria-expanded={deckState !== 'stacked'}
+            aria-controls="arb-cards-deck"
+            tabIndex={deckState === 'stacked' ? 0 : -1}
+          >
+            <span className="arb-card-corner arb-corner-tl" aria-hidden="true">✦</span>
+            <span className="arb-card-corner arb-corner-tr" aria-hidden="true">✦</span>
+            <div className="arb-invite-emblem">{renderCircuitTreeEmblem()}</div>
+            <span className="arb-invite-badge">Baralho do Conhecimento</span>
+            <strong className="arb-invite-text">
+              Clique aqui e passe as cartas do conhecimento da arborização
+            </strong>
+            <span className="arb-invite-cta">
+              <span>Distribuir 3 Cartas</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </span>
+            <span className="arb-card-corner arb-corner-bl" aria-hidden="true">✦</span>
+            <span className="arb-card-corner arb-corner-br" aria-hidden="true">✦</span>
+          </button>
 
-            return (
-              <article
-                key={card.id}
-                className={cardClasses}
-                style={{ '--delay': card.delay }}
-              >
-                <div className={iconClasses}>
-                  {renderIcon(card.iconType)}
-                </div>
+          {/* AS 3 CARTAS DE CONTEÚDO */}
+          <div className="arb-deck" id="arb-cards-deck" role="list">
+            {ARBOR_CARDS.map((card, index) => {
+              const isOpen = openCardIndex === index;
+              const isOtherOpen = openCardIndex !== null && openCardIndex !== index;
 
-                {card.isHighlight && card.statNum && (
-                  <div className="stat-highlight">
-                    <span className="stat-num">{card.statNum}</span>
-                    <span className="stat-label">
-                      {card.statLabel}
-                      {card.statSourceUrl && (
-                        <a
-                          href={card.statSourceUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="stat-source-badge"
-                          title="Acessar base de dados do IBGE"
+              return (
+                <div
+                  key={card.id}
+                  role="listitem"
+                  className={`arb-card-slot arb-slot-${index + 1} ${isOpen ? 'is-open' : ''} ${isOtherOpen ? 'is-dimmed' : ''}`}
+                  data-card-index={index}
+                  data-card-open={isOpen ? 'true' : 'false'}
+                >
+                  <div className="arb-card-flipper">
+                    {/* VERSO / CAPA DA CARTA (Visível no Estado 1 empilhado e Estado 2 em leque) */}
+                    <button
+                      ref={(el) => (cardBtnRefs.current[index] = el)}
+                      type="button"
+                      className="arb-card-face arb-card-back"
+                      onClick={() =>
+                        deckState === 'stacked'
+                          ? handleDealCards()
+                          : handleSelectCard(index)
+                      }
+                      aria-expanded={isOpen}
+                      aria-controls={`arb-card-content-${card.id}`}
+                      tabIndex={deckState === 'stacked' ? -1 : 0}
+                    >
+                      <div className="arb-card-back-frame">
+                        <div className="arb-card-back-top">
+                          <span className="arb-card-number">0{index + 1} / 03</span>
+                          <span className="arb-card-suit" aria-hidden="true">
+                            {renderCardIcon(card.iconType)}
+                          </span>
+                        </div>
+
+                        <div className="arb-card-back-center">
+                          {renderCircuitTreeEmblem()}
+                          <h3 className="arb-card-back-title">{card.title}</h3>
+                        </div>
+
+                        <div className="arb-card-back-bottom">
+                          <span className="arb-card-flip-prompt">
+                            Virar carta e ler ↻
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* FRENTE DE LEITURA DA CARTA (Visível no Estado 3 ao virar a carta; acessível a leitores de tela mesmo virada) */}
+                    <article
+                      id={`arb-card-content-${card.id}`}
+                      className="arb-card-face arb-card-front"
+                    >
+                      <div className="arb-card-front-header">
+                        <div className="arb-card-front-meta">
+                          <span className={`arb-card-icon ${card.iconType}`}>
+                            {renderCardIcon(card.iconType)}
+                          </span>
+                          <span className="arb-card-step">Carta 0{index + 1}</span>
+                        </div>
+                        <button
+                          ref={(el) => (closeBtnRefs.current[index] = el)}
+                          type="button"
+                          className="arb-card-close"
+                          onClick={handleCloseActiveCard}
+                          aria-label={`Fechar carta ${card.title}`}
+                          tabIndex={isOpen ? 0 : -1}
                         >
-                          ({card.statSourceLabel} ↗)
-                        </a>
-                      )}
-                    </span>
-                  </div>
-                )}
+                          &times;
+                        </button>
+                      </div>
 
-                <h3>{card.title}</h3>
+                      <div className="arb-card-front-body">
+                        <h3 className="arb-card-front-title">{card.title}</h3>
 
-                {card.desc && <p>{card.desc}</p>}
+                        {card.isHighlight && card.statNum && (
+                          <div className="arb-stat-highlight">
+                            <span className="arb-stat-num">{card.statNum}</span>
+                            <span className="arb-stat-label">
+                              {card.statLabel}{' '}
+                              {card.statSourceUrl && (
+                                <a
+                                  href={card.statSourceUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="arb-stat-source"
+                                  tabIndex={isOpen ? 0 : -1}
+                                >
+                                  ({card.statSourceLabel} ↗)
+                                </a>
+                              )}
+                            </span>
+                          </div>
+                        )}
 
-                {card.bullets && (
-                  <ul className="arbor-list">
-                    {card.bullets.map((b, idx) => (
-                      <li key={idx}>
-                        <div>
-                          <strong>{b.label}:</strong> {b.text}
-                          {b.sourceUrl && (
+                        {card.desc && <p className="arb-card-desc">{card.desc}</p>}
+
+                        {card.bullets && (
+                          <ul className="arb-card-list">
+                            {card.bullets.map((b, idx) => (
+                              <li key={idx}>
+                                <strong>{b.label}:</strong> {b.text}{' '}
+                                {b.sourceUrl && (
+                                  <a
+                                    href={b.sourceUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="arb-source-badge"
+                                    tabIndex={isOpen ? 0 : -1}
+                                  >
+                                    [Fonte: {b.sourceLabel} ↗]
+                                  </a>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+
+                        {card.paragraphs &&
+                          card.paragraphs.map((p, idx) => (
+                            <p
+                              key={idx}
+                              className="arb-card-desc"
+                              dangerouslySetInnerHTML={{
+                                __html: p
+                                  .replace(
+                                    /Censo do IBGE \(2022\)/g,
+                                    '<a href="https://censo2022.ibge.gov.br/" target="_blank" rel="noopener noreferrer" class="arb-inline-link"><strong>Censo do IBGE (2022) ↗</strong></a>'
+                                  )
+                                  .replace(
+                                    /Sergipe é o estado brasileiro com o menor índice de vias públicas arborizadas de todo o país\./g,
+                                    '<strong>Sergipe é o estado brasileiro com o menor índice de vias públicas arborizadas de todo o país.</strong>'
+                                  )
+                                  .replace(
+                                    /ilhas de calor/g,
+                                    '<a href="https://www.gov.br/mma/pt-br" target="_blank" rel="noopener noreferrer" class="arb-inline-link"><strong>ilhas de calor ↗</strong></a>'
+                                  )
+                                  .replace(
+                                    /Arborização Inteligente/g,
+                                    '<strong>Arborização Inteligente</strong>'
+                                  )
+                              }}
+                            />
+                          ))}
+
+                        {card.officialSource && (
+                          <div className="arb-official-source">
+                            <span className="arb-official-label">
+                              Fonte Oficial Citada:
+                            </span>
                             <a
-                              href={b.sourceUrl}
+                              href={card.officialSource.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="bullet-source-link"
-                              title={`Consultar fonte oficial: ${b.sourceLabel}`}
+                              className="arb-official-link"
+                              tabIndex={isOpen ? 0 : -1}
                             >
-                              [Fonte: {b.sourceLabel} ↗]
+                              <strong>{card.officialSource.name}</strong>
+                              <span>{card.officialSource.doc} ↗</span>
                             </a>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                {card.paragraphs && card.paragraphs.map((p, idx) => (
-                  <p
-                    key={idx}
-                    dangerouslySetInnerHTML={{
-                      __html: p
-                        .replace(
-                          /Censo do IBGE \(2022\)/g,
-                          '<a href="https://censo2022.ibge.gov.br/" target="_blank" rel="noopener noreferrer" class="source-inline-link" title="Acessar publicação oficial do Censo Demográfico do IBGE"><strong>Censo do IBGE (2022) ↗</strong></a>'
-                        )
-                        .replace(
-                          /Sergipe é o estado brasileiro com o menor índice de vias públicas arborizadas de todo o país\./g,
-                          '<strong>Sergipe é o estado brasileiro com o menor índice de vias públicas arborizadas de todo o país</strong>.'
-                        )
-                        .replace(
-                          /ilhas de calor/g,
-                          '<a href="https://www.gov.br/mma/pt-br" target="_blank" rel="noopener noreferrer" class="source-inline-link" title="Saiba mais sobre ilhas de calor e políticas climáticas do MMA"><strong>ilhas de calor ↗</strong></a>'
-                        )
-                        .replace(/Arborização Inteligente/g, '<strong>Arborização Inteligente</strong>')
-                    }}
-                  />
-                ))}
-
-                {card.officialSource && (
-                  <div className="official-source-box">
-                    <div className="source-box-title">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                      </svg>
-                      <span>Fonte Oficial Citada:</span>
-                    </div>
-                    <a
-                      href={card.officialSource.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="official-source-link"
-                      title="Acessar portal oficial do IBGE"
-                    >
-                      <strong>{card.officialSource.name}</strong>
-                      <span>{card.officialSource.doc} ↗</span>
-                    </a>
+                          </div>
+                        )}
+                      </div>
+                    </article>
                   </div>
-                )}
-              </article>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

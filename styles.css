@@ -150,8 +150,17 @@ img {
   transition: opacity 0.2s ease;
 }
 
+.topbar .brand {
+  gap: 0;
+  cursor: pointer;
+}
+
 .brand:hover {
   opacity: 0.85;
+}
+
+.topbar .brand:hover {
+  opacity: 1;
 }
 
 .brand-logo {
@@ -172,6 +181,40 @@ img {
   display: flex;
   flex-direction: column;
   line-height: 1.15;
+}
+
+.topbar .brand-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: 0;
+  transform: translateX(-8px);
+  pointer-events: none;
+  transition:
+    max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.topbar .brand.show-name .brand-text {
+  max-width: 320px;
+  opacity: 1;
+  margin-left: 0.75rem;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+@media (min-width: 769px) {
+  .topbar .brand:hover .brand-text,
+  .topbar .brand:focus-visible .brand-text {
+    max-width: 320px;
+    opacity: 1;
+    margin-left: 0.75rem;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
 }
 
 .brand-text strong {
@@ -258,22 +301,24 @@ img {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  min-width: 48px;
-  min-height: 48px;
-  width: 48px;
-  height: 48px;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
+  min-width: 0;
+  min-height: 0;
+  width: auto;
+  height: auto;
   padding: 0;
   cursor: pointer;
   z-index: 60;
-  transition: all 0.25s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .menu-toggle:active {
   transform: scale(0.94);
-  background: rgba(255, 255, 255, 0.18);
+  background: transparent;
 }
 
 .menu-toggle .hamburger-line,
@@ -735,25 +780,39 @@ img {
 }
 
 @media (max-width: 768px) {
-  .topbar {
+  .topbar,
+  .topbar.scrolled {
     width: 100%;
     border-radius: 0;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.25rem;
     margin: 0;
-    height: 60px;
-    background: rgba(2, 24, 63, 0.88);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    height: auto;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-bottom: none;
+    box-shadow: none;
   }
 
   .site-header {
-    padding: 0 0 3.5rem;
+    padding: 0 0 2.5rem;
     min-height: auto;
   }
 
-  .brand {
-    gap: 0.6rem;
+  .site-header::before {
+    background-image: url("assets/equipe-robotse2.jpg");
+    background-size: cover;
+    background-position: center 38%;
+    background-repeat: no-repeat;
+  }
+
+  .topbar .brand {
+    gap: 0;
+  }
+
+  .topbar .brand.show-name .brand-text {
+    margin-left: 0.6rem;
   }
 
   .brand-logo {
@@ -771,6 +830,15 @@ img {
 
   .menu-toggle {
     display: inline-flex;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    padding: 0;
+    min-width: 0;
+    min-height: 0;
+    width: auto;
+    height: auto;
   }
 
   .nav-backdrop {
@@ -823,19 +891,41 @@ img {
     align-items: center;
     justify-content: space-between;
     padding: 14px 18px;
-    border-bottom: 1px solid rgba(16, 92, 162, 0.08);
+    border-bottom: none;
     min-height: 60px;
-    background: #f8fbff;
+    background: #ffffff;
   }
 
   .nav-drawer-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0;
     font-weight: 700;
     color: #061e73;
     font-size: 0.95rem;
     font-family: var(--font-display);
+    cursor: pointer;
+  }
+
+  .nav-drawer-brand-text {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left: 0;
+    transform: translateX(-6px);
+    transition:
+      max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.25s ease,
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav-drawer-brand.show-name .nav-drawer-brand-text {
+    max-width: 240px;
+    opacity: 1;
+    margin-left: 10px;
+    transform: translateX(0);
   }
 
   .nav-drawer-logo {
@@ -843,29 +933,31 @@ img {
     height: 32px;
     border-radius: 50%;
     object-fit: contain;
+    flex-shrink: 0;
   }
 
   .nav-close-btn {
-    min-width: 48px;
-    min-height: 48px;
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: rgba(6, 30, 115, 0.06);
+    min-width: 0;
+    min-height: 0;
+    width: auto;
+    height: auto;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 28px;
     line-height: 1;
     color: var(--primary-dark);
-    transition: background 0.2s ease, transform 0.15s ease;
+    transition: transform 0.15s ease, opacity 0.2s ease;
   }
 
   .nav-close-btn:active {
     transform: scale(0.92);
-    background: rgba(6, 30, 115, 0.14);
+    background: transparent;
   }
 
   .nav-links-wrapper {
@@ -4345,8 +4437,9 @@ img {
   /* 3. Hero Mobile */
   .hero {
     grid-template-columns: 1fr;
-    padding-top: 1.5rem;
-    padding-bottom: 2.5rem;
+    min-height: auto;
+    padding-top: 2rem;
+    padding-bottom: 1.5rem;
   }
 
   .hero-copy h1 {
@@ -5243,3 +5336,1734 @@ img {
   border-color: rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
 }
+
+/* ==========================================================================
+   SEÇÃO ARBORIZAÇÃO - BARALHO INTERATIVO (.arb-*)
+   Paleta: Azul-marinho (#03093f / #050e64), Esmeralda (#16be7d), Dourado (#e8be50), Branco (#ffffff)
+   ========================================================================== */
+
+.arb-section {
+  --arb-navy-dark: #03093f;
+  --arb-navy: #050e64;
+  --arb-emerald: #16be7d;
+  --arb-gold: #e8be50;
+  --arb-white: #ffffff;
+  --arb-ease-overshoot: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --arb-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  padding: 6.5rem 0 7rem;
+  color: var(--arb-white);
+  background-color: var(--arb-navy-dark);
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(3, 9, 63, 0.88) 0%,
+      rgba(5, 14, 100, 0.78) 50%,
+      rgba(3, 9, 63, 0.94) 100%
+    ),
+    url("assets/arborizacao-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@media (max-width: 768px) {
+  .arb-section {
+    padding: 4.5rem 0 5rem;
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(3, 9, 63, 0.9) 0%,
+        rgba(5, 14, 100, 0.82) 50%,
+        rgba(3, 9, 63, 0.95) 100%
+      ),
+      url("assets/arborizacao-bg-mobile.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+}
+
+/* Utilitário de acessibilidade para leitores de tela */
+.arb-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Backdrop para fechar ao clicar fora no Estado 3 */
+.arb-reading-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 18;
+  background: rgba(3, 9, 63, 0.55);
+  backdrop-filter: blur(3px);
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.arb-container {
+  position: relative;
+  z-index: 20;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Entrada da seção via IntersectionObserver */
+.arb-header,
+.arb-stage {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity 0.7s var(--arb-ease-smooth),
+    transform 0.7s var(--arb-ease-smooth);
+}
+
+.arb-section[data-in-view="true"] .arb-header,
+.arb-section[data-in-view="true"] .arb-stage {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.arb-section[data-in-view="true"] .arb-stage {
+  transition-delay: 120ms;
+}
+
+/* Cabeçalho da seção */
+.arb-header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 2rem;
+}
+
+.arb-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.38rem 1rem;
+  border-radius: 999px;
+  background: rgba(22, 190, 125, 0.14);
+  border: 1px solid rgba(232, 190, 80, 0.55);
+  color: var(--arb-gold);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.arb-title {
+  font-size: clamp(1.85rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: var(--arb-white);
+  line-height: 1.18;
+  margin: 0 0 0.9rem;
+  text-shadow: 0 4px 18px rgba(3, 9, 63, 0.7);
+}
+
+.arb-subtitle {
+  font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+  margin: 0 auto;
+}
+
+/* Barra de controle (instrução + botão Reembaralhar) */
+.arb-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 980px;
+  margin: 0 auto 1.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 14px;
+  background: rgba(3, 9, 63, 0.82);
+  border: 1px solid rgba(232, 190, 80, 0.38);
+  opacity: 0;
+  transform: translate3d(0, -12px, 0);
+  pointer-events: none;
+  transition:
+    opacity 0.35s var(--arb-ease-smooth),
+    transform 0.35s var(--arb-ease-smooth);
+}
+
+.arb-controls.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  pointer-events: auto;
+}
+
+.arb-instruction {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.arb-reshuffle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--arb-navy) 0%, var(--arb-navy-dark) 100%);
+  border: 1.5px solid var(--arb-gold);
+  color: var(--arb-gold);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.25s var(--arb-ease-smooth),
+    opacity 0.25s ease;
+}
+
+.arb-reshuffle-btn:hover {
+  transform: translate3d(0, -2px, 0);
+  background: rgba(232, 190, 80, 0.16);
+  color: var(--arb-white);
+}
+
+.arb-reshuffle-btn:focus-visible {
+  outline: 3px solid var(--arb-emerald);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   PALCO E PROPORÇÃO DE BARALHO (~5:7)
+   ========================================================================== */
+.arb-stage {
+  position: relative;
+  min-height: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1400px;
+}
+
+/* CARTA-CONVITE (Topo da pilha no Estado 1) */
+.arb-invite-card {
+  position: absolute;
+  z-index: 12;
+  width: 320px;
+  height: 448px; /* Proporção exata 5:7 */
+  padding: 2rem 1.65rem;
+  border-radius: 20px;
+  border: 2px solid var(--arb-gold);
+  background:
+    radial-gradient(circle at 50% 28%, rgba(22, 190, 125, 0.2) 0%, transparent 62%),
+    linear-gradient(160deg, var(--arb-navy) 0%, var(--arb-navy-dark) 100%);
+  color: var(--arb-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  cursor: pointer;
+  box-shadow:
+    0 24px 50px rgba(0, 0, 0, 0.65),
+    inset 0 0 0 1px rgba(22, 190, 125, 0.35);
+  will-change: transform, opacity;
+  animation: arb-invite-float 3.6s ease-in-out infinite;
+  transition:
+    transform 0.55s var(--arb-ease-smooth),
+    opacity 0.45s ease;
+}
+
+/* Brilho dourado em loop via pseudo-elemento usando apenas opacity/transform */
+.arb-invite-card::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 23px;
+  border: 2px solid var(--arb-gold);
+  box-shadow: 0 0 24px rgba(232, 190, 80, 0.65);
+  opacity: 0.25;
+  pointer-events: none;
+  animation: arb-invite-glow 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes arb-invite-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -9px, 0);
+  }
+}
+
+@keyframes arb-invite-glow {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.99);
+  }
+  100% {
+    opacity: 0.85;
+    transform: scale(1.015);
+  }
+}
+
+.arb-invite-card:hover {
+  animation-play-state: paused;
+  transform: translate3d(0, -6px, 0) scale(1.02);
+}
+
+.arb-invite-card:focus-visible {
+  outline: 3px solid var(--arb-emerald);
+  outline-offset: 5px;
+}
+
+/* Carta-convite saindo de cena no Estado 2 / 3 */
+.arb-invite-card.is-dismissed {
+  animation: none;
+  opacity: 0;
+  transform: translate3d(0, -70px, 0) scale(0.88);
+  pointer-events: none;
+}
+
+.arb-card-corner {
+  position: absolute;
+  font-size: 1rem;
+  color: var(--arb-gold);
+  opacity: 0.85;
+  line-height: 1;
+}
+
+.arb-corner-tl {
+  top: 14px;
+  left: 16px;
+}
+.arb-corner-tr {
+  top: 14px;
+  right: 16px;
+}
+.arb-corner-bl {
+  bottom: 14px;
+  left: 16px;
+}
+.arb-corner-br {
+  bottom: 14px;
+  right: 16px;
+}
+
+.arb-invite-emblem {
+  width: 112px;
+  height: 112px;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arb-emblem-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.arb-invite-badge {
+  display: inline-block;
+  padding: 0.28rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(22, 190, 125, 0.18);
+  border: 1px solid rgba(22, 190, 125, 0.55);
+  color: var(--arb-emerald);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.arb-invite-text {
+  font-size: 1.18rem;
+  font-weight: 800;
+  line-height: 1.38;
+  color: var(--arb-white);
+  margin: 0.25rem 0;
+}
+
+.arb-invite-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.65rem 1.35rem;
+  border-radius: 999px;
+  background: var(--arb-gold);
+  color: var(--arb-navy-dark);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: transform 0.2s ease;
+}
+
+.arb-invite-card:hover .arb-invite-cta {
+  transform: translate3d(0, -2px, 0);
+}
+
+/* ==========================================================================
+   CONTAINER DAS 3 CARTAS (.arb-deck e .arb-card-slot)
+   ========================================================================== */
+.arb-deck {
+  position: relative;
+  width: 100%;
+  height: 490px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arb-card-slot {
+  position: absolute;
+  width: 320px;
+  height: 448px; /* Proporção ~5:7 */
+  perspective: 1400px;
+  will-change: transform, opacity;
+  transition:
+    transform 0.65s var(--arb-ease-overshoot),
+    opacity 0.45s ease;
+}
+
+/* ESTADO 1 (stacked): Empilhadas atrás da carta-convite com leve deslocamento e rotação */
+.arb-section[data-deck-state="stacked"] .arb-card-slot {
+  pointer-events: none;
+}
+
+.arb-section[data-deck-state="stacked"] .arb-slot-1 {
+  z-index: 9;
+  transform: translate3d(-18px, 10px, 0) rotate(-6deg) scale(0.97);
+  opacity: 0.92;
+  transition-delay: 0ms;
+}
+
+.arb-section[data-deck-state="stacked"] .arb-slot-2 {
+  z-index: 8;
+  transform: translate3d(18px, 14px, 0) rotate(5.5deg) scale(0.95);
+  opacity: 0.85;
+  transition-delay: 60ms;
+}
+
+.arb-section[data-deck-state="stacked"] .arb-slot-3 {
+  z-index: 7;
+  transform: translate3d(-8px, 22px, 0) rotate(-3deg) scale(0.93);
+  opacity: 0.78;
+  transition-delay: 120ms;
+}
+
+/* ESTADO 2 (fanned): Distribuídas em leque no desktop com delay escalonado (150ms) */
+.arb-section[data-deck-state="fanned"] .arb-slot-1 {
+  z-index: 14;
+  transform: translate3d(-345px, 14px, 0) rotate(-6deg);
+  opacity: 1;
+  transition-delay: 0ms;
+}
+
+.arb-section[data-deck-state="fanned"] .arb-slot-2 {
+  z-index: 15;
+  transform: translate3d(0, -10px, 0) rotate(0deg);
+  opacity: 1;
+  transition-delay: 150ms;
+}
+
+.arb-section[data-deck-state="fanned"] .arb-slot-3 {
+  z-index: 16;
+  transform: translate3d(345px, 14px, 0) rotate(6deg);
+  opacity: 1;
+  transition-delay: 300ms;
+}
+
+/* Hover suave em cada carta no Estado 2 */
+.arb-section[data-deck-state="fanned"] .arb-slot-1:hover {
+  transform: translate3d(-345px, -4px, 0) rotate(-3deg) scale(1.03);
+  z-index: 22;
+  transition-delay: 0ms;
+}
+
+.arb-section[data-deck-state="fanned"] .arb-slot-2:hover {
+  transform: translate3d(0, -24px, 0) rotate(0deg) scale(1.03);
+  z-index: 22;
+  transition-delay: 0ms;
+}
+
+.arb-section[data-deck-state="fanned"] .arb-slot-3:hover {
+  transform: translate3d(345px, -4px, 0) rotate(3deg) scale(1.03);
+  z-index: 22;
+  transition-delay: 0ms;
+}
+
+/* ESTADO 3 (reading): Carta selecionada centraliza e expande; as outras recuam */
+.arb-section[data-deck-state="reading"] .arb-card-slot.is-open {
+  z-index: 30;
+  transform: translate3d(0, -6px, 0) rotate(0deg) scale(1.06);
+  opacity: 1;
+  transition-delay: 0ms;
+}
+
+.arb-section[data-deck-state="reading"] .arb-slot-1.is-dimmed {
+  z-index: 11;
+  transform: translate3d(-380px, 24px, 0) rotate(-8deg) scale(0.88);
+  opacity: 0.42;
+  transition-delay: 0ms;
+}
+
+.arb-section[data-deck-state="reading"] .arb-slot-2.is-dimmed {
+  z-index: 11;
+  transform: translate3d(0, 32px, 0) rotate(0deg) scale(0.86);
+  opacity: 0.35;
+  transition-delay: 0ms;
+}
+
+.arb-section[data-deck-state="reading"] .arb-slot-3.is-dimmed {
+  z-index: 11;
+  transform: translate3d(380px, 24px, 0) rotate(8deg) scale(0.88);
+  opacity: 0.42;
+  transition-delay: 0ms;
+}
+
+/* ==========================================================================
+   ROTAÇÃO 3D (FLIPPER E FACES)
+   ========================================================================== */
+.arb-card-flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.65s var(--arb-ease-smooth);
+}
+
+.arb-card-slot.is-open .arb-card-flipper {
+  transform: rotateY(180deg);
+}
+
+.arb-card-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-sizing: border-box;
+}
+
+/* VERSO DA CARTA (.arb-card-back) */
+.arb-card-back {
+  padding: 0.85rem;
+  border: 1.5px solid var(--arb-gold);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(22, 190, 125, 0.18) 0%, transparent 65%),
+    linear-gradient(155deg, var(--arb-navy) 0%, var(--arb-navy-dark) 100%);
+  color: var(--arb-white);
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+}
+
+.arb-card-back:focus-visible {
+  outline: 3px solid var(--arb-emerald);
+  outline-offset: 4px;
+}
+
+.arb-card-back-frame {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(22, 190, 125, 0.42);
+  background-image:
+    linear-gradient(rgba(22, 190, 125, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 190, 125, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.arb-card-back-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.arb-card-number {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--arb-gold);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(232, 190, 80, 0.14);
+  border: 1px solid rgba(232, 190, 80, 0.4);
+}
+
+.arb-card-suit {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(22, 190, 125, 0.16);
+  border: 1px solid rgba(22, 190, 125, 0.45);
+  color: var(--arb-emerald);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arb-card-suit svg {
+  width: 18px;
+  height: 18px;
+}
+
+.arb-card-back-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  margin: auto 0;
+}
+
+.arb-card-back-center .arb-emblem-svg {
+  width: 96px;
+  height: 96px;
+}
+
+.arb-card-back-title {
+  font-size: 1.18rem;
+  font-weight: 800;
+  line-height: 1.32;
+  color: var(--arb-white);
+  margin: 0;
+}
+
+.arb-card-back-bottom {
+  display: flex;
+  justify-content: center;
+}
+
+.arb-card-flip-prompt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(232, 190, 80, 0.15);
+  border: 1px solid var(--arb-gold);
+  color: var(--arb-gold);
+  font-size: 0.84rem;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+
+.arb-card-back:hover .arb-card-flip-prompt {
+  background: var(--arb-gold);
+  color: var(--arb-navy-dark);
+}
+
+/* FRENTE DE LEITURA DA CARTA (.arb-card-front) */
+.arb-card-front {
+  transform: rotateY(180deg);
+  border: 2px solid var(--arb-gold);
+  background: linear-gradient(165deg, var(--arb-navy) 0%, var(--arb-navy-dark) 100%);
+  color: var(--arb-white);
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, 0.75),
+    0 0 28px rgba(22, 190, 125, 0.22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-align: left;
+}
+
+.arb-card-front-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem 0.75rem;
+  border-bottom: 1px solid rgba(22, 190, 125, 0.3);
+  background: rgba(3, 9, 63, 0.65);
+  flex-shrink: 0;
+}
+
+.arb-card-front-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.arb-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(22, 190, 125, 0.18);
+  color: var(--arb-emerald);
+}
+
+.arb-card-icon.warning,
+.arb-card-icon.danger {
+  background: rgba(232, 190, 80, 0.18);
+  color: var(--arb-gold);
+}
+
+.arb-card-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.arb-card-step {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--arb-gold);
+}
+
+/* Botão fechar (Alvo de toque >= 44px) */
+.arb-card-close {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 190, 80, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--arb-white);
+  font-size: 1.5rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.arb-card-close:hover {
+  background: var(--arb-gold);
+  color: var(--arb-navy-dark);
+  transform: scale(1.05);
+}
+
+.arb-card-close:focus-visible {
+  outline: 3px solid var(--arb-emerald);
+  outline-offset: 2px;
+}
+
+/* Corpo rolável interno para textos longos mantendo proporção 5:7 */
+.arb-card-front-body {
+  flex: 1;
+  padding: 1rem 1.15rem 1.2rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--arb-gold) rgba(3, 9, 63, 0.5);
+}
+
+.arb-card-front-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.arb-card-front-body::-webkit-scrollbar-track {
+  background: rgba(3, 9, 63, 0.5);
+}
+
+.arb-card-front-body::-webkit-scrollbar-thumb {
+  background-color: var(--arb-gold);
+  border-radius: 999px;
+}
+
+.arb-card-front-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--arb-gold);
+  margin: 0 0 0.75rem;
+  line-height: 1.3;
+}
+
+.arb-stat-highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 0.85rem;
+  border-radius: 12px;
+  background: rgba(22, 190, 125, 0.14);
+  border-left: 3px solid var(--arb-emerald);
+}
+
+.arb-stat-num {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: var(--arb-emerald);
+  line-height: 1.1;
+}
+
+.arb-stat-label {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.35;
+}
+
+.arb-stat-source {
+  color: var(--arb-gold);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.arb-card-desc {
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 0.75rem;
+}
+
+.arb-card-desc strong {
+  color: var(--arb-gold);
+}
+
+.arb-card-list {
+  margin: 0 0 0.85rem;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.arb-card-list li {
+  font-size: 0.83rem;
+  line-height: 1.48;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.arb-card-list li strong {
+  color: var(--arb-emerald);
+}
+
+.arb-source-badge,
+.arb-inline-link {
+  color: var(--arb-gold);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.arb-official-source {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(232, 190, 80, 0.35);
+  font-size: 0.78rem;
+}
+
+.arb-official-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 0.2rem;
+}
+
+.arb-official-link {
+  display: flex;
+  flex-direction: column;
+  color: var(--arb-gold);
+  text-decoration: none;
+  gap: 0.1rem;
+}
+
+.arb-official-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (Telas médias <= 1080px e Mobile <= 768px / 360px)
+   ========================================================================== */
+@media (max-width: 1080px) and (min-width: 769px) {
+  .arb-section[data-deck-state="fanned"] .arb-slot-1 {
+    transform: translate3d(-240px, 12px, 0) rotate(-5deg) scale(0.92);
+  }
+  .arb-section[data-deck-state="fanned"] .arb-slot-2 {
+    transform: translate3d(0, -8px, 0) rotate(0deg) scale(0.92);
+  }
+  .arb-section[data-deck-state="fanned"] .arb-slot-3 {
+    transform: translate3d(240px, 12px, 0) rotate(5deg) scale(0.92);
+  }
+  .arb-section[data-deck-state="reading"] .arb-slot-1.is-dimmed {
+    transform: translate3d(-250px, 20px, 0) rotate(-6deg) scale(0.82);
+  }
+  .arb-section[data-deck-state="reading"] .arb-slot-3.is-dimmed {
+    transform: translate3d(250px, 20px, 0) rotate(6deg) scale(0.82);
+  }
+}
+
+@media (max-width: 768px) {
+  .arb-container {
+    padding: 0 1rem;
+  }
+
+  .arb-controls {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.85rem 1rem;
+  }
+
+  .arb-reshuffle-btn {
+    width: 100%;
+  }
+
+  .arb-invite-card,
+  .arb-card-slot {
+    width: min(100%, 312px);
+    height: 436px;
+  }
+
+  /* Estado 1 no mobile: pilha centralizada sem vazar lateralmente */
+  .arb-section[data-deck-state="stacked"] .arb-stage {
+    min-height: 470px;
+  }
+
+  .arb-section[data-deck-state="stacked"] .arb-slot-1 {
+    transform: translate3d(-8px, 8px, 0) rotate(-3.5deg) scale(0.96);
+  }
+  .arb-section[data-deck-state="stacked"] .arb-slot-2 {
+    transform: translate3d(8px, 12px, 0) rotate(3.5deg) scale(0.94);
+  }
+  .arb-section[data-deck-state="stacked"] .arb-slot-3 {
+    transform: translate3d(-4px, 18px, 0) rotate(-2deg) scale(0.92);
+  }
+
+  /* Estados 2 e 3 no mobile: Pilha vertical com entrada escalonada e zero scroll horizontal */
+  .arb-section[data-deck-state="fanned"] .arb-stage,
+  .arb-section[data-deck-state="reading"] .arb-stage {
+    min-height: auto;
+  }
+
+  .arb-section[data-deck-state="fanned"] .arb-deck,
+  .arb-section[data-deck-state="reading"] .arb-deck {
+    height: auto;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 0.5rem 0;
+  }
+
+  .arb-section[data-deck-state="fanned"] .arb-card-slot,
+  .arb-section[data-deck-state="reading"] .arb-card-slot {
+    position: relative;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+
+  .arb-section[data-deck-state="fanned"] .arb-slot-1:hover,
+  .arb-section[data-deck-state="fanned"] .arb-slot-2:hover,
+  .arb-section[data-deck-state="fanned"] .arb-slot-3:hover {
+    transform: translate3d(0, -4px, 0) scale(1.01);
+  }
+
+  .arb-section[data-deck-state="reading"] .arb-card-slot.is-open {
+    transform: translate3d(0, 0, 0) scale(1);
+    z-index: 30;
+  }
+
+  .arb-section[data-deck-state="reading"] .arb-card-slot.is-dimmed {
+    transform: translate3d(0, 0, 0) scale(0.96);
+    opacity: 0.45;
+  }
+}
+
+/* ==========================================================================
+   ACESSIBILIDADE: PREFERS-REDUCED-MOTION
+   Sem flip 3D nem abertura em leque animada, apenas fade simples
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .arb-header,
+  .arb-stage,
+  .arb-controls,
+  .arb-invite-card,
+  .arb-invite-card::after,
+  .arb-card-slot,
+  .arb-card-flipper {
+    animation: none !important;
+    transition: opacity 0.25s ease !important;
+  }
+
+  /* Desativa rotação 3D e alterna visibilidade das faces por opacidade */
+  .arb-card-flipper,
+  .arb-card-slot.is-open .arb-card-flipper {
+    transform: none !important;
+  }
+
+  .arb-card-front {
+    transform: none !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .arb-card-slot.is-open .arb-card-back {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .arb-card-slot.is-open .arb-card-front {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ==========================================================================
+   VÍDEO EXPLICATIVO DO PROJETO NA SEÇÃO NOSSA SOLUÇÃO
+   ========================================================================== */
+.solution-video-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 4.5rem;
+}
+
+.solution-video-frame {
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #03093f;
+  border: 2px solid rgba(232, 190, 80, 0.55);
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.5),
+    0 0 32px rgba(22, 190, 125, 0.2);
+}
+
+.solution-video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .solution-video-showcase {
+    margin-bottom: 3rem;
+  }
+
+  .solution-video-frame {
+    max-width: 340px;
+    aspect-ratio: 9 / 16;
+    border-radius: 18px;
+  }
+}
+
+/* ==========================================================================
+   SEÇÃO DE PLANOS: ÁRVORE INTERATIVA EM SVG (.arvplanos-*)
+   Paleta: Azul-marinho (#03093f / #050e64), Esmeralda (#16be7d), Dourado (#e8be50), Branco (#ffffff)
+   ========================================================================== */
+
+.arvplanos-wrapper {
+  --arv-navy-dark: #03093f;
+  --arv-navy: #050e64;
+  --arv-emerald: #16be7d;
+  --arv-gold: #e8be50;
+  --arv-white: #ffffff;
+  --arv-ease-pop: cubic-bezier(0.34, 1.48, 0.64, 1);
+  --arv-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  margin: 0 auto 4.5rem;
+  padding: 3.2rem 2.2rem 2.8rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(22, 190, 125, 0.16) 0%, rgba(5, 14, 100, 0.9) 54%, #03093f 100%);
+  border: 1.5px solid rgba(232, 190, 80, 0.38);
+  box-shadow: 0 26px 64px rgba(0, 0, 0, 0.45);
+  color: var(--arv-white);
+  overflow: hidden;
+}
+
+/* Utilitário sr-only para lista semântica e região aria-live */
+.arvplanos-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Cabeçalho da subseção Planos */
+.arvplanos-header {
+  max-width: 720px;
+  margin: 0 auto 2rem;
+}
+
+.arvplanos-badge {
+  display: inline-block;
+  padding: 0.38rem 1.05rem;
+  border-radius: 999px;
+  background: rgba(22, 190, 125, 0.16);
+  border: 1px solid rgba(232, 190, 80, 0.55);
+  color: var(--arv-gold);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin-bottom: 0.85rem;
+}
+
+.arvplanos-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  font-weight: 800;
+  color: var(--arv-white);
+  margin: 0 0 0.65rem;
+  line-height: 1.2;
+}
+
+.arvplanos-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+  margin: 0 auto;
+}
+
+/* Layout Principal: Árvore + Painel */
+.arvplanos-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .arvplanos-layout.has-open-panel {
+    grid-template-columns: 1.15fr 0.95fr;
+  }
+}
+
+.arvplanos-tree-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.arvplanos-svg {
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.arvplanos-hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.86rem;
+  color: rgba(232, 190, 80, 0.9);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ==========================================================================
+   ANIMAÇÕES DO SVG (Crescimento, Respiração, Hover e Pulso de Energia)
+   Apenas transform, opacity e stroke-dashoffset são animados.
+   ========================================================================== */
+
+/* 1. Entrada (IntersectionObserver): Desenha tronco, galhos e raízes via stroke-dashoffset */
+.arvplanos-draw-path,
+.arvplanos-branch-path,
+.arvplanos-foliage-ring {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition:
+    stroke-dashoffset 0.95s var(--arv-ease-smooth),
+    stroke 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-trunk-main,
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-foliage-ring {
+  stroke-dashoffset: 0;
+  transition-delay: 0ms;
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-delay-1 {
+  stroke-dashoffset: 0;
+  transition-delay: 150ms;
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-delay-2 {
+  stroke-dashoffset: 0;
+  transition-delay: 300ms;
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-delay-3 {
+  stroke-dashoffset: 0;
+  transition-delay: 450ms;
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-delay-4 {
+  stroke-dashoffset: 0;
+  transition-delay: 600ms;
+}
+
+/* Nós aparecem com um pequeno pop após os galhos crescerem */
+.arvplanos-node-group {
+  cursor: pointer;
+  outline: none;
+  opacity: 0;
+  transform: scale(0.65);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity 0.45s ease,
+    transform 0.5s var(--arv-ease-pop);
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-unit-satelite .arvplanos-node-group {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 650ms;
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-unit-drones .arvplanos-node-group {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 800ms;
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-unit-sensores .arvplanos-node-group {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 950ms;
+}
+
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-unit-cadastro .arvplanos-node-group {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 1100ms;
+}
+
+/* Remove delay após entrada para resposta imediata no hover/foco */
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-node-group:hover,
+.arvplanos-wrapper[data-tree-grown="true"] .arvplanos-node-group:focus-visible {
+  transform: scale(1.05);
+  transition-delay: 0ms;
+}
+
+/* Foco visível em dourado (Acessibilidade WCAG AA) */
+.arvplanos-node-group:focus-visible rect {
+  stroke: var(--arv-gold);
+  stroke-width: 2px;
+  stroke-dasharray: 4 3;
+}
+
+/* 2. Repouso: Respiração suave da copa e anéis pulsantes nos nós */
+.arvplanos-canopy-aura {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: arvplanos-breathe 5.5s ease-in-out infinite;
+}
+
+.arvplanos-node-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: arvplanos-ring-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes arvplanos-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.025);
+  }
+}
+
+@keyframes arvplanos-ring-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.78;
+    transform: scale(1.16);
+  }
+}
+
+/* 3. Hover/Foco em um nó: o galho correspondente acende e o resto escurece levemente */
+.arvplanos-branch-unit {
+  transition: opacity 0.3s ease;
+}
+
+.arvplanos-wrapper:not([data-hover-plan="none"]) .arvplanos-branch-unit:not(.is-hovered) {
+  opacity: 0.42;
+}
+
+.arvplanos-wrapper:not([data-hover-plan="none"]) .arvplanos-branch-unit.is-hovered {
+  opacity: 1;
+}
+
+/* 4. Clique/Enter em um nó: Energia flui do tronco até o nó ativo */
+.arvplanos-energy-pulse {
+  stroke-dasharray: 22 78;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.arvplanos-branch-unit.is-active .arvplanos-energy-pulse {
+  opacity: 1;
+  animation: arvplanos-energy-flow 1.4s linear infinite;
+}
+
+@keyframes arvplanos-energy-flow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+
+/* Tipografia dos rótulos no SVG */
+.arvplanos-node-meta {
+  fill: var(--arv-gold);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.arvplanos-node-label {
+  fill: var(--arv-white);
+  font-size: 15.5px;
+  font-weight: 800;
+  transition: fill 0.25s ease;
+}
+
+.arvplanos-branch-unit.is-active .arvplanos-node-label,
+.arvplanos-branch-unit.is-hovered .arvplanos-node-label {
+  fill: var(--arv-gold);
+}
+
+/* ==========================================================================
+   PAINEL DO PLANO (Lateral no Desktop / Abaixo no Tablet / Bottom Sheet no Mobile)
+   ========================================================================== */
+.arvplanos-panel {
+  display: none;
+  opacity: 0;
+  transform: translate3d(24px, 0, 0);
+  transition:
+    opacity 0.35s var(--arv-ease-smooth),
+    transform 0.35s var(--arv-ease-smooth);
+}
+
+.arvplanos-panel.is-open {
+  display: block;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.arvplanos-panel-inner {
+  background: linear-gradient(160deg, var(--arv-navy) 0%, var(--arv-navy-dark) 100%);
+  border: 1.5px solid var(--arv-gold);
+  border-radius: 22px;
+  padding: 1.75rem 1.65rem;
+  box-shadow:
+    0 24px 55px rgba(0, 0, 0, 0.65),
+    0 0 28px rgba(22, 190, 125, 0.2);
+}
+
+.arvplanos-panel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.15rem;
+}
+
+.arvplanos-panel-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.arvplanos-panel-altitude {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  color: var(--arv-white);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.arvplanos-panel-featured {
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: var(--arv-gold);
+  color: var(--arv-navy-dark);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arvplanos-panel-close {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 190, 80, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--arv-white);
+  font-size: 1.5rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.arvplanos-panel-close:hover {
+  background: var(--arv-gold);
+  color: var(--arv-navy-dark);
+  transform: scale(1.05);
+}
+
+.arvplanos-panel-close:focus-visible {
+  outline: 3px solid var(--arv-gold);
+  outline-offset: 2px;
+}
+
+.arvplanos-panel-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.arvplanos-panel-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(22, 190, 125, 0.16);
+  border: 1px solid rgba(22, 190, 125, 0.45);
+  color: var(--arv-emerald);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.arvplanos-panel-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.arvplanos-panel-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--arv-gold);
+  margin: 0 0 0.35rem;
+  line-height: 1.28;
+}
+
+.arvplanos-panel-summary {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.arvplanos-panel-section {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(3, 9, 63, 0.55);
+  border: 1px solid rgba(22, 190, 125, 0.24);
+}
+
+.arvplanos-panel-subtitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--arv-emerald);
+  margin: 0 0 0.65rem;
+}
+
+.arvplanos-panel-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.arvplanos-panel-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.88rem;
+  line-height: 1.48;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.arvplanos-check {
+  color: var(--arv-emerald);
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.arvplanos-source-link {
+  color: var(--arv-gold);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.arvplanos-panel-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-bottom: 1.35rem;
+}
+
+.arvplanos-meta-box {
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(232, 190, 80, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.arvplanos-meta-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+}
+
+.arvplanos-meta-value {
+  font-size: 0.88rem;
+  color: var(--arv-white);
+  line-height: 1.35;
+}
+
+.arvplanos-price {
+  color: var(--arv-gold);
+  font-size: 0.98rem;
+}
+
+.arvplanos-panel-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.arvplanos-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 48px;
+  padding: 0.75rem 1.35rem;
+  border-radius: 12px;
+  background: var(--arv-emerald);
+  color: var(--arv-navy-dark);
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.arvplanos-cta-btn:hover {
+  transform: translate3d(0, -2px, 0);
+  background: var(--arv-gold);
+}
+
+.arvplanos-cta-btn:focus-visible {
+  outline: 3px solid var(--arv-gold);
+  outline-offset: 2px;
+}
+
+.arvplanos-nav-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.arvplanos-arrow-btn {
+  min-height: 44px;
+  padding: 0.45rem 0.95rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 190, 80, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--arv-gold);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.arvplanos-arrow-btn:hover {
+  background: rgba(232, 190, 80, 0.18);
+  color: var(--arv-white);
+}
+
+.arvplanos-arrow-btn:focus-visible {
+  outline: 2px solid var(--arv-gold);
+  outline-offset: 2px;
+}
+
+.arvplanos-step-indicator {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.arvplanos-backdrop {
+  display: none;
+}
+
+/* ==========================================================================
+   RESPONSIVO: TABLET (641px - 1023px) E MOBILE (<= 640px Bottom Sheet)
+   ========================================================================== */
+@media (max-width: 1023px) and (min-width: 641px) {
+  .arvplanos-panel {
+    transform: translate3d(0, 20px, 0);
+  }
+}
+
+@media (max-width: 640px) {
+  .arvplanos-wrapper {
+    padding: 2.2rem 1rem 2rem;
+    border-radius: 20px;
+    margin-bottom: 3rem;
+  }
+
+  /* Rótulos maiores no SVG para leitura fácil em telas pequenas */
+  .arvplanos-node-meta {
+    font-size: 11.5px;
+  }
+
+  .arvplanos-node-label {
+    font-size: 17.5px;
+  }
+
+  .arvplanos-panel-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Backdrop escuro atrás do Bottom Sheet no mobile */
+  .arvplanos-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    background: rgba(3, 9, 63, 0.68);
+    backdrop-filter: blur(3px);
+  }
+
+  /* Painel em formato Bottom Sheet (altura máx. 70vh com scroll interno) */
+  .arvplanos-panel {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    max-height: 70vh;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(0, 105%, 0);
+    transition:
+      transform 0.38s var(--arv-ease-smooth),
+      opacity 0.3s ease;
+  }
+
+  .arvplanos-panel.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .arvplanos-panel-inner {
+    border-radius: 22px 22px 0 0;
+    border-bottom: none;
+    padding: 1.35rem 1.2rem 1.75rem;
+  }
+}
+
+/* ==========================================================================
+   ACESSIBILIDADE: PREFERS-REDUCED-MOTION
+   Árvore já desenhada, sem pulsos, transições apenas de opacidade
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .arvplanos-draw-path,
+  .arvplanos-branch-path,
+  .arvplanos-foliage-ring {
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+
+  .arvplanos-node-group {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: opacity 0.2s ease !important;
+  }
+
+  .arvplanos-canopy-aura,
+  .arvplanos-node-pulse,
+  .arvplanos-energy-pulse {
+    animation: none !important;
+  }
+
+  .arvplanos-panel {
+    transform: none !important;
+    transition: opacity 0.25s ease !important;
+  }
+}
+
+

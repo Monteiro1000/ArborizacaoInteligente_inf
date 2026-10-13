@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showBrandName, setShowBrandName] = useState(false);
+  const brandRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,20 +24,44 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
+      if (e.key === 'Escape') {
+        if (isOpen) setIsOpen(false);
+        if (showBrandName) setShowBrandName(false);
+      }
+    };
+
+    const handleClickOutside = (e) => {
+      if (brandRef.current && !brandRef.current.contains(e.target)) {
+        setShowBrandName(false);
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isOpen, showBrandName]);
 
   const closeMenu = () => setIsOpen(false);
 
+  const handleBrandClick = (e) => {
+    e.preventDefault();
+    setShowBrandName((prev) => !prev);
+  };
+
   return (
     <div className={`topbar container ${scrolled ? 'scrolled' : ''}`} id="topbar">
-      <a className="brand" href="#home" aria-label="Página inicial Arborização Inteligente" onClick={closeMenu}>
+      <a
+        ref={brandRef}
+        className={`brand ${showBrandName ? 'show-name' : ''}`}
+        href="#home"
+        aria-label="Arborização Inteligente"
+        aria-expanded={showBrandName}
+        onClick={handleBrandClick}
+        onMouseLeave={() => setShowBrandName(false)}
+      >
         <img className="brand-logo" src="assets/logo.png" alt="Logo Arborização Inteligente" />
         <span className="brand-text">
           <strong>Arborização Inteligente</strong>
@@ -65,9 +91,12 @@ export default function Navbar() {
 
       <nav className={`main-nav ${isOpen ? 'open' : ''}`} id="main-nav" aria-label="Menu principal">
         <div className="nav-drawer-header">
-          <div className="nav-drawer-brand">
+          <div
+            className={`nav-drawer-brand ${showBrandName ? 'show-name' : ''}`}
+            onClick={() => setShowBrandName((prev) => !prev)}
+          >
             <img className="nav-drawer-logo" src="assets/logo.png" alt="Logo Arborização Inteligente" />
-            <span>Arborização Inteligente</span>
+            <span className="nav-drawer-brand-text">Arborização Inteligente</span>
           </div>
           <button className="nav-close-btn" id="navCloseBtn" aria-label="Fechar menu" onClick={closeMenu}>
             &times;
