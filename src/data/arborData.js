@@ -81,7 +81,7 @@ export const ARBOR_CARDS = [
     ],
     officialSource: {
       name: "IBGE (Instituto Brasileiro de Geografia e Estatística)",
-      doc: "Censo Demográfico 2022 — Características Urbanísticas do Entorno dos Domicílios",
+      doc: "Censo Demográfico 2022 - Características Urbanísticas do Entorno dos Domicílios",
       url: "https://censo2022.ibge.gov.br/"
     },
     isHighlight: true,

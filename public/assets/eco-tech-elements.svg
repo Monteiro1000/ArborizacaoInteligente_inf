@@ -1,0 +1,354 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" fill="none">
+  <defs>
+    <linearGradient id="ecoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#12b674" stop-opacity="0.9" />
+      <stop offset="55%" stop-color="#0b8a56" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#105ca2" stop-opacity="0.7" />
+    </linearGradient>
+    <linearGradient id="ecoFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#12b674" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#0b5c3b" stop-opacity="0.09" />
+    </linearGradient>
+    <radialGradient id="orbGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#12b674" stop-opacity="0.28" />
+      <stop offset="65%" stop-color="#12b674" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#12b674" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- ================= BOKEH & AMBIENT NODES ================= -->
+  <g opacity="0.6">
+    <circle cx="150" cy="180" r="32" fill="url(#orbGlow)" />
+    <circle cx="95" cy="245" r="20" fill="url(#orbGlow)" />
+    <circle cx="520" cy="140" r="38" fill="url(#orbGlow)" />
+    <circle cx="1050" cy="120" r="28" fill="url(#orbGlow)" />
+    <circle cx="580" cy="750" r="34" fill="url(#orbGlow)" />
+    <circle cx="1020" cy="440" r="44" fill="url(#orbGlow)" />
+    <circle cx="240" cy="820" r="30" fill="url(#orbGlow)" />
+    <!-- Small glowing data particles -->
+    <circle cx="380" cy="110" r="3.5" fill="#12b674" />
+    <circle cx="430" cy="260" r="3" fill="#12b674" />
+    <circle cx="490" cy="490" r="2.5" fill="#12b674" />
+    <circle cx="620" cy="450" r="3.5" fill="#12b674" />
+    <circle cx="840" cy="130" r="3" fill="#12b674" />
+    <circle cx="980" cy="190" r="4" fill="#12b674" />
+    <circle cx="1070" cy="310" r="3" fill="#12b674" />
+    <circle cx="1210" cy="350" r="3.5" fill="#12b674" />
+    <circle cx="720" cy="590" r="3" fill="#12b674" />
+    <circle cx="1020" cy="680" r="4" fill="#12b674" />
+    <circle cx="1160" cy="790" r="3" fill="#12b674" />
+    <circle cx="1370" cy="660" r="3" fill="#12b674" />
+  </g>
+
+  <!-- ================= TOP-LEFT PCB TRACES & ECO-GEAR ================= -->
+  <g stroke="url(#ecoGrad)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0,75 L95,75 L135,115 L220,115" />
+    <circle cx="224" cy="115" r="3.5" fill="#12b674" />
+    <path d="M0,105 L80,105 L120,145 L185,145" />
+    <circle cx="189" cy="145" r="3.5" fill="#12b674" />
+    <path d="M0,135 L65,135 L105,175 L155,175" />
+    <circle cx="159" cy="175" r="3.5" fill="#12b674" />
+    <!-- Top-left Eco-Gear with Leaf -->
+    <g transform="translate(285, 110)" stroke-width="2">
+      <circle cx="0" cy="0" r="36" stroke-dasharray="12 6" fill="url(#ecoFill)" />
+      <circle cx="0" cy="0" r="24" />
+      <path d="M-10,12 C-12,-4 2,-14 14,-12 C14,2 4,14 -10,12 Z" fill="url(#ecoFill)" />
+      <path d="M-12,14 L12,-10" stroke-width="1.6" />
+    </g>
+    <!-- Molecular graph near top-center-left -->
+    <g transform="translate(485, 105)" stroke-width="1.6">
+      <line x1="0" y1="0" x2="-24" y2="-16" />
+      <line x1="0" y1="0" x2="24" y2="-14" />
+      <line x1="0" y1="0" x2="18" y2="22" />
+      <line x1="0" y1="0" x2="-20" y2="18" />
+      <circle cx="0" cy="0" r="6" fill="url(#ecoFill)" />
+      <circle cx="-24" cy="-16" r="3.5" fill="#12b674" />
+      <circle cx="24" cy="-14" r="3.5" fill="#12b674" />
+      <circle cx="18" cy="22" r="3.5" fill="#12b674" />
+      <circle cx="-20" cy="18" r="3.5" fill="#12b674" />
+    </g>
+  </g>
+
+  <!-- ================= 1. CENTRAL-LEFT HUD ORB WITH LEAF ================= -->
+  <g transform="translate(290, 445)" stroke="url(#ecoGrad)">
+    <circle cx="0" cy="0" r="138" fill="url(#orbGlow)" stroke="none" />
+    <!-- Outer HUD rings -->
+    <circle cx="0" cy="0" r="118" stroke-width="1.5" stroke-opacity="0.5" />
+    <circle cx="0" cy="0" r="108" stroke-width="3" stroke-dasharray="28 14 8 14 45 18" stroke-opacity="0.75" />
+    <circle cx="0" cy="0" r="95" stroke-width="1.2" stroke-dasharray="6 8" stroke-opacity="0.65" />
+    <circle cx="0" cy="0" r="82" stroke-width="2.2" fill="url(#ecoFill)" />
+    <circle cx="0" cy="0" r="72" stroke-width="1" stroke-opacity="0.45" />
+    <!-- Ring nodes -->
+    <circle cx="-76" cy="-76" r="4.5" fill="#12b674" stroke="none" />
+    <circle cx="76" cy="-76" r="4" fill="#12b674" stroke="none" />
+    <circle cx="95" cy="12" r="5" fill="#12b674" stroke="none" />
+    <circle cx="62" cy="82" r="4" fill="#12b674" stroke="none" />
+    <circle cx="-55" cy="88" r="4.5" fill="#12b674" stroke="none" />
+    <circle cx="-102" cy="18" r="3.5" fill="#12b674" stroke="none" />
+    <!-- Central stylized leaf -->
+    <path d="M-38,42 C-42,-12 -8,-46 44,-48 C42,6 14,44 -38,42 Z" fill="url(#ecoFill)" stroke-width="3" stroke-linejoin="round" />
+    <path d="M-44,48 L36,-40" stroke-width="2.6" stroke-linecap="round" />
+    <path d="M-18,20 L-22,-8 M-2,2 L-8,-26 M14,-16 L10,-36 M-12,14 L16,18 M4,-4 L28,-2" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- ================= 2. WIREFRAME MESH CONSTELLATIONS (LEFT & TOP RIGHT) ================= -->
+  <g stroke="url(#ecoGrad)" stroke-width="1.2" stroke-opacity="0.48">
+    <!-- Top-left mesh constellation -->
+    <path d="M100,270 L165,215 L230,235 L185,290 Z M165,215 L185,290 M230,235 L300,195 L265,275 L185,290 M300,195 L375,210 L335,270 L265,275 M375,210 L435,245 L335,270" />
+    <circle cx="100" cy="270" r="3" fill="#12b674" />
+    <circle cx="165" cy="215" r="3.5" fill="#12b674" />
+    <circle cx="230" cy="235" r="3" fill="#12b674" />
+    <circle cx="300" cy="195" r="3.5" fill="#12b674" />
+    <circle cx="375" cy="210" r="3" fill="#12b674" />
+    <circle cx="265" cy="275" r="3" fill="#12b674" />
+
+    <!-- Bottom-left mesh constellation -->
+    <path d="M210,730 L275,675 L340,705 L280,765 Z M275,675 L280,765 M340,705 L425,670 L395,745 L280,765 M425,670 L505,620 L475,705 L395,745" />
+    <circle cx="210" cy="730" r="3" fill="#12b674" />
+    <circle cx="275" cy="675" r="3.5" fill="#12b674" />
+    <circle cx="340" cy="705" r="3" fill="#12b674" />
+    <circle cx="425" cy="670" r="3.5" fill="#12b674" />
+    <circle cx="505" cy="620" r="3" fill="#12b674" />
+
+    <!-- Top-right corner geometric mesh -->
+    <path d="M1290,40 L1350,85 L1420,55 L1380,15 Z M1350,85 L1380,15 M1350,85 L1410,135 L1420,55" />
+    <circle cx="1350" cy="85" r="3" fill="#12b674" />
+    <circle cx="1410" cy="135" r="3" fill="#12b674" />
+  </g>
+
+  <!-- ================= 3. WIREFRAME GLOBES (GEODESIC SPHERES) ================= -->
+  <!-- Globe 1: Bottom-Left -->
+  <g transform="translate(135, 600)" stroke="url(#ecoGrad)" stroke-width="1.5">
+    <circle cx="0" cy="0" r="56" fill="url(#ecoFill)" />
+    <ellipse cx="0" cy="0" rx="28" ry="56" stroke-dasharray="4 3" />
+    <ellipse cx="0" cy="0" rx="56" ry="24" stroke-dasharray="4 3" />
+    <line x1="-56" y1="0" x2="56" y2="0" stroke-opacity="0.6" />
+    <line x1="0" y1="-56" x2="0" y2="56" stroke-opacity="0.6" />
+    <circle cx="-26" cy="-21" r="3" fill="#12b674" stroke="none" />
+    <circle cx="26" cy="21" r="3" fill="#12b674" stroke="none" />
+    <circle cx="0" cy="56" r="4" fill="#12b674" stroke="none" />
+    <circle cx="56" cy="0" r="3.5" fill="#12b674" stroke="none" />
+  </g>
+
+  <!-- Globe 2: Center -->
+  <g transform="translate(760, 325)" stroke="url(#ecoGrad)" stroke-width="1.4">
+    <circle cx="0" cy="0" r="45" fill="url(#ecoFill)" />
+    <ellipse cx="0" cy="0" rx="22" ry="45" stroke-dasharray="3 3" />
+    <ellipse cx="0" cy="0" rx="45" ry="19" stroke-dasharray="3 3" />
+    <line x1="-45" y1="0" x2="45" y2="0" stroke-opacity="0.5" />
+    <line x1="0" y1="-45" x2="0" y2="45" stroke-opacity="0.5" />
+    <circle cx="20" cy="-16" r="3" fill="#12b674" stroke="none" />
+    <circle cx="-20" cy="16" r="3" fill="#12b674" stroke="none" />
+    <circle cx="38" cy="24" r="3.5" fill="#12b674" stroke="none" />
+  </g>
+
+  <!-- ================= 4. BOTANICAL LEAVES & SPROUTS ================= -->
+  <!-- Double Leaf Cluster (Center-Top) -->
+  <g transform="translate(615, 285)" stroke="url(#ecoGrad)" stroke-width="2.2" stroke-linejoin="round">
+    <path d="M0,65 C-15,10 15,-35 65,-50 C70,5 45,50 0,65 Z" fill="url(#ecoFill)" />
+    <path d="M0,65 L65,-50" stroke-width="2" />
+    <path d="M16,37 L8,10 M30,12 L22,-14 M44,-13 L38,-34 M18,34 L42,26 M32,8 L55,2" stroke-width="1.6" stroke-linecap="round" />
+    <!-- Second leaf -->
+    <path d="M12,62 C35,35 72,30 98,48 C78,74 42,78 12,62 Z" fill="url(#ecoFill)" />
+    <path d="M12,62 L98,48" stroke-width="1.8" />
+    <path d="M42,57 L54,43 M66,53 L76,42 M46,57 L60,67" stroke-width="1.4" stroke-linecap="round" />
+  </g>
+
+  <!-- Single Outlined Leaf (Top-Center-Right) -->
+  <g transform="translate(860, 195)" stroke="url(#ecoGrad)" stroke-width="2.2">
+    <path d="M0,45 C-8,5 12,-28 48,-38 C52,2 32,35 0,45 Z" fill="url(#ecoFill)" />
+    <path d="M-4,52 L48,-38" stroke-linecap="round" />
+    <path d="M12,24 L6,2 M25,2 L20,-18 M15,20 L34,14 M28,-2 L42,-6" stroke-width="1.6" stroke-linecap="round" />
+  </g>
+
+  <!-- Twin Sprout on Circuit Line -->
+  <g transform="translate(940, 265)" stroke="url(#ecoGrad)" stroke-width="2.2">
+    <line x1="-115" y1="0" x2="10" y2="0" />
+    <circle cx="-115" cy="0" r="4.5" fill="#ffffff" />
+    <circle cx="-60" cy="0" r="5.5" fill="#ffffff" />
+    <path d="M0,0 C-5,-36 -35,-55 -62,-48 C-55,-18 -30,0 0,0 Z" fill="url(#ecoFill)" />
+    <path d="M8,0 C12,-32 38,-48 62,-40 C55,-14 32,0 8,0 Z" fill="url(#ecoFill)" />
+    <path d="M-28,-58 Q4,-74 36,-54" stroke-width="1.6" fill="none" />
+    <circle cx="-12" cy="-64" r="3.5" fill="#12b674" stroke="none" />
+    <circle cx="6" cy="-72" r="4" fill="#12b674" stroke="none" />
+    <circle cx="24" cy="-61" r="3.5" fill="#12b674" stroke="none" />
+    <circle cx="6" cy="-52" r="4.5" fill="#12b674" stroke="none" />
+  </g>
+
+  <!-- Bottom-Left Detailed Leaf -->
+  <g transform="translate(95, 745)" stroke="url(#ecoGrad)" stroke-width="2">
+    <path d="M0,48 C-12,8 8,-28 46,-36 C50,4 32,38 0,48 Z" fill="url(#ecoFill)" />
+    <path d="M0,48 L46,-36" />
+    <path d="M12,26 L6,4 M24,4 L18,-18 M34,-14 L30,-28 M14,22 L34,16 M26,0 L42,-4" stroke-width="1.4" stroke-linecap="round" />
+    <path d="M8,44 C26,24 54,20 74,34 C58,54 32,56 8,44 Z" fill="url(#ecoFill)" />
+    <path d="M8,44 L74,34" stroke-width="1.5" />
+  </g>
+
+  <!-- Circle with Twin Plant Icon (Center-Bottom) -->
+  <g transform="translate(805, 635)" stroke="url(#ecoGrad)" stroke-width="2.5">
+    <circle cx="0" cy="0" r="46" stroke-width="3.5" fill="url(#ecoFill)" />
+    <path d="M-4,32 L-4,-8" stroke-linecap="round" />
+    <path d="M-4,18 C-26,14 -34,-6 -24,-24 C-6,-18 0,0 -4,18 Z" fill="url(#ecoFill)" />
+    <path d="M-4,8 C16,4 28,-14 22,-32 C4,-24 -4,-8 -4,8 Z" fill="url(#ecoFill)" />
+    <path d="M-14,-16 C-12,-30 0,-38 8,-30" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- ================= 5. ECO-GEARS WITH LEAVES & CIRCUIT TRACES ================= -->
+  <!-- Eco-Gear 1 (Center-Right) -->
+  <g transform="translate(895, 500)" stroke="url(#ecoGrad)" stroke-width="2.2" stroke-linejoin="round">
+    <path d="M-12,-58 L12,-58 L16,-46 L29,-41 L40,-49 L52,-37 L44,-26 L49,-13 L61,-9 L61,9 L49,13 L44,26 L52,37 L40,49 L29,41 L16,46 L12,58 L-12,58 L-16,46 L-29,41 L-40,49 L-52,37 L-44,26 L-49,13 L-61,9 L-61,-9 L-49,-13 L-44,-26 L-52,-37 L-40,-49 L-29,-41 L-16,-46 Z" fill="url(#ecoFill)" />
+    <circle cx="0" cy="0" r="34" stroke-width="2" />
+    <circle cx="0" cy="0" r="26" stroke-width="1.4" />
+    <path d="M-14,14 C-16,-6 2,-18 18,-16 C18,2 4,16 -14,14 Z" fill="url(#ecoFill)" stroke-width="2" />
+    <path d="M-16,16 L14,-12" stroke-width="1.8" stroke-linecap="round" />
+    <path d="M58,4 C74,-6 94,-2 104,12 C88,22 68,18 58,4 Z" fill="url(#ecoFill)" stroke-width="1.8" />
+    <path d="M58,4 L100,11" stroke-width="1.4" />
+    <path d="M36,48 C56,52 68,72 62,92 C44,84 32,66 36,48 Z" fill="url(#ecoFill)" stroke-width="1.8" />
+    <path d="M36,48 L58,88" stroke-width="1.4" />
+  </g>
+
+  <!-- Eco-Gear 2 (Bottom-Center-Right) with PCB Traces -->
+  <g transform="translate(925, 760)" stroke="url(#ecoGrad)" stroke-width="2.2" stroke-linejoin="round">
+    <path d="M-10,-50 L10,-50 L14,-40 L25,-35 L35,-42 L45,-32 L38,-22 L42,-11 L52,-8 L52,8 L42,11 L38,22 L45,32 L35,42 L25,35 L14,40 L10,50 L-10,50 L-14,40 L-25,35 L-35,42 L-45,32 L-38,22 L-42,11 L-52,8 L-52,-8 L-42,-11 L-38,-22 L-45,-32 L-35,-42 L-25,-35 L-14,-40 Z" fill="url(#ecoFill)" />
+    <circle cx="0" cy="0" r="30" stroke-width="2" />
+    <path d="M-14,16 C-16,-6 2,-20 20,-18 C20,2 6,18 -14,16 Z" fill="url(#ecoFill)" stroke-width="2" />
+    <path d="M-14,16 L18,-16" stroke-width="1.6" />
+    <path d="M-4,6 L-6,-6 M6,-4 L4,-14 M-2,4 L10,2" stroke-width="1.3" stroke-linecap="round" />
+    <g stroke-width="1.8" stroke-linecap="round">
+      <path d="M46,-28 L78,-28 L90,-16 L125,-16" />
+      <circle cx="129" cy="-16" r="3.5" fill="#ffffff" />
+      <path d="M52,-4 L115,-4" />
+      <circle cx="119" cy="-4" r="3.5" fill="#ffffff" />
+      <path d="M50,12 L135,12" />
+      <circle cx="139" cy="12" r="3.5" fill="#ffffff" />
+      <path d="M44,26 L72,26 L84,38 L125,38" />
+      <circle cx="129" cy="38" r="3.5" fill="#ffffff" />
+    </g>
+  </g>
+
+  <!-- ================= 6. RIGHT-SIDE PCB CIRCUIT TRACES & MINI GEARS ================= -->
+  <g stroke="url(#ecoGrad)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1440,225 L1330,225 L1250,305 L1145,305" />
+    <circle cx="1141" cy="305" r="3.5" fill="#12b674" />
+
+    <path d="M1440,255 L1345,255 L1265,335 L1085,335 L1050,370" />
+    <circle cx="1047" cy="373" r="4" fill="#12b674" />
+
+    <path d="M1440,285 L1360,285 L1285,360 L1180,360" />
+    <circle cx="1176" cy="360" r="3.5" fill="#12b674" />
+
+    <path d="M1440,320 L1375,320 L1315,380 L1220,380" />
+    <circle cx="1216" cy="380" r="3.5" fill="#12b674" />
+
+    <path d="M1440,465 L1360,465 L1325,500 L1215,500" />
+    <circle cx="1211" cy="500" r="3.5" fill="#12b674" />
+
+    <path d="M1440,495 L1340,495 L1305,530 L1155,530" />
+    <circle cx="1151" cy="530" r="3.5" fill="#12b674" />
+
+    <path d="M1440,525 L1355,525 L1320,560 L1245,560" />
+    <circle cx="1241" cy="560" r="3.5" fill="#12b674" />
+
+    <g transform="translate(1255, 415)" stroke-width="2">
+      <circle cx="0" cy="0" r="22" stroke-dasharray="9 5" fill="url(#ecoFill)" />
+      <circle cx="0" cy="0" r="11" fill="#ffffff" fill-opacity="0.6" />
+    </g>
+    <g transform="translate(1322, 412)" stroke-width="2">
+      <circle cx="0" cy="0" r="20" stroke-dasharray="8 5" fill="url(#ecoFill)" />
+      <circle cx="0" cy="0" r="10" fill="#ffffff" fill-opacity="0.6" />
+    </g>
+  </g>
+
+  <!-- ================= 7. WIND TURBINES & ECO-PLUG (CLEAN TECH) ================= -->
+  <!-- Wind Turbine 1 (Top-Right) -->
+  <g transform="translate(1165, 130)" stroke="url(#ecoGrad)" stroke-width="1.6" stroke-linejoin="round">
+    <path d="M-4,0 L-12,145 M4,0 L12,145 M-24,145 L24,145" stroke-width="1.8" />
+    <path d="M-5,25 L5,25 M-7,55 L7,55 M-9,85 L9,85 M-11,115 L11,115" stroke-width="1.2" />
+    <path d="M-4,0 L6,25 L-7,55 L8,85 L-10,115 L12,145 M4,0 L-5,25 L7,55 L-8,85 L10,115 L-12,145" stroke-width="1" stroke-opacity="0.65" />
+    <circle cx="0" cy="0" r="5" fill="#12b674" />
+    <path d="M0,-5 L-6,-88 L2,-88 L4,-5 Z" fill="url(#ecoFill)" />
+    <path d="M4,3 L78,42 L74,48 L1,5 Z" fill="url(#ecoFill)" />
+    <path d="M-4,3 L-74,48 L-78,42 L-1,5 Z" fill="url(#ecoFill)" />
+    <path d="M-65,65 C-75,40 -55,15 -35,20 C-28,42 -42,62 -65,65 Z" fill="url(#ecoFill)" stroke-width="1.8" />
+  </g>
+
+  <!-- Wind Turbine 2 (Bottom-Right) -->
+  <g transform="translate(1255, 695)" stroke="url(#ecoGrad)" stroke-width="1.6" stroke-linejoin="round">
+    <path d="M-4,0 L-12,155 M4,0 L12,155 M-28,155 L28,155" stroke-width="1.8" />
+    <path d="M-5,30 L5,30 M-7,65 L7,65 M-9,100 L9,100 M-11,130 L11,130" stroke-width="1.2" />
+    <path d="M-4,0 L6,30 L-7,65 L8,100 L-10,130 L12,155 M4,0 L-5,30 L7,65 L-8,100 L10,130 L-12,155" stroke-width="1" stroke-opacity="0.65" />
+    <circle cx="0" cy="0" r="5" fill="#12b674" />
+    <path d="M0,-5 L-5,-85 L2,-85 L4,-5 Z" fill="url(#ecoFill)" />
+    <path d="M4,3 L74,44 L70,50 L1,5 Z" fill="url(#ecoFill)" />
+    <path d="M-4,3 L-70,50 L-74,44 L-1,5 Z" fill="url(#ecoFill)" />
+    <path d="M35,105 L26,120 L34,120 L29,135 L42,116 L34,116 Z" fill="#12b674" stroke="none" />
+  </g>
+
+  <!-- Eco-Plug with Sprouting Leaf & Brackets -->
+  <g transform="translate(1110, 610)" stroke="url(#ecoGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-42,-42 L-52,-42 C-58,-42 -62,-38 -62,-32 L-62,68 C-62,74 -58,78 -52,78 L-42,78" fill="none" />
+    <circle cx="-62" cy="18" r="14" fill="#ffffff" />
+    <path d="M-60,9 L-67,19 L-61,19 L-64,28 L-56,17 L-62,17 Z" fill="#12b674" stroke="none" />
+    <path d="M-18,-28 L-18,-48 M12,-28 L12,-48" stroke-width="4" />
+    <rect x="-32" y="-28" width="58" height="32" rx="6" fill="url(#ecoFill)" />
+    <path d="M-24,4 L18,4 L12,34 C10,42 4,46 -3,46 C-10,46 -16,42 -18,34 Z" fill="url(#ecoFill)" />
+    <circle cx="-3" cy="22" r="7" stroke-width="1.6" />
+    <path d="M-3,46 L-3,68 C-3,78 4,84 14,84 L38,84 C48,84 54,78 54,68 L54,4" stroke-width="3" fill="none" />
+    <path d="M54,8 C32,4 18,-18 24,-42 C44,-34 56,-14 54,8 Z" fill="url(#ecoFill)" />
+    <path d="M54,8 C74,6 92,-12 90,-36 C70,-32 56,-14 54,8 Z" fill="url(#ecoFill)" />
+    <g transform="translate(-145, -28)" stroke-width="1.4">
+      <polyline points="0,-15 0,25 55,25" fill="none" />
+      <polyline points="2,18 16,8 28,15 42,-4 52,4" fill="none" />
+      <polyline points="2,8 16,20 30,12 44,18 52,10" stroke-opacity="0.6" fill="none" />
+    </g>
+  </g>
+
+  <!-- ================= 8. MOLECULAR & TELEMETRY NODE GRAPHS ================= -->
+  <g transform="translate(88, 515)" stroke="url(#ecoGrad)" stroke-width="1.8">
+    <line x1="0" y1="0" x2="-22" y2="-18" />
+    <line x1="0" y1="0" x2="-20" y2="20" />
+    <line x1="0" y1="0" x2="24" y2="-14" />
+    <line x1="0" y1="0" x2="22" y2="18" />
+    <circle cx="0" cy="0" r="8" fill="#ffffff" />
+    <circle cx="-22" cy="-18" r="4" fill="#12b674" />
+    <circle cx="-20" cy="20" r="4" fill="#12b674" />
+    <circle cx="24" cy="-14" r="4" fill="#12b674" />
+    <circle cx="22" cy="18" r="4" fill="#12b674" />
+  </g>
+
+  <g transform="translate(715, 165)" stroke="url(#ecoGrad)" stroke-width="1.6">
+    <line x1="0" y1="0" x2="-26" y2="-14" />
+    <line x1="0" y1="0" x2="22" y2="-22" />
+    <line x1="0" y1="0" x2="-16" y2="26" />
+    <line x1="0" y1="0" x2="28" y2="14" />
+    <circle cx="0" cy="0" r="5.5" fill="#12b674" />
+    <circle cx="-26" cy="-14" r="3.5" fill="#12b674" />
+    <circle cx="22" cy="-22" r="3.5" fill="#12b674" />
+    <circle cx="-16" cy="26" r="3.5" fill="#12b674" />
+    <circle cx="28" cy="14" r="3.5" fill="#12b674" />
+  </g>
+
+  <g transform="translate(925, 365)" stroke="url(#ecoGrad)" stroke-width="1.5">
+    <polyline points="-35,12 -12,-10 14,8 36,-12" fill="none" />
+    <line x1="-12" y1="-10" x2="-8" y2="-32" />
+    <line x1="14" y1="8" x2="18" y2="30" />
+    <circle cx="-35" cy="12" r="3.5" fill="#12b674" />
+    <circle cx="-12" cy="-10" r="5" fill="#12b674" />
+    <circle cx="14" cy="8" r="5" fill="#12b674" />
+    <circle cx="36" cy="-12" r="4" fill="#12b674" />
+    <circle cx="-8" cy="-32" r="3" fill="#12b674" />
+    <circle cx="18" cy="30" r="3.5" fill="#12b674" />
+  </g>
+
+  <g transform="translate(690, 795)" stroke="url(#ecoGrad)" stroke-width="1.8">
+    <line x1="0" y1="0" x2="-32" y2="-16" />
+    <line x1="0" y1="0" x2="-22" y2="28" />
+    <line x1="0" y1="0" x2="30" y2="-20" />
+    <line x1="0" y1="0" x2="28" y2="22" />
+    <circle cx="0" cy="0" r="10" fill="url(#ecoFill)" />
+    <circle cx="-32" cy="-16" r="4.5" fill="#12b674" />
+    <circle cx="-22" cy="28" r="5" fill="#12b674" />
+    <circle cx="30" cy="-20" r="3.5" fill="#12b674" />
+    <circle cx="28" cy="22" r="6" fill="#12b674" />
+  </g>
+</svg>

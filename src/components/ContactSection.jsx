@@ -5,9 +5,6 @@ export default function ContactSection() {
     <section className="contact-section" id="contato">
       <div className="container">
         <div className="section-header text-center">
-          <p className="eyebrow eyebrow-dark">
-            Canais Oficiais &amp; Mensagem Direta
-          </p>
           <h2>Entre em Contato Conosco</h2>
           <p className="section-text">
             Tem interesse em implementar a Arborização Inteligente na sua cidade, escola ou projeto? Fale diretamente com nossa equipe!

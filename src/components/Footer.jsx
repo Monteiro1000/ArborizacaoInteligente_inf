@@ -58,7 +58,7 @@ export default function Footer() {
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              <span>Aracaju, Sergipe — Brasil</span>
+              <span>Aracaju, Sergipe - Brasil</span>
             </li>
           </ul>
         </div>
@@ -76,7 +76,7 @@ export default function Footer() {
             className="footer-ods-link"
             title="Conheça o ODS 11 da ONU"
           >
-            ODS 11 — Cidades Sustentáveis ↗
+            ODS 11 - Cidades Sustentáveis ↗
           </a>
           <a
             href="https://brasil.un.org/pt-br/sdgs/13"
@@ -85,7 +85,7 @@ export default function Footer() {
             className="footer-ods-link"
             title="Conheça o ODS 13 da ONU"
           >
-            ODS 13 — Ação Climática ↗
+            ODS 13 - Ação Climática ↗
           </a>
           <a
             href="https://brasil.un.org/pt-br/sdgs/15"
@@ -94,7 +94,7 @@ export default function Footer() {
             className="footer-ods-link"
             title="Conheça o ODS 15 da ONU"
           >
-            ODS 15 — Vida Terrestre ↗
+            ODS 15 - Vida Terrestre ↗
           </a>
         </div>
       </div>

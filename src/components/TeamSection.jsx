@@ -6,10 +6,7 @@ export default function TeamSection() {
     <section className="team-section" id="quem-somos">
       <div className="container">
         <div className="section-header text-center">
-          <p className="eyebrow eyebrow-dark">
-            Equipe, Metas &amp; Objetivos
-          </p>
-          <h2>Quem Somos Nós, Metas e Objetivos</h2>
+          <h2>Equipe, Metas e Objetivos</h2>
           <p className="section-text">
             Conheça o time de estudantes, pesquisadores e inovadores sergipanos dedicado a construir cidades sustentáveis e inteligentes.
           </p>
