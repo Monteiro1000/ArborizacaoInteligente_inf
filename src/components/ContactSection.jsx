@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from './IconSprite';
 
 export default function ContactSection() {
   return (
@@ -17,21 +18,15 @@ export default function ContactSection() {
             {/* Card 1: E-mail Oficial */}
             <div className="contact-channel-card">
               <div className="contact-channel-icon email">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
+                <Icon name="envelope-simple" size="lg" />
               </div>
               <div className="contact-channel-content">
                 <span className="contact-channel-label">E-mail Oficial</span>
                 <h3>Fale por E-mail</h3>
                 <p>Envie propostas, solicitações de parcerias municipais, convênios acadêmicos ou tire dúvidas com nossa equipe.</p>
-                <a href="mailto:arborizacaointeligente1@gmail.com" className="btn btn-primary contact-channel-btn">
+                <a href="mailto:arborizacaointeligente1@gmail.com" className="btn btn-primary contact-channel-btn ic-interactive">
                   <span>Enviar E-mail</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                    <line x1="22" y1="2" x2="11" y2="13" />
-                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                  </svg>
+                  <Icon name="paper-plane-tilt-duotone" size="sm" />
                 </a>
                 <span className="contact-channel-info">arborizacaointeligente1@gmail.com</span>
               </div>
@@ -39,24 +34,16 @@ export default function ContactSection() {
 
             {/* Card 2: Instagram Oficial */}
             <div className="contact-channel-card">
-              <div className="contact-channel-icon instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>
+              <div className="contact-channel-icon social-channel">
+                <Icon name="instagram-logo" size="lg" />
               </div>
               <div className="contact-channel-content">
                 <span className="contact-channel-label">Redes Sociais</span>
                 <h3>Siga no Instagram</h3>
                 <p>Acompanhe atualizações em tempo real, registros em campo, novidades tecnológicas e eventos em que participamos.</p>
-                <a href="https://www.instagram.com/arborizacao_inteligente?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="btn btn-primary contact-channel-btn instagram-btn">
+                <a href="https://www.instagram.com/arborizacao_inteligente?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="btn btn-primary contact-channel-btn instagram-btn ic-interactive">
                   <span>Acessar Instagram</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                    <polyline points="15 3 21 3 21 9" />
-                    <line x1="10" y1="14" x2="21" y2="3" />
-                  </svg>
+                  <Icon name="arrow-square-out-duotone" size="sm" />
                 </a>
                 <span className="contact-channel-info">@arborizacao_inteligente</span>
               </div>
@@ -64,37 +51,33 @@ export default function ContactSection() {
 
             {/* Card 3: Origem & Localização */}
             <div className="contact-channel-card">
-              <div className="contact-channel-icon location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
+              <div className="contact-channel-icon location icone-badge">
+                <Icon name="map-pin-area-duotone" size="lg" />
               </div>
               <div className="contact-channel-content">
                 <span className="contact-channel-label">Base do Projeto</span>
                 <h3>Localização &amp; Origem</h3>
                 <p>
                   Iniciativa nascida em Sergipe, vinculada à comunidade acadêmica da{' '}
-                  <a href="https://www.ufs.br/" target="_blank" rel="noopener noreferrer" className="contact-inline-link" title="Acessar portal da UFS">
-                    UFS ↗
+                  <a href="https://www.ufs.br/" target="_blank" rel="noopener noreferrer" className="contact-inline-link ic-interactive" title="Acessar portal da UFS">
+                    <span>UFS</span>
+                    <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
                   </a>
                   , desenvolvida para impactar o Nordeste e o Brasil.
                 </p>
                 <div className="contact-location-badge">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                    <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                  <span>Aracaju, Sergipe — Brasil</span>
+                  <Icon name="map-pin-area-duotone" size="sm" />
+                  <span>Aracaju, Sergipe - Brasil</span>
                 </div>
                 <a
                   href="https://www.ufs.br/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="contact-channel-info contact-channel-link"
+                  className="contact-channel-info contact-channel-link ic-interactive"
                   title="Acessar portal oficial da Universidade Federal de Sergipe"
                 >
-                  Universidade Federal de Sergipe (UFS) ↗
+                  <span>Universidade Federal de Sergipe (UFS)</span>
+                  <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
                 </a>
               </div>
             </div>
@@ -104,3 +87,4 @@ export default function ContactSection() {
     </section>
   );
 }
+

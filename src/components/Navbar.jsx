@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Icon } from './IconSprite';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,16 +71,14 @@ export default function Navbar() {
       </a>
 
       <button
-        className={`menu-toggle ${isOpen ? 'open' : ''}`}
+        className={`menu-toggle ic-btn ${isOpen ? 'open' : ''}`}
         id="menu-toggle"
         aria-label={isOpen ? "Fechar menu" : "Abrir menu de navegação"}
         aria-expanded={isOpen}
         aria-controls="main-nav"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="hamburger-line"></span>
-        <span className="hamburger-line"></span>
-        <span className="hamburger-line"></span>
+        <Icon name={isOpen ? 'x-duotone' : 'list-duotone'} size="md" />
       </button>
 
       <div
@@ -98,8 +97,8 @@ export default function Navbar() {
             <img className="nav-drawer-logo" src="assets/logo.png" alt="Logo Arborização Inteligente" />
             <span className="nav-drawer-brand-text">Arborização Inteligente</span>
           </div>
-          <button className="nav-close-btn" id="navCloseBtn" aria-label="Fechar menu" onClick={closeMenu}>
-            &times;
+          <button className="nav-close-btn ic-btn" id="navCloseBtn" aria-label="Fechar menu" onClick={closeMenu}>
+            <Icon name="x-duotone" size="md" />
           </button>
         </div>
 

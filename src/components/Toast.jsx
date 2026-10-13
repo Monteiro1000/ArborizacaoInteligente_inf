@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from './IconSprite';
 
 export default function Toast({ message, isVisible }) {
   return (
@@ -8,7 +9,8 @@ export default function Toast({ message, isVisible }) {
       role="status"
       aria-live="polite"
     >
-      {message}
+      <Icon name="check-circle-duotone" size="sm" className="ic-toast-icon" />
+      <span>{message}</span>
     </div>
   );
 }

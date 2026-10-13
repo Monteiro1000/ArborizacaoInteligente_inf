@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AUDIENCE_SEGMENTS } from '../data/solutionData';
+import { Icon } from './IconSprite';
 
 /**
  * DADOS DOS 4 PLANOS DA ÁRVORE INTERATIVA (Edite textos, preços e links aqui)
@@ -268,51 +269,18 @@ export default function SolutionSection() {
     [activePlanIndex, handleClosePanel]
   );
 
-  // Ícones vetoriais de cada plano no painel
+  // Ícones vetoriais de cada plano no painel (Sprite SVG local)
   const renderPlanIcon = (type) => {
     switch (type) {
       case 'satellite':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M13 7 9 3 5 7l4 4" />
-            <path d="m17 11 4 4-4 4-4-4" />
-            <path d="m8 12 4 4 6-6-4-4Z" />
-            <path d="m16 8 3-3" />
-            <path d="M9 21a6 6 0 0 0-6-6" />
-          </svg>
-        );
+        return <Icon name="satellite" size="lg" />;
       case 'drone':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="6" height="6" rx="1" />
-            <path d="M9 9 5 5M15 9l4-4M9 15l-4 4M15 15l4 4" />
-            <circle cx="5" cy="5" r="2" />
-            <circle cx="19" cy="5" r="2" />
-            <circle cx="5" cy="19" r="2" />
-            <circle cx="19" cy="19" r="2" />
-          </svg>
-        );
+        return <Icon name="drone-duotone" size="lg" />;
       case 'sensor':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <rect x="6" y="6" width="12" height="12" rx="2" />
-            <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3" />
-            <circle cx="12" cy="12" r="2" />
-          </svg>
-        );
+        return <Icon name="cpu-duotone" size="lg" />;
       case 'root':
       default:
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 3v10" />
-            <path d="m12 13-5 5v3" />
-            <path d="m12 13 5 5v3" />
-            <path d="m12 10-4-3" />
-            <path d="m12 8 4-3" />
-            <circle cx="7" cy="21" r="1.5" />
-            <circle cx="17" cy="21" r="1.5" />
-          </svg>
-        );
+        return <Icon name="clipboard-text-duotone" size="lg" />;
     }
   };
 
@@ -659,7 +627,7 @@ export default function SolutionSection() {
                           textAnchor={textAnchor}
                         >
                           {plan.altitudeLabel.toUpperCase()}
-                          {isFeatured ? ' ★ MAIS INDICADO' : ''}
+                          {isFeatured ? ' • MAIS INDICADO' : ''}
                         </text>
                         <text
                           className="arvplanos-node-label"
@@ -700,24 +668,28 @@ export default function SolutionSection() {
                       </span>
                       {featuredPlanId === activePlan.id && (
                         <span className="arvplanos-panel-featured">
-                          Mais indicado
+                          <Icon name="sparkle-duotone" size="sm" className="ic-inline" />
+                          <span>Mais indicado</span>
                         </span>
                       )}
                     </div>
                     <button
                       ref={closeBtnRef}
                       type="button"
-                      className="arvplanos-panel-close"
+                      className="arvplanos-panel-close ic-btn"
                       onClick={handleClosePanel}
                       aria-label="Fechar painel do plano"
                     >
-                      &times;
+                      <Icon name="x-duotone" size="md" />
                     </button>
                   </div>
 
-                  {/* Cabeçalho com ícone e título */}
+                  {/* Cabeçalho com ícone (.icone-badge) e título */}
                   <div className="arvplanos-panel-header">
-                    <div className="arvplanos-panel-icon">
+                    <div
+                      className="arvplanos-panel-icon icone-badge ic-badge-plan is-active"
+                      aria-hidden="true"
+                    >
                       {renderPlanIcon(activePlan.iconType)}
                     </div>
                     <div>
@@ -734,7 +706,9 @@ export default function SolutionSection() {
                     <ul className="arvplanos-panel-list">
                       {activePlan.howItWorks.map((topic, idx) => (
                         <li key={idx}>
-                          <span className="arvplanos-check" aria-hidden="true">✓</span>
+                          <span className="arvplanos-check" aria-hidden="true">
+                            <Icon name="check-circle-duotone" size="sm" />
+                          </span>
                           <span>
                             {topic.text}{' '}
                             {topic.sourceUrl && (
@@ -744,7 +718,9 @@ export default function SolutionSection() {
                                 rel="noopener noreferrer"
                                 className="arvplanos-source-link"
                               >
-                                ({topic.sourceLabel} ↗)
+                                <span>({topic.sourceLabel}</span>
+                                <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
+                                <span>)</span>
                               </a>
                             )}
                           </span>
@@ -773,32 +749,34 @@ export default function SolutionSection() {
                   <div className="arvplanos-panel-footer">
                     <a
                       href={ctaHref}
-                      className="arvplanos-cta-btn"
+                      className="arvplanos-cta-btn ic-interactive"
                       onClick={() => setActivePlanIndex(null)}
                     >
                       <span>{ctaText}</span>
-                      <span aria-hidden="true">→</span>
+                      <Icon name="arrow-right-duotone" size="sm" />
                     </a>
 
                     <div className="arvplanos-nav-arrows">
                       <button
                         type="button"
-                        className="arvplanos-arrow-btn"
+                        className="arvplanos-arrow-btn ic-interactive"
                         onClick={handlePrevPlan}
                         aria-label="Plano anterior"
                       >
-                        ← Anterior
+                        <Icon name="arrow-left-duotone" size="sm" />
+                        <span>Anterior</span>
                       </button>
                       <span className="arvplanos-step-indicator">
                         {activePlanIndex + 1} / {plans.length}
                       </span>
                       <button
                         type="button"
-                        className="arvplanos-arrow-btn"
+                        className="arvplanos-arrow-btn ic-interactive"
                         onClick={handleNextPlan}
                         aria-label="Próximo plano"
                       >
-                        Próximo →
+                        <span>Próximo</span>
+                        <Icon name="arrow-right-duotone" size="sm" />
                       </button>
                     </div>
                   </div>
@@ -818,11 +796,7 @@ export default function SolutionSection() {
             </p>
             <div className="differential-ods-box">
               <div className="ods-box-header">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-                  <path d="M2 12h20" />
-                </svg>
+                <Icon name="globe-hemisphere-west-duotone" size="sm" />
                 <strong>Viabilidade e Conformidade com os ODS da ONU</strong>
               </div>
               <p>
@@ -834,7 +808,8 @@ export default function SolutionSection() {
                   className="inline-source-link"
                   title="Conheça os Objetivos de Desenvolvimento Sustentável da ONU Brasil"
                 >
-                  Objetivos de Desenvolvimento Sustentável (ODS) ↗
+                  <span>Objetivos de Desenvolvimento Sustentável (ODS)</span>
+                  <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
                 </a>.
               </p>
             </div>

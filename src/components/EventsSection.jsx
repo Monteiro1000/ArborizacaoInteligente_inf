@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { EVENTS_DATA } from '../data/eventsData';
+import { Icon } from './IconSprite';
 
 export default function EventsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -101,14 +102,12 @@ export default function EventsSection() {
           onTouchEnd={() => setIsPaused(false)}
         >
           <button
-            className="events-nav-btn prev"
+            className="events-nav-btn prev ic-btn"
             id="eventPrev"
             aria-label="Destaque anterior"
             onClick={prevSlide}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
+            <Icon name="arrow-left-duotone" size="md" />
           </button>
 
           <div
@@ -135,7 +134,10 @@ export default function EventsSection() {
                     <h3>{event.title}</h3>
                     <p className="event-desc">{event.desc}</p>
                     <div className="event-meta-footer">
-                      <span className="event-highlight-tag">{event.highlightTag}</span>
+                      <span className="event-highlight-tag">
+                        <Icon name={event.highlightIcon || 'medal-duotone'} size="sm" className="ic-inline" />
+                        <span>{event.highlightTag}</span>
+                      </span>
                       <span className="event-attendees-tag">{event.attendeesTag}</span>
                     </div>
                     {event.sourceUrl && (
@@ -147,7 +149,8 @@ export default function EventsSection() {
                           className="event-source-link"
                           title={`Conferir portal oficial: ${event.sourceOrg}`}
                         >
-                          Órgão / Realização: {event.sourceOrg} ↗
+                          <span>Órgão / Realização: {event.sourceOrg}</span>
+                          <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
                         </a>
                       </div>
                     )}
@@ -158,14 +161,12 @@ export default function EventsSection() {
           </div>
 
           <button
-            className="events-nav-btn next"
+            className="events-nav-btn next ic-btn"
             id="eventNext"
             aria-label="Próximo destaque"
             onClick={nextSlide}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <Icon name="arrow-right-duotone" size="md" />
           </button>
         </div>
 

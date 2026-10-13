@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Icon } from './IconSprite';
 
 export default function BlogModal({ post, onClose, onShare }) {
   useEffect(() => {
@@ -35,15 +36,12 @@ export default function BlogModal({ post, onClose, onShare }) {
       <div className="modal-overlay" id="modalOverlay" onClick={onClose}></div>
       <div className="modal-content blog-modal-content">
         <button
-          className="modal-close"
+          className="modal-close ic-btn"
           id="modalClose"
           aria-label="Fechar modal"
           onClick={onClose}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
+          <Icon name="x-duotone" size="md" />
         </button>
 
         <div className="modal-header">
@@ -66,10 +64,7 @@ export default function BlogModal({ post, onClose, onShare }) {
         <div className="modal-body">
           <div className="modal-author-bar">
             <div className="modal-author-avatar" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
+              <Icon name="user-duotone" size="md" />
             </div>
             <div className="modal-author-info">
               <span id="modalAuthor" className="modal-author-name">
@@ -95,18 +90,12 @@ export default function BlogModal({ post, onClose, onShare }) {
 
         <div className="modal-footer">
           <button
-            className="modal-share-btn"
+            className="modal-share-btn ic-interactive"
             id="modalShareBtn"
             type="button"
             onClick={() => onShare(post)}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="18" cy="5" r="3" />
-              <circle cx="6" cy="12" r="3" />
-              <circle cx="18" cy="19" r="3" />
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-            </svg>
+            <Icon name="share-network-duotone" size="sm" />
             <span>Compartilhar</span>
           </button>
           <button

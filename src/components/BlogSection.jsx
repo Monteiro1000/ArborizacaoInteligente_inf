@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { BLOG_POSTS, BLOG_CATEGORIES } from '../data/newsData';
+import { Icon } from './IconSprite';
 
 export default function BlogSection({ onOpenPost }) {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -116,25 +117,22 @@ export default function BlogSection({ onOpenPost }) {
                 {inputValue && (
                   <button
                     type="button"
-                    className="blog-search-clear"
+                    className="blog-search-clear ic-btn"
                     id="blogSearchClear"
                     aria-label="Limpar busca"
                     title="Limpar busca"
                     onClick={handleClearSearch}
                   >
-                    &times;
+                    <Icon name="x-duotone" size="sm" />
                   </button>
                 )}
                 <button
                   type="submit"
-                  className="blog-search-btn"
+                  className="blog-search-btn ic-btn"
                   id="blogSearchBtn"
                   aria-label="Pesquisar"
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                  </svg>
+                  <Icon name="magnifying-glass-duotone" size="sm" />
                 </button>
               </div>
             </form>
@@ -165,7 +163,10 @@ export default function BlogSection({ onOpenPost }) {
             <div id="blogFeatured">
               <article className="blog-featured-card reveal">
                 <div className="featured-image-area">
-                  <span className="featured-tag-badge">⭐ Destaque</span>
+                  <span className="featured-tag-badge">
+                    <Icon name="sparkle-duotone" size="sm" className="ic-inline" />
+                    <span>Destaque</span>
+                  </span>
                   <span className="featured-category-badge">{featuredPost.badge}</span>
                   <img src={featuredPost.image} alt={featuredPost.title} loading="lazy" />
                 </div>
@@ -174,29 +175,24 @@ export default function BlogSection({ onOpenPost }) {
                     <span className="blog-date-text">{featuredPost.date}</span>
                     <span className="blog-meta-divider">|</span>
                     <span className="blog-read-time-pill">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10" />
-                        <polyline points="12 6 12 12 16 14" />
-                      </svg>
-                      {featuredPost.readTime || '3 min de leitura'}
+                      <Icon name="clock-duotone" size="sm" />
+                      <span>{featuredPost.readTime || '3 min de leitura'}</span>
                     </span>
                   </div>
                   <h3 className="featured-title">{featuredPost.title}</h3>
                   <p className="featured-excerpt">{featuredPost.excerpt}</p>
                   <div className="featured-footer">
                     <div className="featured-author">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                      </svg>
+                      <Icon name="user-duotone" size="sm" />
                       <span>{featuredPost.author || 'Equipe Arbo'}</span>
                     </div>
                     <button
                       type="button"
-                      className="btn-read-featured open-blog-post"
+                      className="btn-read-featured open-blog-post ic-interactive"
                       onClick={() => onOpenPost(featuredPost)}
                     >
-                      Ler artigo completo →
+                      <span>Ler artigo completo</span>
+                      <Icon name="arrow-right-duotone" size="sm" className="ic-inline" />
                     </button>
                   </div>
                 </div>
@@ -228,11 +224,8 @@ export default function BlogSection({ onOpenPost }) {
                   <div className="blog-card-meta">
                     <span className="blog-date-text">{post.date}</span>
                     <span className="blog-read-time-pill">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '0.85rem', height: '0.85rem' }} aria-hidden="true">
-                        <circle cx="12" cy="12" r="10" />
-                        <polyline points="12 6 12 12 16 14" />
-                      </svg>
-                      {post.readTime || '3 min'}
+                      <Icon name="clock-duotone" size="sm" />
+                      <span>{post.readTime || '3 min'}</span>
                     </span>
                   </div>
                   <h3>{post.title}</h3>
@@ -241,10 +234,11 @@ export default function BlogSection({ onOpenPost }) {
                     <span className="blog-card-author">{post.author || 'Equipe Arbo'}</span>
                     <button
                       type="button"
-                      className="blog-card-link open-blog-post"
+                      className="blog-card-link open-blog-post ic-interactive"
                       onClick={() => onOpenPost(post)}
                     >
-                      Ler mais →
+                      <span>Ler mais</span>
+                      <Icon name="arrow-right-duotone" size="sm" className="ic-inline" />
                     </button>
                   </div>
                 </div>
@@ -256,12 +250,8 @@ export default function BlogSection({ onOpenPost }) {
         {/* Estado Vazio (quando não há resultados) */}
         {filteredPosts.length === 0 && (
           <div className="blog-empty" id="blogEmpty" style={{ display: 'block' }}>
-            <div className="blog-empty-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                <line x1="8" y1="11" x2="14" y2="11" />
-              </svg>
+            <div className="blog-empty-icon icone-badge ic-badge-plan" style={{ margin: '0 auto 1rem' }}>
+              <Icon name="magnifying-glass-duotone" size="lg" />
             </div>
             <h3 id="blogEmptyTitle">
               {searchQuery ? 'Nenhum resultado encontrado' : 'Artigos em Produção'}

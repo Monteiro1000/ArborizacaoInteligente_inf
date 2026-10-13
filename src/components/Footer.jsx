@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from './IconSprite';
 
 export default function Footer() {
   return (
@@ -33,18 +34,11 @@ export default function Footer() {
           <h4>Contato Oficial</h4>
           <ul>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
+              <Icon name="envelope-simple-duotone" size="sm" />
               <a href="mailto:arborizacaointeligente1@gmail.com">arborizacaointeligente1@gmail.com</a>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-              </svg>
+              <Icon name="instagram-logo-duotone" size="sm" />
               <a
                 href="https://www.instagram.com/arborizacao_inteligente?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
                 target="_blank"
@@ -54,10 +48,7 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
+              <Icon name="map-pin-area-duotone" size="sm" />
               <span>Aracaju, Sergipe - Brasil</span>
             </li>
           </ul>
@@ -76,7 +67,7 @@ export default function Footer() {
             className="footer-ods-link"
             title="Conheça o ODS 11 da ONU"
           >
-            ODS 11 - Cidades Sustentáveis ↗
+            ODS 11 - Cidades Sustentáveis
           </a>
           <a
             href="https://brasil.un.org/pt-br/sdgs/13"
@@ -85,7 +76,7 @@ export default function Footer() {
             className="footer-ods-link"
             title="Conheça o ODS 13 da ONU"
           >
-            ODS 13 - Ação Climática ↗
+            ODS 13 - Ação Climática
           </a>
           <a
             href="https://brasil.un.org/pt-br/sdgs/15"
@@ -94,10 +85,11 @@ export default function Footer() {
             className="footer-ods-link"
             title="Conheça o ODS 15 da ONU"
           >
-            ODS 15 - Vida Terrestre ↗
+            ODS 15 - Vida Terrestre
           </a>
         </div>
       </div>
     </footer>
   );
 }
+

@@ -4341,18 +4341,18 @@ img {
 
 .footer-bottom-badges {
   display: flex;
-  gap: 0.8rem;
+  gap: 1.4rem;
   flex-wrap: wrap;
 }
 
 .footer-bottom-badges span {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #12b674;
-  background: rgba(18, 182, 116, 0.15);
-  padding: 0.35rem 0.85rem;
-  border-radius: 999px;
-  border: 1px solid rgba(18, 182, 116, 0.3);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  border: none;
 }
 
 /* ============================================================
@@ -5327,21 +5327,22 @@ img {
 .footer-ods-link {
   display: inline-block;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 0.76rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  padding: 0.35rem 0.85rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .footer-ods-link:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: transparent;
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-1px);
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* ==========================================================================
@@ -5412,7 +5413,6 @@ img {
   inset: 0;
   z-index: 18;
   background: rgba(3, 9, 63, 0.55);
-  backdrop-filter: blur(3px);
   opacity: 1;
   transition: opacity 0.3s ease;
   cursor: pointer;
@@ -5439,7 +5439,7 @@ img {
 .arb-section[data-in-view="true"] .arb-header,
 .arb-section[data-in-view="true"] .arb-stage {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  transform: none;
 }
 
 .arb-section[data-in-view="true"] .arb-stage {
@@ -5559,7 +5559,6 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1400px;
 }
 
 /* CARTA-CONVITE (Topo da pilha no Estado 1) */
@@ -5584,7 +5583,6 @@ img {
   box-shadow:
     0 24px 50px rgba(0, 0, 0, 0.65),
     inset 0 0 0 1px rgba(22, 190, 125, 0.35);
-  will-change: transform, opacity;
   animation: arb-invite-float 3.6s ease-in-out infinite;
   transition:
     transform 0.55s var(--arb-ease-smooth),
@@ -5669,18 +5667,22 @@ img {
 }
 
 .arb-invite-emblem {
-  width: 112px;
-  height: 112px;
-  margin-top: 0.5rem;
+  width: 118px;
+  height: 118px;
+  margin-top: 0.35rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.arb-emblem-svg {
+.arb-emblem-svg,
+.arb-emblem-logo {
   width: 100%;
   height: 100%;
   display: block;
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45));
 }
 
 .arb-invite-badge {
@@ -5742,8 +5744,6 @@ img {
   position: absolute;
   width: 320px;
   height: 448px; /* Proporção ~5:7 */
-  perspective: 1400px;
-  will-change: transform, opacity;
   transition:
     transform 0.65s var(--arb-ease-overshoot),
     opacity 0.45s ease;
@@ -5816,10 +5816,10 @@ img {
   transition-delay: 0ms;
 }
 
-/* ESTADO 3 (reading): Carta selecionada centraliza e expande; as outras recuam */
+/* ESTADO 3 (reading): Carta selecionada centraliza sem scale fracionário para manter nitidez 100% no texto */
 .arb-section[data-deck-state="reading"] .arb-card-slot.is-open {
   z-index: 30;
-  transform: translate3d(0, -6px, 0) rotate(0deg) scale(1.06);
+  transform: translate3d(0, -6px, 0);
   opacity: 1;
   transition-delay: 0ms;
 }
@@ -5847,18 +5847,14 @@ img {
 
 /* ==========================================================================
    ROTAÇÃO 3D (FLIPPER E FACES)
+   Rotaciona cada face individualmente para que .arb-card-front repouse em
+   rotateY(0deg) quando aberta, garantindo renderização subpixel nítida.
    ========================================================================== */
 .arb-card-flipper {
   position: relative;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  will-change: transform;
-  transition: transform 0.65s var(--arb-ease-smooth);
-}
-
-.arb-card-slot.is-open .arb-card-flipper {
-  transform: rotateY(180deg);
+  perspective: 1400px;
 }
 
 .arb-card-face {
@@ -5870,10 +5866,12 @@ img {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   box-sizing: border-box;
+  transition: transform 0.65s var(--arb-ease-smooth);
 }
 
 /* VERSO DA CARTA (.arb-card-back) */
 .arb-card-back {
+  transform: rotateY(0deg);
   padding: 0.85rem;
   border: 1.5px solid var(--arb-gold);
   background:
@@ -5885,6 +5883,11 @@ img {
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55);
   display: flex;
   flex-direction: column;
+}
+
+.arb-card-slot.is-open .arb-card-back {
+  transform: rotateY(-180deg);
+  pointer-events: none;
 }
 
 .arb-card-back:focus-visible {
@@ -5950,9 +5953,10 @@ img {
   margin: auto 0;
 }
 
-.arb-card-back-center .arb-emblem-svg {
-  width: 96px;
-  height: 96px;
+.arb-card-back-center .arb-emblem-svg,
+.arb-card-back-center .arb-emblem-logo {
+  width: 104px;
+  height: 104px;
 }
 
 .arb-card-back-title {
@@ -5991,6 +5995,7 @@ img {
 /* FRENTE DE LEITURA DA CARTA (.arb-card-front) */
 .arb-card-front {
   transform: rotateY(180deg);
+  pointer-events: none;
   border: 2px solid var(--arb-gold);
   background: linear-gradient(165deg, var(--arb-navy) 0%, var(--arb-navy-dark) 100%);
   color: var(--arb-white);
@@ -6001,6 +6006,11 @@ img {
   flex-direction: column;
   overflow: hidden;
   text-align: left;
+}
+
+.arb-card-slot.is-open .arb-card-front {
+  transform: rotateY(0deg);
+  pointer-events: auto;
 }
 
 .arb-card-front-header {
@@ -6307,19 +6317,22 @@ img {
   .arb-invite-card,
   .arb-invite-card::after,
   .arb-card-slot,
-  .arb-card-flipper {
+  .arb-card-flipper,
+  .arb-card-face {
     animation: none !important;
     transition: opacity 0.25s ease !important;
   }
 
   /* Desativa rotação 3D e alterna visibilidade das faces por opacidade */
   .arb-card-flipper,
-  .arb-card-slot.is-open .arb-card-flipper {
+  .arb-card-back,
+  .arb-card-slot.is-open .arb-card-back,
+  .arb-card-front,
+  .arb-card-slot.is-open .arb-card-front {
     transform: none !important;
   }
 
   .arb-card-front {
-    transform: none !important;
     opacity: 0;
     pointer-events: none;
   }
@@ -7311,4 +7324,323 @@ img {
 }
 
 
-
+
+/* ==========================================================================
+   SISTEMA UNIFICADO DE ÍCONES (.ic-* e .icone-badge)
+   Biblioteca Principal: Phosphor Icons Duotone (@phosphor-icons/core)
+   Complemento Oficial: Tabler Icons Outline (@tabler/icons - satellite)
+   ========================================================================== */
+
+:root {
+  --icone-cor: #16be7d;
+  --icone-cor-destaque: #e8be50;
+  --icone-secundario-opacidade: 0.24;
+  --icone-tamanho-sm: 20px;
+  --icone-tamanho-md: 24px;
+  --icone-tamanho-lg: 32px;
+}
+
+/* Ocultar completamente o SVG raiz de definições do sprite para não gerar espaço no topo */
+#ic-sprite-root,
+.ic-sprite-defs {
+  display: none !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Base para todos os ícones SVG do sistema */
+.ic-svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  color: inherit;
+  fill: currentColor;
+  user-select: none;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.28s ease,
+              color 0.25s ease;
+}
+
+/* Tamanhos padronizados de interface: 20px, 24px e 32px */
+.ic-sm {
+  width: var(--icone-tamanho-sm);
+  height: var(--icone-tamanho-sm);
+}
+
+.ic-md {
+  width: var(--icone-tamanho-md);
+  height: var(--icone-tamanho-md);
+}
+
+.ic-lg {
+  width: var(--icone-tamanho-lg);
+  height: var(--icone-tamanho-lg);
+}
+
+/* Ícone externo inline em links de texto */
+.ic-inline-ext {
+  width: 16px;
+  height: 16px;
+  margin-left: 0.3rem;
+  vertical-align: -2px;
+  opacity: 0.9;
+}
+
+/* Recipiente padrão .icone-badge para cartas, planos e canais (40px a 56px) */
+.icone-badge,
+.arb-card-suit.icone-badge,
+.arb-card-icon.icone-badge,
+.arvplanos-panel-icon.icone-badge,
+.contact-channel-icon.icone-badge {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  min-height: 52px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    145deg,
+    rgba(22, 190, 125, 0.24) 0%,
+    rgba(4, 38, 28, 0.92) 100%
+  );
+  border: 1px solid rgba(232, 190, 80, 0.5);
+  box-shadow: 0 6px 18px rgba(3, 9, 63, 0.32),
+              0 0 14px rgba(22, 190, 125, 0.18),
+              inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  color: var(--icone-cor);
+  position: relative;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.32s ease,
+              border-color 0.32s ease,
+              color 0.28s ease;
+}
+
+/* Tamanhos de recipiente .icone-badge dentro da faixa 40px a 56px */
+.icone-badge--sm,
+.arb-card-suit.icone-badge,
+.arb-card-icon.icone-badge {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 11px;
+}
+
+.icone-badge--lg,
+.contact-channel-icon.icone-badge {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: 16px;
+}
+
+/* Ícones dentro de .icone-badge ocupam proporção harmônica */
+.icone-badge .ic-svg,
+.contact-channel-icon.icone-badge svg {
+  width: var(--icone-tamanho-lg);
+  height: var(--icone-tamanho-lg);
+}
+
+.icone-badge--sm .ic-svg,
+.arb-card-suit.icone-badge .ic-svg,
+.arb-card-icon.icone-badge .ic-svg,
+.arvplanos-panel-icon.icone-badge .ic-svg {
+  width: var(--icone-tamanho-md);
+  height: var(--icone-tamanho-md);
+}
+
+/* Canais de E-mail e Redes Sociais em preto limpo e normal */
+.contact-channel-icon.email,
+.contact-channel-icon.social-channel,
+.contact-channel-icon.instagram {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #111111;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+}
+
+.contact-channel-icon.email svg,
+.contact-channel-icon.social-channel svg,
+.contact-channel-icon.instagram svg {
+  width: 28px;
+  height: 28px;
+  color: #111111;
+}
+
+.contact-channel-icon.location.icone-badge {
+  background: linear-gradient(
+    145deg,
+    rgba(22, 190, 125, 0.24) 0%,
+    rgba(4, 38, 28, 0.94) 100%
+  );
+  color: var(--icone-cor);
+  border: 1.5px solid rgba(232, 190, 80, 0.55);
+}
+
+/* Botões de redes sociais (LinkedIn e Instagram) nos cards da Equipe: normais em preto */
+.member-social-link {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  color: #111111;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  box-shadow: none;
+  transition: transform 0.22s ease, background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+}
+
+.member-social-link svg,
+.member-social-link .ic-svg {
+  width: 20px !important;
+  height: 20px !important;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.member-social-link:hover,
+.member-social-link:focus-visible {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+/* Microinterações: Hover/foco no card ou botão eleva o .icone-badge,
+   intensifica o glow dourado e aplica rotação/pulso sutil no SVG (só transform e opacity) */
+.arb-card-face:hover .icone-badge,
+.arb-card-face:focus-visible .icone-badge,
+.contact-channel-card:hover .icone-badge,
+.contact-channel-card:focus-within .icone-badge,
+.arvplanos-panel-header:hover .icone-badge,
+.icone-badge:hover {
+  transform: translateY(-3px) scale(1.04);
+  border-color: rgba(232, 190, 80, 0.88);
+  box-shadow: 0 10px 24px rgba(3, 9, 63, 0.45),
+              0 0 20px rgba(232, 190, 80, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  color: var(--icone-cor-destaque);
+}
+
+.arb-card-face:hover .icone-badge .ic-svg,
+.arb-card-face:focus-visible .icone-badge .ic-svg,
+.contact-channel-card:hover .icone-badge .ic-svg,
+.contact-channel-card:focus-within .icone-badge .ic-svg,
+.ic-interactive:hover .ic-svg,
+.ic-interactive:focus-visible .ic-svg {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+/* Estado ativo (carta aberta, plano selecionado, botão ativo):
+   troca a cor do ícone para --icone-cor-destaque (#e8be50) */
+.icone-badge.is-active,
+.arb-card-slot.is-open .icone-badge,
+.ic-interactive:active .ic-svg,
+.ic-interactive.is-active .ic-svg,
+.menu-toggle[aria-expanded="true"] .ic-svg {
+  color: var(--icone-cor-destaque);
+  border-color: var(--icone-cor-destaque);
+}
+
+/* Ajustes de cor e alinhamento para menu mobile, rodapé, selos e busca */
+.menu-toggle {
+  color: #ffffff;
+}
+
+.ods-box-header .ic-svg {
+  color: #0b5c3b;
+}
+
+.event-highlight-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.event-highlight-tag .ic-svg {
+  color: #0b5c3b;
+}
+
+.blog-card-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.footer-contact-group ul li .ic-svg {
+  width: 22px;
+  height: 22px;
+  color: var(--icone-cor);
+  flex-shrink: 0;
+}
+
+.contact-location-badge .ic-svg {
+  width: 20px;
+  height: 20px;
+  color: #0b5c3b;
+  flex-shrink: 0;
+}
+
+/* Acessibilidade WCAG: área clicável mínima de 44x44px para botões que são só ícone */
+.menu-toggle,
+.nav-close-btn,
+.modal-close,
+.arb-card-close,
+.arvplanos-panel-close,
+.blog-search-clear {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 769px) {
+  .menu-toggle {
+    display: none !important;
+  }
+}
+
+/* Respeito estrito a prefers-reduced-motion: sem transformações, apenas mudança de cor */
+@media (prefers-reduced-motion: reduce) {
+  .ic-svg,
+  .icone-badge,
+  .member-social-link {
+    transition: color 0.2s ease, border-color 0.2s ease !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .arb-card-face:hover .icone-badge,
+  .arb-card-face:focus-visible .icone-badge,
+  .contact-channel-card:hover .icone-badge,
+  .contact-channel-card:focus-within .icone-badge,
+  .arvplanos-panel-header:hover .icone-badge,
+  .icone-badge:hover,
+  .arb-card-face:hover .icone-badge .ic-svg,
+  .arb-card-face:focus-visible .icone-badge .ic-svg,
+  .contact-channel-card:hover .icone-badge .ic-svg,
+  .contact-channel-card:focus-within .icone-badge .ic-svg,
+  .ic-interactive:hover .ic-svg,
+  .ic-interactive:focus-visible .ic-svg,
+  .member-social-link:hover,
+  .member-social-link:focus-visible {
+    transform: none !important;
+  }
+}

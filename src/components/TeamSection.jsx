@@ -1,5 +1,6 @@
 import React from 'react';
 import { TEAM_MEMBERS, TEAM_GOALS, ODS_ITEMS } from '../data/teamData';
+import { Icon } from './IconSprite';
 
 export default function TeamSection() {
   return (
@@ -35,33 +36,25 @@ export default function TeamSection() {
                   {member.linkedin && member.linkedin !== '#' && (
                     <a
                       href={member.linkedin}
-                      className="member-social-link"
+                      className="member-social-link ic-btn"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`LinkedIn de ${member.name}`}
                       title="LinkedIn"
                     >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                        <rect x="2" y="9" width="4" height="12" />
-                        <circle cx="4" cy="4" r="2" />
-                      </svg>
+                      <Icon name="linkedin-logo-duotone" size="sm" />
                     </a>
                   )}
                   {member.instagram && member.instagram !== '#' && (
                     <a
                       href={member.instagram}
-                      className="member-social-link"
+                      className="member-social-link ic-btn"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Instagram de ${member.name}`}
                       title="Instagram"
                     >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                      </svg>
+                      <Icon name="instagram-logo-duotone" size="sm" />
                     </a>
                   )}
                 </div>
@@ -98,7 +91,9 @@ export default function TeamSection() {
                 className="ods-main-link"
                 title="Acessar página oficial dos ODS na ONU Brasil"
               >
-                Objetivos de Desenvolvimento Sustentável (ONU Brasil ↗)
+                <span>Objetivos de Desenvolvimento Sustentável (ONU Brasil</span>
+                <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
+                <span>)</span>
               </a>:
             </span>
             <div className="ods-badges-list">
@@ -114,7 +109,10 @@ export default function TeamSection() {
                   <div className="ods-image-wrapper">
                     <img src={ods.img} alt={`${ods.code} - ${ods.title}`} className="ods-badge-img" loading="lazy" />
                   </div>
-                  <span className="ods-number">{ods.code} ↗</span>
+                  <span className="ods-number">
+                    <span>{ods.code}</span>
+                    <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
+                  </span>
                   <strong>{ods.title}</strong>
                   <p>{ods.desc}</p>
                 </a>

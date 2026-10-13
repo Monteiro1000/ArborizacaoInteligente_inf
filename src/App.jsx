@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import BlogModal from './components/BlogModal';
 import Toast from './components/Toast';
 import SectionDivider from './components/SectionDivider';
+import IconSprite from './components/IconSprite';
 import { BLOG_POSTS } from './data/newsData';
 
 export default function App() {
@@ -57,7 +58,7 @@ export default function App() {
       navigator.clipboard
         .writeText(shareUrl)
         .then(() => {
-          showToast('✓ Link do artigo copiado para a área de transferência!');
+          showToast('Link do artigo copiado para a área de transferência!');
         })
         .catch(() => {
           fallbackCopy(shareUrl);
@@ -73,7 +74,7 @@ export default function App() {
       tempInput.select();
       try {
         document.execCommand('copy');
-        showToast('✓ Link do artigo copiado!');
+        showToast('Link do artigo copiado!');
       } catch (err) {
         showToast('Não foi possível copiar o link.');
       }
@@ -161,6 +162,7 @@ export default function App() {
       />
 
       <Toast message={toast.message} isVisible={toast.isVisible} />
+      <IconSprite />
     </>
   );
 }

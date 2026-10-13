@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ARBOR_CARDS } from '../data/arborData';
+import { Icon } from './IconSprite';
 
 /**
  * Seção Arborização - Dinâmica Interativa de Cartas de Baralho
@@ -119,87 +120,27 @@ export default function ArborizacaoSection() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [deckState, handleCloseActiveCard]);
 
-  // SVG do circuito-árvore (padrão da logo no verso das cartas)
+  // Logo oficial do projeto no topo da carta-convite e no verso das 3 cartas
   const renderCircuitTreeEmblem = () => (
-    <svg
-      className="arb-emblem-svg"
-      viewBox="0 0 120 120"
-      fill="none"
-      aria-hidden="true"
-    >
-      <circle
-        cx="60"
-        cy="60"
-        r="52"
-        stroke="#e8be50"
-        strokeWidth="1.2"
-        strokeDasharray="6 4"
-        opacity="0.65"
-      />
-      <circle
-        cx="60"
-        cy="60"
-        r="42"
-        stroke="#16be7d"
-        strokeWidth="1.2"
-        opacity="0.45"
-      />
-      {/* Tronco e trilhas de circuito */}
-      <path
-        d="M60 95 V55 M60 72 L40 54 V40 M60 64 L80 46 V34 M60 55 L48 38 M60 55 L72 38"
-        stroke="#16be7d"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* Nós de circuito dourados e esmeralda */}
-      <circle cx="40" cy="40" r="4" fill="#e8be50" />
-      <circle cx="80" cy="34" r="4" fill="#e8be50" />
-      <circle cx="48" cy="38" r="3.5" fill="#16be7d" />
-      <circle cx="72" cy="38" r="3.5" fill="#16be7d" />
-      <circle cx="60" cy="28" r="4.5" fill="#e8be50" />
-      <path d="M60 55 V28" stroke="#16be7d" strokeWidth="2.5" strokeLinecap="round" />
-      {/* Folhas estilizadas */}
-      <path
-        d="M34 54 C24 50 22 38 32 36 C38 42 38 50 34 54 Z"
-        fill="#16be7d"
-        opacity="0.85"
-      />
-      <path
-        d="M86 48 C96 44 98 32 88 30 C82 36 82 44 86 48 Z"
-        fill="#16be7d"
-        opacity="0.85"
-      />
-    </svg>
+    <img
+      src="assets/logo.png"
+      alt="Logo Arborização Inteligente"
+      className="arb-emblem-logo"
+      decoding="async"
+    />
   );
 
+  // Mapeamento semântico de ícones das 3 cartas (@phosphor-icons/core Duotone)
   const renderCardIcon = (type) => {
     switch (type) {
       case 'tree':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 22v-8M12 14c-4 0-7-3-7-7 0-3 3-5 7-5s7 2 7 5c0 4-3 7-7 7z" />
-            <path d="M9 18l3-4 3 4" />
-          </svg>
-        );
+        return <Icon name="tree-duotone" size="md" />;
       case 'warning':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-        );
+        return <Icon name="thermometer-hot-duotone" size="md" />;
       case 'danger':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-            <line x1="12" y1="9" x2="12" y2="13" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-        );
+        return <Icon name="map-pin-area-duotone" size="md" />;
       default:
-        return null;
+        return <Icon name="tree-duotone" size="md" />;
     }
   };
 
@@ -247,17 +188,11 @@ export default function ArborizacaoSection() {
           </p>
           <button
             type="button"
-            className="arb-reshuffle-btn"
+            className="arb-reshuffle-btn ic-interactive"
             onClick={handleReshuffle}
             aria-label="Reembaralhar cartas e voltar ao monte inicial"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="16 3 21 3 21 8" />
-              <line x1="4" y1="20" x2="21" y2="3" />
-              <polyline points="21 16 21 21 16 21" />
-              <line x1="15" y1="15" x2="21" y2="21" />
-              <line x1="4" y1="4" x2="9" y2="9" />
-            </svg>
+            <Icon name="shuffle-duotone" size="sm" />
             <span>Reembaralhar</span>
           </button>
         </div>
@@ -274,22 +209,27 @@ export default function ArborizacaoSection() {
             aria-controls="arb-cards-deck"
             tabIndex={deckState === 'stacked' ? 0 : -1}
           >
-            <span className="arb-card-corner arb-corner-tl" aria-hidden="true">✦</span>
-            <span className="arb-card-corner arb-corner-tr" aria-hidden="true">✦</span>
+            <span className="arb-card-corner arb-corner-tl" aria-hidden="true">
+              <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
+            </span>
+            <span className="arb-card-corner arb-corner-tr" aria-hidden="true">
+              <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
+            </span>
             <div className="arb-invite-emblem">{renderCircuitTreeEmblem()}</div>
             <span className="arb-invite-badge">Baralho do Conhecimento</span>
             <strong className="arb-invite-text">
               Clique aqui e passe as cartas do conhecimento da arborização
             </strong>
-            <span className="arb-invite-cta">
+            <span className="arb-invite-cta ic-interactive">
               <span>Distribuir 3 Cartas</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
+              <Icon name="arrow-right-duotone" size="sm" />
             </span>
-            <span className="arb-card-corner arb-corner-bl" aria-hidden="true">✦</span>
-            <span className="arb-card-corner arb-corner-br" aria-hidden="true">✦</span>
+            <span className="arb-card-corner arb-corner-bl" aria-hidden="true">
+              <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
+            </span>
+            <span className="arb-card-corner arb-corner-br" aria-hidden="true">
+              <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
+            </span>
           </button>
 
           {/* AS 3 CARTAS DE CONTEÚDO */}
@@ -324,7 +264,7 @@ export default function ArborizacaoSection() {
                       <div className="arb-card-back-frame">
                         <div className="arb-card-back-top">
                           <span className="arb-card-number">0{index + 1} / 03</span>
-                          <span className="arb-card-suit" aria-hidden="true">
+                          <span className="arb-card-suit icone-badge ic-badge-card" aria-hidden="true">
                             {renderCardIcon(card.iconType)}
                           </span>
                         </div>
@@ -336,7 +276,8 @@ export default function ArborizacaoSection() {
 
                         <div className="arb-card-back-bottom">
                           <span className="arb-card-flip-prompt">
-                            Virar carta e ler ↻
+                            <span>Virar carta e ler</span>
+                            <Icon name="arrows-clockwise-duotone" size="sm" className="ic-inline" />
                           </span>
                         </div>
                       </div>
@@ -349,7 +290,10 @@ export default function ArborizacaoSection() {
                     >
                       <div className="arb-card-front-header">
                         <div className="arb-card-front-meta">
-                          <span className={`arb-card-icon ${card.iconType}`}>
+                          <span
+                            className={`arb-card-icon icone-badge ic-badge-card ${isOpen ? 'is-active' : ''}`}
+                            aria-hidden="true"
+                          >
                             {renderCardIcon(card.iconType)}
                           </span>
                           <span className="arb-card-step">Carta 0{index + 1}</span>
@@ -357,12 +301,12 @@ export default function ArborizacaoSection() {
                         <button
                           ref={(el) => (closeBtnRefs.current[index] = el)}
                           type="button"
-                          className="arb-card-close"
+                          className="arb-card-close ic-btn"
                           onClick={handleCloseActiveCard}
                           aria-label={`Fechar carta ${card.title}`}
                           tabIndex={isOpen ? 0 : -1}
                         >
-                          &times;
+                          <Icon name="x-duotone" size="md" />
                         </button>
                       </div>
 
@@ -382,7 +326,9 @@ export default function ArborizacaoSection() {
                                   className="arb-stat-source"
                                   tabIndex={isOpen ? 0 : -1}
                                 >
-                                  ({card.statSourceLabel} ↗)
+                                  <span>({card.statSourceLabel}</span>
+                                  <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
+                                  <span>)</span>
                                 </a>
                               )}
                             </span>
@@ -404,7 +350,9 @@ export default function ArborizacaoSection() {
                                     className="arb-source-badge"
                                     tabIndex={isOpen ? 0 : -1}
                                   >
-                                    [Fonte: {b.sourceLabel} ↗]
+                                    <span>[Fonte: {b.sourceLabel}</span>
+                                    <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
+                                    <span>]</span>
                                   </a>
                                 )}
                               </li>
@@ -421,7 +369,7 @@ export default function ArborizacaoSection() {
                                 __html: p
                                   .replace(
                                     /Censo do IBGE \(2022\)/g,
-                                    '<a href="https://censo2022.ibge.gov.br/" target="_blank" rel="noopener noreferrer" class="arb-inline-link"><strong>Censo do IBGE (2022) ↗</strong></a>'
+                                    '<a href="https://censo2022.ibge.gov.br/" target="_blank" rel="noopener noreferrer" class="arb-inline-link"><strong>Censo do IBGE (2022)</strong> <svg viewBox="0 0 256 256" class="ic-svg ic-sm ic-inline-ext" aria-hidden="true" focusable="false"><use href="#ic-arrow-square-out-duotone"></use></svg></a>'
                                   )
                                   .replace(
                                     /Sergipe é o estado brasileiro com o menor índice de vias públicas arborizadas de todo o país\./g,
@@ -429,7 +377,7 @@ export default function ArborizacaoSection() {
                                   )
                                   .replace(
                                     /ilhas de calor/g,
-                                    '<a href="https://www.gov.br/mma/pt-br" target="_blank" rel="noopener noreferrer" class="arb-inline-link"><strong>ilhas de calor ↗</strong></a>'
+                                    '<a href="https://www.gov.br/mma/pt-br" target="_blank" rel="noopener noreferrer" class="arb-inline-link"><strong>ilhas de calor</strong> <svg viewBox="0 0 256 256" class="ic-svg ic-sm ic-inline-ext" aria-hidden="true" focusable="false"><use href="#ic-arrow-square-out-duotone"></use></svg></a>'
                                   )
                                   .replace(
                                     /Arborização Inteligente/g,
@@ -452,7 +400,10 @@ export default function ArborizacaoSection() {
                               tabIndex={isOpen ? 0 : -1}
                             >
                               <strong>{card.officialSource.name}</strong>
-                              <span>{card.officialSource.doc} ↗</span>
+                              <span className="ic-inline-group">
+                                <span>{card.officialSource.doc}</span>
+                                <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
+                              </span>
                             </a>
                           </div>
                         )}
