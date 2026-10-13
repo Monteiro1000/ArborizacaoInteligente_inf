@@ -3309,7 +3309,7 @@ img {
 .member-photo-julio img { object-position: center 18%; }
 .member-photo-asafe img { object-position: center 15%; }
 .member-photo-ellen img { object-position: center 16%; }
-.member-photo-evilyn img { object-position: center 20%; }
+.member-photo-evilyn img { object-position: center 42%; }
 .member-photo-jonatas img { object-position: center 30%; }
 .member-photo-otavio img { object-position: center 15%; }
 .member-photo-yann img { object-position: center 15%; }
@@ -7078,5 +7078,237 @@ img {
     transition: opacity 0.25s ease !important;
   }
 }
+
+/* ==========================================================================
+   SISTEMA DE COR & RITMO VISUAL ENTRE SEÇÕES (PARTE A + PARTE B)
+   ========================================================================== */
+
+:root {
+  /* Família Azul-Marinho (Seções 1 e 3) */
+  --bg-azul-1: #03093f;
+  --bg-azul-2: #050e64;
+  --bg-azul-3: #091a8a;
+
+  /* Família Verde-Floresta Escuro (Seção 2 - derivada de #16be7d, matiz ~160°) */
+  --bg-verde-1: #04261c;
+  --bg-verde-2: #073828;
+  --bg-verde-3: #0a4a36;
+
+  /* Acentos e Tipografia da Marca */
+  --acento-verde: #16be7d;
+  --acento-dourado: #e8be50;
+  --texto: #ffffff;
+  --texto-suave: rgba(255, 255, 255, 0.86);
+}
+
+/* 1. SEÇÃO 1 (HERO - .site-header): Gradiente Azul-Marinho terminando em --bg-azul-1 */
+.site-header {
+  background-color: var(--bg-azul-1);
+  color: var(--texto);
+}
+
+.site-header::after {
+  background:
+    radial-gradient(circle at 22% 35%, rgba(22, 190, 125, 0.14) 0%, transparent 55%),
+    linear-gradient(
+      180deg,
+      rgba(3, 9, 63, 0.86) 0%,
+      rgba(5, 14, 100, 0.76) 55%,
+      var(--bg-azul-1) 100%
+    );
+}
+
+/* 2. SEÇÃO 2 (ARBORIZAÇÃO / CARTAS - .arb-section): Alternância para Verde-Floresta Escuro */
+.arb-section {
+  --arb-navy-dark: var(--bg-verde-1);
+  --arb-navy: var(--bg-verde-2);
+  --arb-emerald: var(--acento-verde);
+  --arb-gold: var(--acento-dourado);
+  --arb-white: var(--texto);
+
+  color: var(--texto);
+  background-color: var(--bg-verde-1);
+  background-image:
+    radial-gradient(circle at 50% 44%, rgba(22, 190, 125, 0.22) 0%, transparent 62%),
+    linear-gradient(
+      180deg,
+      var(--bg-verde-1) 0%,
+      rgba(7, 56, 40, 0.85) 35%,
+      rgba(10, 74, 54, 0.82) 65%,
+      var(--bg-verde-1) 100%
+    ),
+    url("assets/arborizacao-bg.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 768px) {
+  .arb-section {
+    background-image:
+      radial-gradient(circle at 50% 44%, rgba(22, 190, 125, 0.24) 0%, transparent 65%),
+      linear-gradient(
+        180deg,
+        var(--bg-verde-1) 0%,
+        rgba(7, 56, 40, 0.88) 40%,
+        rgba(10, 74, 54, 0.85) 68%,
+        var(--bg-verde-1) 100%
+      ),
+      url("assets/arborizacao-bg-mobile.jpg");
+  }
+}
+
+.arb-subtitle {
+  color: var(--texto-suave);
+}
+
+.arb-controls {
+  background: rgba(4, 38, 28, 0.86);
+  border-color: rgba(232, 190, 80, 0.42);
+}
+
+.arb-reading-backdrop {
+  background: rgba(4, 38, 28, 0.62);
+}
+
+/* 3. SEÇÃO 3 (NOSSA SOLUÇÃO & PLANOS - .solution-section): Retorno ao Azul-Marinho */
+.solution-section {
+  color: var(--texto);
+  background:
+    radial-gradient(circle at 80% 18%, rgba(22, 190, 125, 0.14) 0%, transparent 50%),
+    linear-gradient(
+      180deg,
+      var(--bg-azul-1) 0%,
+      var(--bg-azul-2) 48%,
+      var(--bg-azul-1) 100%
+    );
+}
+
+.solution-section .section-header .section-text,
+.arvplanos-subtitle {
+  color: var(--texto-suave);
+}
+
+/* ==========================================================================
+   PARTE B: COMPONENTE REUTILIZÁVEL DE TRANSIÇÃO (.sec-divider)
+   Suporta 3 variações: --wave, --circuit e --gradient
+   ========================================================================== */
+
+.sec-divider {
+  --divider-top: var(--bg-azul-1);
+  --divider-bottom: var(--bg-verde-1);
+
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: clamp(68px, 8.5vw, 124px);
+  /* Sobreposição de -1px para eliminar qualquer fresta de subpixel */
+  margin-top: -1px;
+  margin-bottom: -1px;
+  background-color: var(--divider-top);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sec-divider__parallax {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  transform: translate3d(0, 0, 0) scaleX(1.04);
+}
+
+.sec-divider__svg {
+  display: block;
+  width: 100%;
+  height: calc(100% + 2px);
+}
+
+.sec-divider.is-flipped .sec-divider__svg {
+  transform: scaleX(-1);
+}
+
+.sec-divider__fill {
+  fill: var(--divider-bottom);
+}
+
+/* Variação 1: Onda Orgânica (--wave) */
+.sec-divider__wave-back {
+  fill: var(--acento-verde);
+  opacity: 0.16;
+}
+
+.sec-divider__stroke-accent {
+  stroke: var(--acento-dourado);
+  stroke-width: 1.8px;
+  opacity: 0.65;
+}
+
+/* Variação 2: Circuito (--circuit) */
+.sec-divider__circuit-line {
+  stroke: var(--acento-verde);
+  stroke-width: 2.2px;
+  opacity: 0.85;
+}
+
+.sec-divider__circuit-subline {
+  stroke: var(--acento-dourado);
+  stroke-width: 1.2px;
+  stroke-dasharray: 8 6;
+  opacity: 0.55;
+}
+
+.sec-divider__nodes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sec-divider__node {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sec-divider__node.is-gold {
+  background: var(--acento-dourado);
+  box-shadow: 0 0 12px var(--acento-dourado);
+}
+
+.sec-divider__node.is-emerald {
+  background: var(--acento-verde);
+  box-shadow: 0 0 12px var(--acento-verde);
+}
+
+/* Variação 3: Gradiente Puro (--gradient) */
+.sec-divider--gradient {
+  height: clamp(160px, 18vw, 240px);
+  background: linear-gradient(
+    180deg,
+    var(--divider-top) 0%,
+    var(--divider-bottom) 100%
+  );
+}
+
+.sec-divider__gradient-band {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(22, 190, 125, 0.14) 0%,
+    transparent 70%
+  );
+}
+
+/* Acessibilidade: Divisor estático quando prefers-reduced-motion está ativo */
+@media (prefers-reduced-motion: reduce) {
+  .sec-divider__parallax,
+  .sec-divider__gradient-band {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 
 

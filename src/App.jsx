@@ -9,6 +9,7 @@ import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import BlogModal from './components/BlogModal';
 import Toast from './components/Toast';
+import SectionDivider from './components/SectionDivider';
 import { BLOG_POSTS } from './data/newsData';
 
 export default function App() {
@@ -125,7 +126,25 @@ export default function App() {
       <Hero />
 
       <main>
+        {/* Transição 1: Hero (Azul-Marinho) -> Arborização (Verde-Floresta Escuro)
+            Opções de variant: "circuit" | "wave" | "gradient" */}
+        <SectionDivider
+          variant="circuit"
+          topColor="var(--bg-azul-1)"
+          bottomColor="var(--bg-verde-1)"
+        />
+
         <ArborizacaoSection />
+
+        {/* Transição 2: Arborização (Verde-Floresta Escuro) -> Nossa Solução / Planos (Azul-Marinho)
+            Opções de variant: "circuit" | "wave" | "gradient" */}
+        <SectionDivider
+          variant="wave"
+          topColor="var(--bg-verde-1)"
+          bottomColor="var(--bg-azul-1)"
+          flip
+        />
+
         <SolutionSection />
         <TeamSection />
         <EventsSection />

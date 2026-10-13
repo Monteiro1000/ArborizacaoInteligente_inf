@@ -30,18 +30,18 @@ export const TEAM_MEMBERS = [
     photoClass: "member-photo-yann",
     delay: "0.3s",
     linkedin: "https://www.linkedin.com/in/yann-vinicius-a89502426?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-    instagram: "https://www.instagram.com/eiyannvinicius?stkn=dGMzbTJtc2FjNGk5"
+    instagram: "https://www.instagram.com/eu_yann_vinicius/"
   },
   {
     id: "asafe-emanuel",
     name: "Asafe Emanuel",
     role: "Hardware, Eletrônica & IoT",
-    desc: "Desenvolve a arquitetura de sensores, firmware em ESP32, calibração e prototipagem física. Graduando em Engenharia Eletrônica pela UFS.",
+    desc: "Desenvolve a arquitetura de sensores, firmware em IoT, calibração e prototipagem física. Graduando em Engenharia Eletrônica pela UFS.",
     photo: "assets/membros/asafe.jpg",
     photoClass: "member-photo-asafe",
     delay: "0.15s",
     linkedin: "https://www.linkedin.com/in/asafe-emanuel-74b83438b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-    instagram: "https://www.instagram.com/asafe_emanuel_/"
+    instagram: "https://www.instagram.com/asafeemanuelosilva/"
   },
   {
     id: "jonatas",
@@ -52,7 +52,7 @@ export const TEAM_MEMBERS = [
     photoClass: "member-photo-jonatas",
     delay: "0.2s",
     linkedin: "https://www.linkedin.com/in/jônatas-santos-55734237b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-    instagram: "https://www.instagram.com/jonatas_stss?stkn=NWNmNGI0ZGU4Mjkw"
+    instagram: "https://www.instagram.com/rasjonatas/"
   },
   {
     id: "ellen",
@@ -63,7 +63,7 @@ export const TEAM_MEMBERS = [
     photoClass: "member-photo-ellen",
     delay: "0.35s",
     linkedin: "#",
-    instagram: "https://www.instagram.com/ln_euz?stkn=ODFmMWU2NDFmOTY2"
+    instagram: "https://www.instagram.com/ellen.yea/"
   },
   {
     id: "evilyn",
@@ -74,18 +74,18 @@ export const TEAM_MEMBERS = [
     photoClass: "member-photo-evilyn",
     delay: "0.38s",
     linkedin: "#",
-    instagram: "https://www.instagram.com/evillynx_?stkn=ODFmMWU2NDFmOTY2"
+    instagram: "https://www.instagram.com/evilyn132_/"
   },
   {
     id: "pedro-moises",
     name: "Pedro Moisés",
-    role: "Comunicação & Mídias Digitais",
-    desc: "Produção audiovisual, captação multimídia e expansão do alcance do projeto nas redes. Graduando em Publicidade e Propaganda pela UFS.",
+    role: "Hardware, Eletrônica & IoT",
+    desc: "Atua no desenvolvimento de hardware, integração de sensores IoT e instrumentação eletrônica do sistema. Graduando pela UFS.",
     photo: "assets/membros/pedro.jpg",
     photoClass: "member-photo-pedro",
     delay: "0.39s",
     linkedin: "#",
-    instagram: "https://www.instagram.com/pedro_moises14?stkn=NjNkNWE0OGEwODkx"
+    instagram: "https://www.instagram.com/ppmeloo/"
   },
   {
     id: "vanessa-simplicio",
@@ -96,7 +96,7 @@ export const TEAM_MEMBERS = [
     photoClass: "member-photo-vanessa",
     delay: "0.4s",
     linkedin: "#",
-    instagram: "#"
+    instagram: "https://www.instagram.com/vanessa.simpl/"
   }
 ];
 
