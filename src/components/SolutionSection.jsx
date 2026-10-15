@@ -289,7 +289,7 @@ export default function SolutionSection() {
       <div className="container">
         <div className="section-header text-center">
           <p className="eyebrow eyebrow-dark">Tecnologia &amp; Inovação</p>
-          <h2>Nossa Solução: Monitoramento Arbóreo Inteligente</h2>
+          <h2>Solução: Sistema de Monitoramento Arbóreo</h2>
           <p className="section-text">
             Um sistema de monitoramento arbóreo capaz de analisar áreas com déficit vegetal, avaliar a saúde das árvores em tempo real e diferenciar espécies nativas de invasoras por meio de sensores IoT, inteligência artificial e drones.
           </p>

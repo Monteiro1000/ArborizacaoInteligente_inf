@@ -12,7 +12,7 @@ export default function Hero() {
             Tecnologia &amp; Meio Ambiente
           </span>
           <h1 className="hero-title">
-            Sistema de Monitoramento Arbóreo que transforma cidades em cidades inteligentes.
+            Arborização Inteligente
           </h1>
           <p className="lead">
             Arborização Inteligente surge como uma solução inovadora que transforma dados em ação de maneira inteligente. Somos a ferramenta para transformar a qualidade de vida da sua cidade.
