@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Hero from './components/Hero';
 import ArborizacaoSection from './components/ArborizacaoSection';
 import SolutionSection from './components/SolutionSection';
+import PartnersSection from './components/PartnersSection';
 import TeamSection from './components/TeamSection';
 import EventsSection from './components/EventsSection';
 import BlogSection from './components/BlogSection';
@@ -11,14 +12,14 @@ import BlogModal from './components/BlogModal';
 import Toast from './components/Toast';
 import SectionDivider from './components/SectionDivider';
 import IconSprite from './components/IconSprite';
-import { BLOG_POSTS } from './data/newsData';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 
-export default function App() {
-  const [activeModalPost, setActiveModalPost] = useState(null);
+function AppContent() {
+  const { dict } = useLanguage();
+  const [activeModalPostId, setActiveModalPostId] = useState(null);
   const [toast, setToast] = useState({ message: '', isVisible: false });
   const toastTimeoutRef = useRef(null);
 
-  // Show Toast helper
   const showToast = useCallback((message, duration = 3500) => {
     if (toastTimeoutRef.current) {
       clearTimeout(toastTimeoutRef.current);
@@ -29,17 +30,17 @@ export default function App() {
     }, duration);
   }, []);
 
-  // Modal open
-  const handleOpenPost = useCallback((post) => {
-    setActiveModalPost(post);
+  const handleOpenPost = useCallback((postOrId) => {
+    const postId = typeof postOrId === 'string' ? postOrId : postOrId?.id;
+    if (!postId) return;
+    setActiveModalPostId(postId);
     if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, '', `#noticia-${post.id}`);
+      window.history.replaceState(null, '', `#noticia-${postId}`);
     }
   }, []);
 
-  // Modal close
   const handleCloseModal = useCallback(() => {
-    setActiveModalPost(null);
+    setActiveModalPostId(null);
     if (window.history && window.history.replaceState) {
       window.history.replaceState(
         null,
@@ -49,38 +50,40 @@ export default function App() {
     }
   }, []);
 
-  // Share post
-  const handleSharePost = useCallback((post) => {
-    if (!post) return;
-    const shareUrl = `${window.location.origin}${window.location.pathname}#noticia-${post.id}`;
+  const handleSharePost = useCallback(
+    (post) => {
+      if (!post) return;
+      const shareUrl = `${window.location.origin}${window.location.pathname}#noticia-${post.id}`;
 
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard
-        .writeText(shareUrl)
-        .then(() => {
-          showToast('Link do artigo copiado para a área de transferência!');
-        })
-        .catch(() => {
-          fallbackCopy(shareUrl);
-        });
-    } else {
-      fallbackCopy(shareUrl);
-    }
-
-    function fallbackCopy(text) {
-      const tempInput = document.createElement('input');
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      try {
-        document.execCommand('copy');
-        showToast('Link do artigo copiado!');
-      } catch (err) {
-        showToast('Não foi possível copiar o link.');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(shareUrl)
+          .then(() => {
+            showToast(dict.blog.shareToastSuccess);
+          })
+          .catch(() => {
+            fallbackCopy(shareUrl);
+          });
+      } else {
+        fallbackCopy(shareUrl);
       }
-      document.body.removeChild(tempInput);
-    }
-  }, [showToast]);
+
+      function fallbackCopy(text) {
+        const tempInput = document.createElement('input');
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try {
+          document.execCommand('copy');
+          showToast(dict.blog.shareToastSuccess);
+        } catch {
+          showToast(dict.blog.shareToastError);
+        }
+        document.body.removeChild(tempInput);
+      }
+    },
+    [showToast, dict.blog.shareToastSuccess, dict.blog.shareToastError]
+  );
 
   // URL Hash listener for #noticia-:id
   useEffect(() => {
@@ -88,11 +91,11 @@ export default function App() {
       const hash = window.location.hash;
       if (hash && hash.startsWith('#noticia-')) {
         const postId = hash.replace('#noticia-', '');
-        const post = BLOG_POSTS.find((p) => p.id === postId);
-        if (post) {
+        const exists = dict.blog.posts.some((p) => p.id === postId);
+        if (exists) {
           const noticiasSection = document.getElementById('noticias');
           noticiasSection?.scrollIntoView({ behavior: 'smooth' });
-          setActiveModalPost(post);
+          setActiveModalPostId(postId);
         }
       }
     };
@@ -100,10 +103,17 @@ export default function App() {
     checkHash();
     window.addEventListener('hashchange', checkHash);
     return () => window.removeEventListener('hashchange', checkHash);
-  }, []);
+  }, [dict.blog.posts]);
 
   // Scroll reveal observer for elements with .reveal class
   useEffect(() => {
+    if (!('IntersectionObserver' in window)) {
+      document
+        .querySelectorAll('.reveal:not(.is-visible)')
+        .forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
@@ -113,7 +123,7 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.12 }
     );
 
     const elements = document.querySelectorAll('.reveal:not(.is-visible)');
@@ -127,8 +137,6 @@ export default function App() {
       <Hero />
 
       <main>
-        {/* Transição 1: Hero (Azul-Marinho) -> Arborização (Verde-Floresta Escuro)
-            Opções de variant: "circuit" | "wave" | "gradient" */}
         <SectionDivider
           variant="circuit"
           topColor="var(--bg-azul-1)"
@@ -137,8 +145,6 @@ export default function App() {
 
         <ArborizacaoSection />
 
-        {/* Transição 2: Arborização (Verde-Floresta Escuro) -> Nossa Solução / Planos (Azul-Marinho)
-            Opções de variant: "circuit" | "wave" | "gradient" */}
         <SectionDivider
           variant="wave"
           topColor="var(--bg-verde-1)"
@@ -147,6 +153,7 @@ export default function App() {
         />
 
         <SolutionSection />
+        <PartnersSection />
         <TeamSection />
         <EventsSection />
         <BlogSection onOpenPost={handleOpenPost} />
@@ -156,7 +163,7 @@ export default function App() {
       <Footer />
 
       <BlogModal
-        post={activeModalPost}
+        postId={activeModalPostId}
         onClose={handleCloseModal}
         onShare={handleSharePost}
       />
@@ -164,5 +171,13 @@ export default function App() {
       <Toast message={toast.message} isVisible={toast.isVisible} />
       <IconSprite />
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }

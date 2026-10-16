@@ -1,95 +1,159 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { EVENTS_DATA } from '../data/eventsData';
 import { Icon } from './IconSprite';
+import { useLanguage } from '../context/LanguageContext';
 
+/**
+ * TAREFA 7: SEÇÃO DESTAQUES DO PROJETO OTIMIZADA PARA 60FPS
+ * - Substitui listener de scroll síncrono por IntersectionObserver (zero layout thrashing)
+ * - Autoplay pausado fora da viewport, em hover/toque e com prefers-reduced-motion
+ * - Indicadores animam apenas transform/opacity com área de toque mínima de 44x44px
+ */
 export default function EventsSection() {
+  const { dict } = useLanguage();
+  const eventsDict = dict.events;
+  const eventsList = eventsDict.items;
+  const totalSlides = eventsList.length;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  const sectionRef = useRef(null);
   const carouselRef = useRef(null);
+  const slideRefs = useRef([]);
+  const currentIndexRef = useRef(0);
 
-  const totalSlides = EVENTS_DATA.length;
-
-  const goToSlide = useCallback((index) => {
-    let targetIndex = index;
-    if (targetIndex < 0) targetIndex = totalSlides - 1;
-    if (targetIndex >= totalSlides) targetIndex = 0;
-
-    setCurrentIndex(targetIndex);
-
-    const carousel = carouselRef.current;
-    if (carousel) {
-      const slides = carousel.querySelectorAll('.event-slide');
-      const targetSlide = slides[targetIndex];
-      if (targetSlide) {
-        const targetLeft = targetSlide.offsetLeft - carousel.offsetLeft;
-        carousel.scrollTo({
-          left: targetLeft,
-          behavior: 'smooth'
-        });
-      }
-    }
-  }, [totalSlides]);
-
-  const nextSlide = useCallback(() => {
-    goToSlide((currentIndex + 1) % totalSlides);
-  }, [currentIndex, goToSlide, totalSlides]);
-
-  const prevSlide = useCallback(() => {
-    goToSlide((currentIndex - 1 + totalSlides) % totalSlides);
-  }, [currentIndex, goToSlide, totalSlides]);
-
-  // Autoplay timer
   useEffect(() => {
-    if (isPaused) return;
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
 
-    const interval = setInterval(() => {
-      goToSlide((currentIndex + 1) % totalSlides);
-    }, 4500);
+  // Respeita prefers-reduced-motion
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
+    const onChange = (e) => setPrefersReducedMotion(e.matches);
+    if (mq.addEventListener) {
+      mq.addEventListener('change', onChange);
+      return () => mq.removeEventListener('change', onChange);
+    }
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [currentIndex, isPaused, goToSlide, totalSlides]);
+  // 1. IntersectionObserver da seção: pausa o autoplay quando fora da tela
+  useEffect(() => {
+    const sectionEl = sectionRef.current;
+    if (!sectionEl || !('IntersectionObserver' in window)) {
+      setIsInViewport(true);
+      return;
+    }
 
-  // Sync index from scroll (touch swipe / snap scrolling)
-  const handleScroll = useCallback(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.15 }
+    );
 
-    const scrollLeft = carousel.scrollLeft;
-    const slides = carousel.querySelectorAll('.event-slide');
-    let closestIndex = 0;
-    let minDistance = Infinity;
+    sectionObserver.observe(sectionEl);
+    return () => sectionObserver.disconnect();
+  }, []);
 
-    slides.forEach((slide, idx) => {
-      const distance = Math.abs(slide.offsetLeft - carousel.offsetLeft - scrollLeft);
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestIndex = idx;
+  // 2. IntersectionObserver dos slides: sincroniza o indicador sem evento de scroll
+  useEffect(() => {
+    const carouselEl = carouselRef.current;
+    if (!carouselEl || !('IntersectionObserver' in window)) return;
+
+    const slideObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.55) {
+            const idx = Number(entry.target.getAttribute('data-slide-index'));
+            if (!Number.isNaN(idx)) {
+              setCurrentIndex(idx);
+            }
+          }
+        });
+      },
+      {
+        root: carouselEl,
+        threshold: [0.55, 0.75]
       }
+    );
+
+    slideRefs.current.forEach((slideEl) => {
+      if (slideEl) slideObserver.observe(slideEl);
     });
 
-    if (closestIndex !== currentIndex) {
-      setCurrentIndex(closestIndex);
+    return () => slideObserver.disconnect();
+  }, [totalSlides]);
+
+  const scrollToSlide = useCallback(
+    (index) => {
+      const targetIndex = ((index % totalSlides) + totalSlides) % totalSlides;
+      setCurrentIndex(targetIndex);
+      currentIndexRef.current = targetIndex;
+
+      const carousel = carouselRef.current;
+      const targetSlide = slideRefs.current[targetIndex];
+      if (!carousel || !targetSlide) return;
+
+      // Calcula posição usando getBoundingClientRect uma única vez na ação de clique/timer
+      const carouselRect = carousel.getBoundingClientRect();
+      const slideRect = targetSlide.getBoundingClientRect();
+      const targetLeft = carousel.scrollLeft + (slideRect.left - carouselRect.left);
+
+      carousel.scrollTo({
+        left: targetLeft,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+      });
+    },
+    [prefersReducedMotion, totalSlides]
+  );
+
+  const nextSlide = useCallback(() => {
+    scrollToSlide(currentIndexRef.current + 1);
+  }, [scrollToSlide]);
+
+  const prevSlide = useCallback(() => {
+    scrollToSlide(currentIndexRef.current - 1);
+  }, [scrollToSlide]);
+
+  // Autoplay estável (não recria o timer a cada evento de scroll)
+  useEffect(() => {
+    if (isPaused || !isInViewport || prefersReducedMotion || totalSlides <= 1) {
+      return;
     }
-  }, [currentIndex]);
+
+    const interval = window.setInterval(() => {
+      scrollToSlide(currentIndexRef.current + 1);
+    }, 4800);
+
+    return () => window.clearInterval(interval);
+  }, [isPaused, isInViewport, prefersReducedMotion, scrollToSlide, totalSlides]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowLeft') {
+      e.preventDefault();
       prevSlide();
     } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
       nextSlide();
     }
   };
 
   return (
-    <section className="events-section" id="eventos">
+    <section className="events-section" id="eventos" ref={sectionRef}>
       <div className="container">
         <div className="events-header text-center">
-          <p className="eyebrow eyebrow-dark">
-            Destaques
+          <p className="eyebrow eyebrow-dark" data-i18n="events.eyebrow">
+            {eventsDict.eyebrow}
           </p>
-          <h2>Destaques do Projeto</h2>
-          <p className="section-text">
-            Reconhecimento, premiações e participações oficiais da Arborização Inteligente em feiras científicas, eventos de inovação e conferências climáticas.
+          <h2 data-i18n="events.title">{eventsDict.title}</h2>
+          <p className="section-text" data-i18n="events.subtitle">
+            {eventsDict.subtitle}
           </p>
         </div>
 
@@ -98,13 +162,17 @@ export default function EventsSection() {
           className="events-carousel-wrapper"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onFocusCapture={() => setIsPaused(true)}
+          onBlurCapture={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
         >
           <button
+            type="button"
             className="events-nav-btn prev ic-btn"
             id="eventPrev"
-            aria-label="Destaque anterior"
+            aria-label={eventsDict.prevAria}
+            data-i18n-aria-label="events.prevAria"
             onClick={prevSlide}
           >
             <Icon name="arrow-left-duotone" size="md" />
@@ -116,18 +184,30 @@ export default function EventsSection() {
             ref={carouselRef}
             tabIndex={0}
             role="region"
-            aria-label="Carrossel de eventos"
-            onScroll={handleScroll}
+            aria-label={eventsDict.carouselAria}
+            data-i18n-aria-label="events.carouselAria"
             onKeyDown={handleKeyDown}
           >
-            {EVENTS_DATA.map((event) => (
-              <div key={event.id} className="event-slide">
-                <div className="event-card-inner">
+            {eventsList.map((event, idx) => (
+              <div
+                key={event.id}
+                ref={(el) => (slideRefs.current[idx] = el)}
+                data-slide-index={idx}
+                className="event-slide"
+              >
+                <article className="event-card-inner">
                   <div className="event-image-box">
                     <span className={`event-status-pill ${event.statusType || 'past'}`}>
                       {event.statusPill}
                     </span>
-                    <img src={event.image} alt={event.alt} loading="lazy" />
+                    <img
+                      src={event.image}
+                      alt={event.alt}
+                      width="600"
+                      height="338"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                   <div className="event-body-box">
                     <span className="event-date-tag">{event.dateTag}</span>
@@ -135,7 +215,11 @@ export default function EventsSection() {
                     <p className="event-desc">{event.desc}</p>
                     <div className="event-meta-footer">
                       <span className="event-highlight-tag">
-                        <Icon name={event.highlightIcon || 'medal-duotone'} size="sm" className="ic-inline" />
+                        <Icon
+                          name={event.highlightIcon || 'medal-duotone'}
+                          size="sm"
+                          className="ic-inline"
+                        />
                         <span>{event.highlightTag}</span>
                       </span>
                       <span className="event-attendees-tag">{event.attendeesTag}</span>
@@ -147,40 +231,54 @@ export default function EventsSection() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="event-source-link"
-                          title={`Conferir portal oficial: ${event.sourceOrg}`}
+                          title={event.sourceOrg}
                         >
-                          <span>Órgão / Realização: {event.sourceOrg}</span>
-                          <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
+                          <span>
+                            {eventsDict.sourcePrefix} {event.sourceOrg}
+                          </span>
+                          <Icon
+                            name="arrow-square-out-duotone"
+                            size="sm"
+                            className="ic-inline-ext"
+                          />
                         </a>
                       </div>
                     )}
                   </div>
-                </div>
+                </article>
               </div>
             ))}
           </div>
 
           <button
+            type="button"
             className="events-nav-btn next ic-btn"
             id="eventNext"
-            aria-label="Próximo destaque"
+            aria-label={eventsDict.nextAria}
+            data-i18n-aria-label="events.nextAria"
             onClick={nextSlide}
           >
             <Icon name="arrow-right-duotone" size="md" />
           </button>
         </div>
 
-        {/* Indicadores do Carrossel de Eventos */}
+        {/* Indicadores do Carrossel de Eventos (Alvo de toque >= 44x44px, animação apenas em transform/opacity) */}
         <div className="events-carousel-indicators" id="eventsIndicators">
-          {EVENTS_DATA.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              className={`event-indicator${idx === currentIndex ? ' active' : ''}`}
-              aria-label={`Ir para evento ${idx + 1}`}
-              onClick={() => goToSlide(idx)}
-            />
-          ))}
+          {eventsList.map((ev, idx) => {
+            const isActive = idx === currentIndex;
+            return (
+              <button
+                key={ev.id}
+                type="button"
+                className={`event-indicator ${isActive ? 'active' : ''}`}
+                aria-label={`${eventsDict.dotAriaPrefix} ${idx + 1}: ${ev.title}`}
+                aria-current={isActive ? 'true' : 'false'}
+                onClick={() => scrollToSlide(idx)}
+              >
+                <span className="event-indicator-pill" />
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>

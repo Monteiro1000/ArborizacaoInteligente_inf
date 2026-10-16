@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import { Icon } from './IconSprite';
+import { useLanguage } from '../context/LanguageContext';
 
-export default function BlogModal({ post, onClose, onShare }) {
+export default function BlogModal({ postId, onClose, onShare }) {
+  const { dict } = useLanguage();
+  const blogDict = dict.blog;
+  const post = postId ? blogDict.posts.find((p) => p.id === postId) : null;
+
   useEffect(() => {
     if (!post) return;
 
-    // Lock body scroll
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    // Escape key listener
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onClose();
@@ -38,7 +41,8 @@ export default function BlogModal({ post, onClose, onShare }) {
         <button
           className="modal-close ic-btn"
           id="modalClose"
-          aria-label="Fechar modal"
+          aria-label={blogDict.modalCloseAria}
+          data-i18n-aria-label="blog.modalCloseAria"
           onClick={onClose}
         >
           <Icon name="x-duotone" size="md" />
@@ -50,13 +54,14 @@ export default function BlogModal({ post, onClose, onShare }) {
             src={post.image}
             alt={post.title}
             className="modal-image"
+            decoding="async"
           />
           <div className="modal-badges-row">
             <span id="modalBadge" className="modal-badge">
               {post.badge}
             </span>
             <span id="modalReadTime" className="modal-read-time">
-              {post.readTime || '3 min de leitura'}
+              {post.readTime}
             </span>
           </div>
         </div>
@@ -68,7 +73,7 @@ export default function BlogModal({ post, onClose, onShare }) {
             </div>
             <div className="modal-author-info">
               <span id="modalAuthor" className="modal-author-name">
-                {post.author || 'Equipe Arbo Inteligente'}
+                {post.author}
               </span>
               <span id="modalDate" className="modal-date">
                 {post.date}
@@ -96,15 +101,16 @@ export default function BlogModal({ post, onClose, onShare }) {
             onClick={() => onShare(post)}
           >
             <Icon name="share-network-duotone" size="sm" />
-            <span>Compartilhar</span>
+            <span data-i18n="blog.modalShareBtn">{blogDict.modalShareBtn}</span>
           </button>
           <button
             className="modal-btn btn-secondary"
             id="modalCloseBtn"
             type="button"
+            data-i18n="blog.modalCloseBtn"
             onClick={onClose}
           >
-            Fechar
+            {blogDict.modalCloseBtn}
           </button>
         </div>
       </div>

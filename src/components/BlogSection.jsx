@@ -1,41 +1,41 @@
 import React, { useState, useMemo } from 'react';
-import { BLOG_POSTS, BLOG_CATEGORIES } from '../data/newsData';
 import { Icon } from './IconSprite';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function BlogSection({ onOpenPost }) {
+  const { dict } = useLanguage();
+  const blogDict = dict.blog;
+  const posts = blogDict.posts;
+  const categories = blogDict.categories;
+
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [inputValue, setInputValue] = useState('');
 
-  // Handle form submit
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setSearchQuery(inputValue.trim().toLowerCase());
   };
 
-  // Handle real-time input change
   const handleInputChange = (e) => {
     const val = e.target.value;
     setInputValue(val);
     setSearchQuery(val.trim().toLowerCase());
   };
 
-  // Clear search
   const handleClearSearch = () => {
     setInputValue('');
     setSearchQuery('');
   };
 
-  // Reset all filters
   const handleResetFilters = () => {
     setActiveCategory('all');
     setInputValue('');
     setSearchQuery('');
   };
 
-  // Filtered posts logic
   const filteredPosts = useMemo(() => {
-    return BLOG_POSTS.filter((post) => {
+    return posts.filter((post) => {
       const matchesCategory =
         activeCategory === 'all' || post.category === activeCategory;
       if (!matchesCategory) return false;
@@ -51,9 +51,8 @@ export default function BlogSection({ onOpenPost }) {
 
       return titleMatch || excerptMatch || badgeMatch || authorMatch || contentMatch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [posts, activeCategory, searchQuery]);
 
-  // Featured vs Grid posts
   const { featuredPost, gridPosts } = useMemo(() => {
     let featured = null;
     let grid = [...filteredPosts];
@@ -72,24 +71,23 @@ export default function BlogSection({ onOpenPost }) {
     return { featuredPost: featured, gridPosts: grid };
   }, [filteredPosts, searchQuery, activeCategory]);
 
-  // Counter text
   const counterText = useMemo(() => {
     const total = filteredPosts.length;
-    if (total === 0) return 'Nenhuma notícia encontrada';
-    if (total === 1) return '1 publicação encontrada';
-    return `${total} publicações encontradas`;
-  }, [filteredPosts.length]);
+    if (total === 0) return blogDict.counterZero;
+    if (total === 1) return blogDict.counterOne;
+    return `${total} ${blogDict.counterManySuffix}`;
+  }, [filteredPosts.length, blogDict]);
 
   return (
     <section className="news-section blog-section" id="noticias">
       <div className="container">
         <div className="news-header blog-header">
-          <p className="eyebrow eyebrow-dark">
-            Atualizações e Artigos
+          <p className="eyebrow eyebrow-dark" data-i18n="blog.eyebrow">
+            {blogDict.eyebrow}
           </p>
-          <h2>Blog &amp; Notícias do Projeto</h2>
-          <p className="section-text">
-            Acompanhe as publicações mais recentes, artigos técnicos, pesquisas de campo e marcos da Arborização Inteligente.
+          <h2 data-i18n="blog.title">{blogDict.title}</h2>
+          <p className="section-text" data-i18n="blog.subtitle">
+            {blogDict.subtitle}
           </p>
         </div>
 
@@ -100,7 +98,8 @@ export default function BlogSection({ onOpenPost }) {
               id="blogSearchForm"
               className="blog-search-form"
               role="search"
-              aria-label="Pesquisar publicações"
+              aria-label={blogDict.searchFormAria}
+              data-i18n-aria-label="blog.searchFormAria"
               onSubmit={handleSearchSubmit}
             >
               <div className="blog-search-box">
@@ -108,8 +107,10 @@ export default function BlogSection({ onOpenPost }) {
                   type="search"
                   id="blogSearchInput"
                   name="q"
-                  placeholder="Buscar artigos..."
-                  aria-label="Buscar artigos"
+                  placeholder={blogDict.searchPlaceholder}
+                  data-i18n-placeholder="blog.searchPlaceholder"
+                  aria-label={blogDict.searchInputAria}
+                  data-i18n-aria-label="blog.searchInputAria"
                   autoComplete="off"
                   value={inputValue}
                   onChange={handleInputChange}
@@ -119,8 +120,8 @@ export default function BlogSection({ onOpenPost }) {
                     type="button"
                     className="blog-search-clear ic-btn"
                     id="blogSearchClear"
-                    aria-label="Limpar busca"
-                    title="Limpar busca"
+                    aria-label={blogDict.clearSearchAria}
+                    title={blogDict.clearSearchAria}
                     onClick={handleClearSearch}
                   >
                     <Icon name="x-duotone" size="sm" />
@@ -130,7 +131,8 @@ export default function BlogSection({ onOpenPost }) {
                   type="submit"
                   className="blog-search-btn ic-btn"
                   id="blogSearchBtn"
-                  aria-label="Pesquisar"
+                  aria-label={blogDict.searchBtnAria}
+                  data-i18n-aria-label="blog.searchBtnAria"
                 >
                   <Icon name="magnifying-glass-duotone" size="sm" />
                 </button>
@@ -138,8 +140,14 @@ export default function BlogSection({ onOpenPost }) {
             </form>
           </search>
 
-          <div className="blog-categories" id="blogCategories" role="tablist" aria-label="Filtrar por categoria">
-            {BLOG_CATEGORIES.map((cat) => {
+          <div
+            className="blog-categories"
+            id="blogCategories"
+            role="tablist"
+            aria-label={blogDict.categoriesAria}
+            data-i18n-aria-label="blog.categoriesAria"
+          >
+            {categories.map((cat) => {
               const isSelected = activeCategory === cat.id;
               return (
                 <button
@@ -165,10 +173,15 @@ export default function BlogSection({ onOpenPost }) {
                 <div className="featured-image-area">
                   <span className="featured-tag-badge">
                     <Icon name="sparkle-duotone" size="sm" className="ic-inline" />
-                    <span>Destaque</span>
+                    <span data-i18n="blog.featuredBadge">{blogDict.featuredBadge}</span>
                   </span>
                   <span className="featured-category-badge">{featuredPost.badge}</span>
-                  <img src={featuredPost.image} alt={featuredPost.title} loading="lazy" />
+                  <img
+                    src={featuredPost.image}
+                    alt={featuredPost.title}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
                 <div className="featured-content-area">
                   <div className="blog-meta-row">
@@ -176,7 +189,7 @@ export default function BlogSection({ onOpenPost }) {
                     <span className="blog-meta-divider">|</span>
                     <span className="blog-read-time-pill">
                       <Icon name="clock-duotone" size="sm" />
-                      <span>{featuredPost.readTime || '3 min de leitura'}</span>
+                      <span>{featuredPost.readTime}</span>
                     </span>
                   </div>
                   <h3 className="featured-title">{featuredPost.title}</h3>
@@ -184,14 +197,14 @@ export default function BlogSection({ onOpenPost }) {
                   <div className="featured-footer">
                     <div className="featured-author">
                       <Icon name="user-duotone" size="sm" />
-                      <span>{featuredPost.author || 'Equipe Arbo'}</span>
+                      <span>{featuredPost.author}</span>
                     </div>
                     <button
                       type="button"
                       className="btn-read-featured open-blog-post ic-interactive"
-                      onClick={() => onOpenPost(featuredPost)}
+                      onClick={() => onOpenPost(featuredPost.id)}
                     >
-                      <span>Ler artigo completo</span>
+                      <span data-i18n="blog.readFullBtn">{blogDict.readFullBtn}</span>
                       <Icon name="arrow-right-duotone" size="sm" className="ic-inline" />
                     </button>
                   </div>
@@ -204,7 +217,9 @@ export default function BlogSection({ onOpenPost }) {
         {/* Cabeçalho do Grid de Publicações */}
         {filteredPosts.length > 0 && (
           <div className="blog-grid-header">
-            <h3 className="blog-grid-title">Publicações do Projeto</h3>
+            <h3 className="blog-grid-title" data-i18n="blog.gridTitle">
+              {blogDict.gridTitle}
+            </h3>
             <span className="blog-counter" id="blogCounter">
               {counterText}
             </span>
@@ -218,26 +233,31 @@ export default function BlogSection({ onOpenPost }) {
               <article key={post.id} className="blog-card reveal">
                 <div className="blog-card-image">
                   <span className="blog-card-badge">{post.badge}</span>
-                  <img src={post.image} alt={post.title} loading="lazy" />
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
                 <div className="blog-card-content">
                   <div className="blog-card-meta">
                     <span className="blog-date-text">{post.date}</span>
                     <span className="blog-read-time-pill">
                       <Icon name="clock-duotone" size="sm" />
-                      <span>{post.readTime || '3 min'}</span>
+                      <span>{post.readTime}</span>
                     </span>
                   </div>
                   <h3>{post.title}</h3>
                   <p>{post.excerpt}</p>
                   <div className="blog-card-footer">
-                    <span className="blog-card-author">{post.author || 'Equipe Arbo'}</span>
+                    <span className="blog-card-author">{post.author}</span>
                     <button
                       type="button"
                       className="blog-card-link open-blog-post ic-interactive"
-                      onClick={() => onOpenPost(post)}
+                      onClick={() => onOpenPost(post.id)}
                     >
-                      <span>Ler mais</span>
+                      <span data-i18n="blog.readMoreBtn">{blogDict.readMoreBtn}</span>
                       <Icon name="arrow-right-duotone" size="sm" className="ic-inline" />
                     </button>
                   </div>
@@ -247,27 +267,31 @@ export default function BlogSection({ onOpenPost }) {
           </div>
         )}
 
-        {/* Estado Vazio (quando não há resultados) */}
+        {/* Estado Vazio */}
         {filteredPosts.length === 0 && (
           <div className="blog-empty" id="blogEmpty" style={{ display: 'block' }}>
-            <div className="blog-empty-icon icone-badge ic-badge-plan" style={{ margin: '0 auto 1rem' }}>
+            <div
+              className="blog-empty-icon icone-badge ic-badge-plan"
+              style={{ margin: '0 auto 1rem' }}
+            >
               <Icon name="magnifying-glass-duotone" size="lg" />
             </div>
             <h3 id="blogEmptyTitle">
-              {searchQuery ? 'Nenhum resultado encontrado' : 'Artigos em Produção'}
+              {searchQuery ? blogDict.emptySearchTitle : blogDict.emptyDefaultTitle}
             </h3>
             <p id="blogEmptyDesc">
               {searchQuery
-                ? `Não encontramos nenhuma publicação para "${searchQuery}". Tente outros termos de busca.`
-                : 'Ainda não há publicações nesta categoria. Nossos artigos técnicos e científicos estão em fase de produção por nossa equipe e serão lançados em breve!'}
+                ? `${blogDict.emptySearchDescPrefix} "${searchQuery}". ${blogDict.emptySearchDescSuffix}`
+                : blogDict.emptyDefaultDesc}
             </p>
             <button
               type="button"
               className="blog-btn-reset"
               id="blogResetBtn"
+              data-i18n="blog.resetBtn"
               onClick={handleResetFilters}
             >
-              Ver todas as notícias
+              {blogDict.resetBtn}
             </button>
           </div>
         )}

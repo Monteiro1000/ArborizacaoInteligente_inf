@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ARBOR_CARDS } from '../data/arborData';
 import { Icon } from './IconSprite';
+import { useLanguage } from '../context/LanguageContext';
 
 /**
  * Seção Arborização - Dinâmica Interativa de Cartas de Baralho
@@ -10,12 +10,14 @@ import { Icon } from './IconSprite';
  * - 'reading' (Estado 3): Uma carta vira em Flip 3D e exibe o conteúdo completo; apenas 1 aberta por vez
  */
 export default function ArborizacaoSection() {
+  const { dict } = useLanguage();
+  const arborDict = dict.arborizacao;
+  const cards = arborDict.cards;
+
   const [deckState, setDeckState] = useState('stacked'); // 'stacked' | 'fanned' | 'reading'
   const [openCardIndex, setOpenCardIndex] = useState(null); // null | 0 | 1 | 2
   const [inView, setInView] = useState(false);
-  const [liveAnnouncement, setLiveAnnouncement] = useState(
-    'Baralho do conhecimento da arborização fechado. Clique na carta do topo para distribuir as cartas.'
-  );
+  const [liveAnnouncement, setLiveAnnouncement] = useState(arborDict.liveStacked);
 
   const sectionRef = useRef(null);
   const inviteBtnRef = useRef(null);
@@ -52,33 +54,34 @@ export default function ArborizacaoSection() {
   const handleDealCards = useCallback(() => {
     setDeckState('fanned');
     setOpenCardIndex(null);
-    setLiveAnnouncement(
-      'Cartas distribuídas. Três cartas disponíveis: escolha uma carta para ler seu conteúdo.'
-    );
+    setLiveAnnouncement(arborDict.liveFanned);
     setTimeout(() => {
       cardBtnRefs.current[0]?.focus();
     }, 320);
-  }, []);
+  }, [arborDict.liveFanned]);
 
   // Transição Estado 2 -> Estado 3 (Abrir/virar uma carta específica)
-  const handleSelectCard = useCallback((index) => {
-    setOpenCardIndex((prevIndex) => {
-      if (prevIndex === index) {
-        setDeckState('fanned');
-        setLiveAnnouncement(`Carta ${ARBOR_CARDS[index].title} fechada.`);
+  const handleSelectCard = useCallback(
+    (index) => {
+      setOpenCardIndex((prevIndex) => {
+        if (prevIndex === index) {
+          setDeckState('fanned');
+          setLiveAnnouncement(`${cards[index].title} ${arborDict.liveClosedSuffix}`);
+          setTimeout(() => {
+            cardBtnRefs.current[index]?.focus();
+          }, 50);
+          return null;
+        }
+        setDeckState('reading');
+        setLiveAnnouncement(`${arborDict.liveOpenedPrefix} ${cards[index].title}.`);
         setTimeout(() => {
-          cardBtnRefs.current[index]?.focus();
-        }, 50);
-        return null;
-      }
-      setDeckState('reading');
-      setLiveAnnouncement(`Carta aberta: ${ARBOR_CARDS[index].title}.`);
-      setTimeout(() => {
-        closeBtnRefs.current[index]?.focus();
-      }, 150);
-      return index;
-    });
-  }, []);
+          closeBtnRefs.current[index]?.focus();
+        }, 150);
+        return index;
+      });
+    },
+    [arborDict.liveClosedSuffix, arborDict.liveOpenedPrefix, cards]
+  );
 
   // Fechar a carta ativa e voltar ao Estado 2 (Leque)
   const handleCloseActiveCard = useCallback(
@@ -87,27 +90,25 @@ export default function ArborizacaoSection() {
       const lastIndex = openCardIndex;
       setOpenCardIndex(null);
       setDeckState('fanned');
-      setLiveAnnouncement('Carta fechada. Você está na visualização em leque.');
+      setLiveAnnouncement(arborDict.liveBackToFan);
       if (lastIndex !== null) {
         setTimeout(() => {
           cardBtnRefs.current[lastIndex]?.focus();
         }, 50);
       }
     },
-    [openCardIndex]
+    [openCardIndex, arborDict.liveBackToFan]
   );
 
   // Botão Reembaralhar -> Volta tudo ao Estado 1 (Pilha inicial)
   const handleReshuffle = useCallback(() => {
     setOpenCardIndex(null);
     setDeckState('stacked');
-    setLiveAnnouncement(
-      'Baralho reembaralhado. Clique na carta-convite para distribuir novamente.'
-    );
+    setLiveAnnouncement(arborDict.liveReshuffled);
     setTimeout(() => {
       inviteBtnRef.current?.focus();
     }, 250);
-  }, []);
+  }, [arborDict.liveReshuffled]);
 
   // Fechar carta com tecla ESC
   useEffect(() => {
@@ -124,9 +125,11 @@ export default function ArborizacaoSection() {
   const renderCircuitTreeEmblem = () => (
     <img
       src="assets/logo.png"
-      alt="Logo Arborização Inteligente"
+      alt={dict.nav.logoAlt}
+      data-i18n-alt="nav.logoAlt"
       className="arb-emblem-logo"
       decoding="async"
+      loading="lazy"
     />
   );
 
@@ -169,11 +172,11 @@ export default function ArborizacaoSection() {
 
       <div className="container arb-container">
         <header className="arb-header">
-          <h2 id="arb-section-title" className="arb-title">
-            Arborização: O que é e por que é um desafio urgente?
+          <h2 id="arb-section-title" className="arb-title" data-i18n="arborizacao.title">
+            {arborDict.title}
           </h2>
-          <p className="arb-subtitle">
-            Compreenda a importância vital da cobertura arbórea urbana e o cenário enfrentado no Brasil, no Nordeste e em Sergipe.
+          <p className="arb-subtitle" data-i18n="arborizacao.subtitle">
+            {arborDict.subtitle}
           </p>
         </header>
 
@@ -183,17 +186,18 @@ export default function ArborizacaoSection() {
         >
           <p className="arb-instruction">
             {deckState === 'fanned'
-              ? 'Selecione uma carta abaixo para virar e ler o diagnóstico completo:'
-              : 'Clique em outra carta para alternar ou feche para voltar ao leque:'}
+              ? arborDict.instructionFanned
+              : arborDict.instructionReading}
           </p>
           <button
             type="button"
             className="arb-reshuffle-btn ic-interactive"
             onClick={handleReshuffle}
-            aria-label="Reembaralhar cartas e voltar ao monte inicial"
+            aria-label={arborDict.reshuffleAria}
+            data-i18n-aria-label="arborizacao.reshuffleAria"
           >
             <Icon name="shuffle-duotone" size="sm" />
-            <span>Reembaralhar</span>
+            <span data-i18n="arborizacao.reshuffleBtn">{arborDict.reshuffleBtn}</span>
           </button>
         </div>
 
@@ -216,12 +220,14 @@ export default function ArborizacaoSection() {
               <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
             </span>
             <div className="arb-invite-emblem">{renderCircuitTreeEmblem()}</div>
-            <span className="arb-invite-badge">Baralho do Conhecimento</span>
-            <strong className="arb-invite-text">
-              Clique aqui e passe as cartas do conhecimento da arborização
+            <span className="arb-invite-badge" data-i18n="arborizacao.inviteBadge">
+              {arborDict.inviteBadge}
+            </span>
+            <strong className="arb-invite-text" data-i18n="arborizacao.inviteText">
+              {arborDict.inviteText}
             </strong>
             <span className="arb-invite-cta ic-interactive">
-              <span>Distribuir 3 Cartas</span>
+              <span data-i18n="arborizacao.inviteCta">{arborDict.inviteCta}</span>
               <Icon name="arrow-right-duotone" size="sm" />
             </span>
             <span className="arb-card-corner arb-corner-bl" aria-hidden="true">
@@ -234,7 +240,7 @@ export default function ArborizacaoSection() {
 
           {/* AS 3 CARTAS DE CONTEÚDO */}
           <div className="arb-deck" id="arb-cards-deck" role="list">
-            {ARBOR_CARDS.map((card, index) => {
+            {cards.map((card, index) => {
               const isOpen = openCardIndex === index;
               const isOtherOpen = openCardIndex !== null && openCardIndex !== index;
 
@@ -247,7 +253,7 @@ export default function ArborizacaoSection() {
                   data-card-open={isOpen ? 'true' : 'false'}
                 >
                   <div className="arb-card-flipper">
-                    {/* VERSO / CAPA DA CARTA (Visível no Estado 1 empilhado e Estado 2 em leque) */}
+                    {/* VERSO / CAPA DA CARTA */}
                     <button
                       ref={(el) => (cardBtnRefs.current[index] = el)}
                       type="button"
@@ -276,14 +282,14 @@ export default function ArborizacaoSection() {
 
                         <div className="arb-card-back-bottom">
                           <span className="arb-card-flip-prompt">
-                            <span>Virar carta e ler</span>
+                            <span data-i18n="arborizacao.flipPrompt">{arborDict.flipPrompt}</span>
                             <Icon name="arrows-clockwise-duotone" size="sm" className="ic-inline" />
                           </span>
                         </div>
                       </div>
                     </button>
 
-                    {/* FRENTE DE LEITURA DA CARTA (Visível no Estado 3 ao virar a carta; acessível a leitores de tela mesmo virada) */}
+                    {/* FRENTE DE LEITURA DA CARTA */}
                     <article
                       id={`arb-card-content-${card.id}`}
                       className="arb-card-face arb-card-front"
@@ -296,14 +302,16 @@ export default function ArborizacaoSection() {
                           >
                             {renderCardIcon(card.iconType)}
                           </span>
-                          <span className="arb-card-step">Carta 0{index + 1}</span>
+                          <span className="arb-card-step">
+                            {arborDict.cardStepPrefix} 0{index + 1}
+                          </span>
                         </div>
                         <button
                           ref={(el) => (closeBtnRefs.current[index] = el)}
                           type="button"
                           className="arb-card-close ic-btn"
                           onClick={handleCloseActiveCard}
-                          aria-label={`Fechar carta ${card.title}`}
+                          aria-label={`${arborDict.closeCardAriaPrefix} ${card.title}`}
                           tabIndex={isOpen ? 0 : -1}
                         >
                           <Icon name="x-duotone" size="md" />
@@ -350,7 +358,9 @@ export default function ArborizacaoSection() {
                                     className="arb-source-badge"
                                     tabIndex={isOpen ? 0 : -1}
                                   >
-                                    <span>[Fonte: {b.sourceLabel}</span>
+                                    <span>
+                                      [{arborDict.sourcePrefix}: {b.sourceLabel}
+                                    </span>
                                     <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
                                     <span>]</span>
                                   </a>
@@ -362,35 +372,15 @@ export default function ArborizacaoSection() {
 
                         {card.paragraphs &&
                           card.paragraphs.map((p, idx) => (
-                            <p
-                              key={idx}
-                              className="arb-card-desc"
-                              dangerouslySetInnerHTML={{
-                                __html: p
-                                  .replace(
-                                    /Censo do IBGE \(2022\)/g,
-                                    '<a href="https://censo2022.ibge.gov.br/" target="_blank" rel="noopener noreferrer" class="arb-inline-link"><strong>Censo do IBGE (2022)</strong> <svg viewBox="0 0 256 256" class="ic-svg ic-sm ic-inline-ext" aria-hidden="true" focusable="false"><use href="#ic-arrow-square-out-duotone"></use></svg></a>'
-                                  )
-                                  .replace(
-                                    /Sergipe é o estado brasileiro com o menor índice de vias públicas arborizadas de todo o país\./g,
-                                    '<strong>Sergipe é o estado brasileiro com o menor índice de vias públicas arborizadas de todo o país.</strong>'
-                                  )
-                                  .replace(
-                                    /ilhas de calor/g,
-                                    '<a href="https://www.gov.br/mma/pt-br" target="_blank" rel="noopener noreferrer" class="arb-inline-link"><strong>ilhas de calor</strong> <svg viewBox="0 0 256 256" class="ic-svg ic-sm ic-inline-ext" aria-hidden="true" focusable="false"><use href="#ic-arrow-square-out-duotone"></use></svg></a>'
-                                  )
-                                  .replace(
-                                    /Arborização Inteligente/g,
-                                    '<strong>Arborização Inteligente</strong>'
-                                  )
-                              }}
-                            />
+                            <p key={idx} className="arb-card-desc">
+                              {p}
+                            </p>
                           ))}
 
                         {card.officialSource && (
                           <div className="arb-official-source">
                             <span className="arb-official-label">
-                              Fonte Oficial Citada:
+                              {arborDict.officialSourceLabel}
                             </span>
                             <a
                               href={card.officialSource.url}

@@ -46,8 +46,8 @@ export const TEAM_MEMBERS = [
   {
     id: "jonatas",
     name: "Jonatas",
-    role: "Hardware, Eletrônica & IoT",
-    desc: "Especialista em telemetria, conexões remotas de dados e otimização de circuitos de baixo consumo. Graduando em Engenharia Eletrônica pela UFS.",
+    role: "Técnico em Podas",
+    desc: "Atua no manejo técnico de podas, avaliação estrutural e conservação da saúde arbórea em campo. Graduando em Agroindústria pela UFS.",
     photo: "assets/membros/jonatas.jpeg",
     photoClass: "member-photo-jonatas",
     delay: "0.2s",
@@ -57,8 +57,8 @@ export const TEAM_MEMBERS = [
   {
     id: "ellen",
     name: "Ellen",
-    role: "Comunicação & Mídias Digitais",
-    desc: "Estrategista de conteúdo visual, engajamento social e divulgação das descobertas ecológicas. Graduanda em Publicidade e Propaganda pela UFS.",
+    role: "Pesquisa Ambiental & Sustentabilidade",
+    desc: "Atua na pesquisa biológica, avaliação da saúde arbórea e conservação da flora nativa urbana. Graduanda em Ciências Biológicas pela UFS.",
     photo: "assets/membros/ellen.jpeg",
     photoClass: "member-photo-ellen",
     delay: "0.35s",

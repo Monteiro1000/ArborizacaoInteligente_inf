@@ -1,153 +1,138 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { AUDIENCE_SEGMENTS } from '../data/solutionData';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Icon } from './IconSprite';
+import { useLanguage } from '../context/LanguageContext';
 
 /**
- * DADOS DOS 4 PLANOS DA ÁRVORE INTERATIVA (Edite textos, preços e links aqui)
- * Metáfora de altitude: do mais abrangente (Galho Alto) ao mais pontual/estrutural (Raiz).
+ * Geometria base dos nós e galhos da Árvore Interativa em SVG
  */
-export const ARVPLANOS_CONFIG = {
-  featuredPlanId: 'drones', // ID do plano com selo "Mais indicado" (ou "nenhum")
-  ctaText: 'Solicitar Proposta deste Plano',
-  ctaHref: '#contato',
-  plans: [
-    {
-      id: 'satelite',
-      num: '01',
-      altitudeLabel: 'Galho Alto',
-      shortTitle: 'Satélite',
-      title: 'Satélite - Plano Base',
-      summary:
-        'Mapeamento e diagnóstico macroscópico por sensoriamento remoto via satélite.',
-      howItWorks: [
-        {
-          text: 'Imagens de satélite multiespectrais em alta resolução espacial',
-          sourceLabel: null,
-          sourceUrl: null
-        },
-        {
-          text: 'Cálculo de índices de vegetação (NDVI)',
-          sourceLabel: 'INPE / Sensoriamento Remoto',
-          sourceUrl: 'https://earthobservatory.nasa.gov/features/MeasuringVegetation'
-        },
-        {
-          text: 'Identificação de áreas com déficit crítico de cobertura vegetal e relatório panorâmico municipal',
-          sourceLabel: null,
-          sourceUrl: null
-        }
-      ],
-      audience: 'Diagnóstico inicial para municípios',
-      price: '[A DEFINIR]',
-      side: 'right',
-      nodeX: 470,
-      nodeY: 110,
-      branchPath: 'M 340 245 L 340 150 L 380 110 L 470 110',
-      iconType: 'satellite'
-    },
-    {
-      id: 'drones',
-      num: '02',
-      altitudeLabel: 'Galho Médio',
-      shortTitle: 'Drones',
-      title: 'Drones - Plano Integrado a Drones',
-      summary:
-        'Análise avançada da cobertura vegetal e copas através de voos aéreos especializados.',
-      howItWorks: [
-        {
-          text: 'Voo automatizado com sensores de alta definição óptica',
-          sourceLabel: null,
-          sourceUrl: null
-        },
-        {
-          text: 'Modelagem tridimensional (3D) e ortomosaicos georreferenciados',
-          sourceLabel: null,
-          sourceUrl: null
-        },
-        {
-          text: 'Detecção precoce de pragas, galhos secos, risco de tombamento e avaliação volumétrica da copa',
-          sourceLabel: null,
-          sourceUrl: null
-        }
-      ],
-      audience: 'Grandes avenidas, praças e corredores verdes',
-      price: '[A DEFINIR]',
-      side: 'left',
-      nodeX: 210,
-      nodeY: 220,
-      branchPath: 'M 340 315 L 340 260 L 300 220 L 210 220',
-      iconType: 'drone'
-    },
-    {
-      id: 'sensores',
-      num: '03',
-      altitudeLabel: 'Galho Baixo',
-      shortTitle: 'Sensores por Árvore',
-      title: 'Sensores por Árvore - Plano Sensores IoT',
-      summary:
-        'Monitoramento contínuo em tempo real por telemetria dedicada e Internet das Coisas.',
-      howItWorks: [
-        {
-          text: 'Estações de monitoramento IoT em vias críticas e árvores estratégicas',
-          sourceLabel: 'Espressif IoT',
-          sourceUrl: 'https://www.espressif.com/en/products/socs/esp32'
-        },
-        {
-          text: 'Leitura 24/7 de microclima: umidade do ar, temperatura e umidade do solo',
-          sourceLabel: null,
-          sourceUrl: null
-        },
-        {
-          text: 'Alertas automáticos preditivos de estresse hídrico, risco fitossanitário e visão computacional',
-          sourceLabel: null,
-          sourceUrl: null
-        }
-      ],
-      audience: 'Locais críticos com ilhas de calor e árvores históricas',
-      price: '[A DEFINIR]',
-      side: 'right',
-      nodeX: 470,
-      nodeY: 330,
-      branchPath: 'M 340 400 L 340 370 L 380 330 L 470 330',
-      iconType: 'sensor'
-    },
-    {
-      id: 'cadastro',
-      num: '04',
-      altitudeLabel: 'Raiz',
-      shortTitle: 'Cadastro em Campo',
-      title: 'Cadastro Técnico em Campo - Plano Técnico',
-      summary:
-        'Ambiente interativo corporativo para técnicos e gestores mapearem e gerenciarem árvores.',
-      howItWorks: [
-        {
-          text: 'Dashboard de gestão técnica para prefeituras e secretarias com geolocalização individual',
-          sourceLabel: null,
-          sourceUrl: null
-        },
-        {
-          text: 'Histórico completo de podas, adubações, laudos fitossanitários e manutenções',
-          sourceLabel: null,
-          sourceUrl: null
-        },
-        {
-          text: 'Classificação assistida de espécies nativas versus invasoras',
-          sourceLabel: 'Flora do Brasil 2020',
-          sourceUrl: 'http://floradobrasil.jbrj.gov.br/'
-        }
-      ],
-      audience: 'Secretarias de Meio Ambiente e Obras',
-      price: '[A DEFINIR]',
-      side: 'left',
-      nodeX: 210,
-      nodeY: 515,
-      branchPath: 'M 340 435 L 340 475 L 300 515 L 210 515',
-      iconType: 'root'
-    }
-  ]
+const TREE_GEOMETRY = {
+  satelite: {
+    side: 'right',
+    nodeX: 470,
+    nodeY: 110,
+    branchPath: 'M 340 245 L 340 150 L 380 110 L 470 110',
+    iconType: 'satellite'
+  },
+  drones: {
+    side: 'left',
+    nodeX: 210,
+    nodeY: 220,
+    branchPath: 'M 340 315 L 340 260 L 300 220 L 210 220',
+    iconType: 'drone'
+  },
+  sensores: {
+    side: 'right',
+    nodeX: 470,
+    nodeY: 330,
+    branchPath: 'M 340 400 L 340 370 L 380 330 L 470 330',
+    iconType: 'sensor'
+  },
+  cadastro: {
+    side: 'left',
+    nodeX: 210,
+    nodeY: 515,
+    branchPath: 'M 340 435 L 340 475 L 300 515 L 210 515',
+    iconType: 'root'
+  }
 };
 
+const FEATURED_PLAN_ID = 'drones';
+
+/**
+ * Ícones SVG de linha minimalistas para os 4 cards da Seção Tecnológica (Tarefa 4)
+ */
+function renderTechLineIcon(id) {
+  switch (id) {
+    case 'iot':
+      return (
+        <svg
+          className="tech-seg-line-svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="6" y="6" width="12" height="12" rx="2.5" />
+          <rect x="9.5" y="9.5" width="5" height="5" rx="1" />
+          <path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4" />
+        </svg>
+      );
+    case 'drones':
+      return (
+        <svg
+          className="tech-seg-line-svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="9" y="9" width="6" height="6" rx="1.5" />
+          <path d="M9 9L5.5 5.5M15 9l3.5-3.5M9 15l-3.5 3.5M15 15l3.5 3.5" />
+          <circle cx="5" cy="5" r="2.5" />
+          <circle cx="19" cy="5" r="2.5" />
+          <circle cx="5" cy="19" r="2.5" />
+          <circle cx="19" cy="19" r="2.5" />
+        </svg>
+      );
+    case 'satelite':
+      return (
+        <svg
+          className="tech-seg-line-svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M13 7L9 3 5 7l4 4" />
+          <path d="m17 11 4 4-4 4-4-4" />
+          <path d="m8 12 4 4 6-6-4-4Z" />
+          <path d="m16 8 3-3" />
+          <path d="M9 21a6 6 0 0 0-6-6" />
+          <path d="M6 21a3 3 0 0 0-3-3" />
+        </svg>
+      );
+    case 'cadastro':
+    default:
+      return (
+        <svg
+          className="tech-seg-line-svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+          <rect x="8" y="2" width="8" height="4" rx="1" />
+          <path d="M9 12h6" />
+          <path d="M9 16h4" />
+          <circle cx="15.5" cy="16.5" r="1.5" />
+        </svg>
+      );
+  }
+}
+
 export default function SolutionSection() {
-  const { plans, featuredPlanId, ctaText, ctaHref } = ARVPLANOS_CONFIG;
+  const { dict } = useLanguage();
+  const solDict = dict.solution;
+
+  const plans = useMemo(() => {
+    return solDict.plans.map((p) => ({
+      ...p,
+      ...(TREE_GEOMETRY[p.id] || TREE_GEOMETRY.satelite)
+    }));
+  }, [solDict.plans]);
 
   const [treeGrown, setTreeGrown] = useState(false);
   const [activePlanIndex, setActivePlanIndex] = useState(null); // null | 0 | 1 | 2 | 3
@@ -161,7 +146,7 @@ export default function SolutionSection() {
 
   const activePlan = activePlanIndex !== null ? plans[activePlanIndex] : null;
 
-  // 1. IntersectionObserver: dispara o crescimento da árvore em SVG uma única vez
+  // IntersectionObserver: dispara o crescimento da árvore em SVG uma única vez
   useEffect(() => {
     const el = treeSectionRef.current;
     if (!el) return;
@@ -192,15 +177,13 @@ export default function SolutionSection() {
     (index) => {
       setActivePlanIndex((prev) => {
         if (prev === index) {
-          setLiveMessage(`Painel do plano ${plans[index].shortTitle} fechado.`);
+          setLiveMessage(`${plans[index].shortTitle}`);
           setTimeout(() => {
             nodeRefs.current[index]?.focus();
           }, 50);
           return null;
         }
-        setLiveMessage(
-          `Plano selecionado: ${plans[index].title}. ${plans[index].summary}`
-        );
+        setLiveMessage(`${plans[index].title}. ${plans[index].summary}`);
         setTimeout(() => {
           closeBtnRef.current?.focus();
         }, 120);
@@ -215,7 +198,6 @@ export default function SolutionSection() {
     setActivePlanIndex((prev) => {
       if (prev !== null) {
         const lastIndex = prev;
-        setLiveMessage('Painel de plano fechado.');
         setTimeout(() => {
           nodeRefs.current[lastIndex]?.focus();
         }, 50);
@@ -224,12 +206,11 @@ export default function SolutionSection() {
     });
   }, []);
 
-  // Navegar para o plano anterior/próximo dentro do painel
   const handlePrevPlan = useCallback(() => {
     setActivePlanIndex((prev) => {
       if (prev === null) return 0;
       const nextIdx = (prev - 1 + plans.length) % plans.length;
-      setLiveMessage(`Navegou para: ${plans[nextIdx].title}`);
+      setLiveMessage(plans[nextIdx].title);
       return nextIdx;
     });
   }, [plans]);
@@ -238,7 +219,7 @@ export default function SolutionSection() {
     setActivePlanIndex((prev) => {
       if (prev === null) return 0;
       const nextIdx = (prev + 1) % plans.length;
-      setLiveMessage(`Navegou para: ${plans[nextIdx].title}`);
+      setLiveMessage(plans[nextIdx].title);
       return nextIdx;
     });
   }, [plans]);
@@ -269,7 +250,6 @@ export default function SolutionSection() {
     [activePlanIndex, handleClosePanel]
   );
 
-  // Ícones vetoriais de cada plano no painel (Sprite SVG local)
   const renderPlanIcon = (type) => {
     switch (type) {
       case 'satellite':
@@ -288,10 +268,12 @@ export default function SolutionSection() {
     <section className="solution-section" id="solucao">
       <div className="container">
         <div className="section-header text-center">
-          <p className="eyebrow eyebrow-dark">Tecnologia &amp; Inovação</p>
-          <h2>Solução: Sistema de Monitoramento Arbóreo</h2>
-          <p className="section-text">
-            Um sistema de monitoramento arbóreo capaz de analisar áreas com déficit vegetal, avaliar a saúde das árvores em tempo real e diferenciar espécies nativas de invasoras por meio de sensores IoT, inteligência artificial e drones.
+          <p className="eyebrow eyebrow-dark" data-i18n="solution.eyebrow">
+            {solDict.eyebrow}
+          </p>
+          <h2 data-i18n="solution.title">{solDict.title}</h2>
+          <p className="section-text" data-i18n="solution.subtitle">
+            {solDict.subtitle}
           </p>
         </div>
 
@@ -302,8 +284,9 @@ export default function SolutionSection() {
               width="560"
               height="315"
               src="https://www.youtube.com/embed/qVLRZMfHiZE?si=u-ywzkvD7ejwf8Ds"
-              title="YouTube video player"
+              title={solDict.videoTitle}
               frameBorder="0"
+              loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
@@ -321,23 +304,24 @@ export default function SolutionSection() {
           data-active-plan={activePlan ? activePlan.id : 'none'}
           data-hover-plan={hoverPlanId || 'none'}
         >
-          {/* Região aria-live para anunciar abertura e troca de planos */}
           <div className="arvplanos-sr-only" aria-live="polite" aria-atomic="true">
             {liveMessage}
           </div>
 
           <div className="arvplanos-header text-center">
-            <span className="arvplanos-badge">Modelos de Atendimento</span>
-            <h3 className="arvplanos-title">
-              Os 4 Planos do Projeto Arborização Inteligente
+            <span className="arvplanos-badge" data-i18n="solution.treeBadge">
+              {solDict.treeBadge}
+            </span>
+            <h3 className="arvplanos-title" data-i18n="solution.treeTitle">
+              {solDict.treeTitle}
             </h3>
-            <p className="arvplanos-subtitle">
-              Da visão orbital por satélite até a raiz cadastrada em campo: clique em cada galho ou raiz da árvore-circuito para explorar o plano correspondente.
+            <p className="arvplanos-subtitle" data-i18n="solution.treeSubtitle">
+              {solDict.treeSubtitle}
             </p>
           </div>
 
           {/* Lista semântica oculta visualmente (sr-only) para leitores de tela e SEO */}
-          <ul className="arvplanos-sr-only" aria-label="Resumo completo dos 4 planos">
+          <ul className="arvplanos-sr-only" aria-label={solDict.srListAria}>
             {plans.map((p) => (
               <li key={p.id}>
                 <h4>
@@ -349,13 +333,16 @@ export default function SolutionSection() {
                     <li key={i}>{item.text}</li>
                   ))}
                 </ul>
-                <p>Público-alvo: {p.audience}</p>
-                <p>Investimento: {p.price}</p>
+                <p>
+                  {solDict.audienceLabel}: {p.audience}
+                </p>
+                <p>
+                  {solDict.priceLabel}: {p.price}
+                </p>
               </li>
             ))}
           </ul>
 
-          {/* Backdrop para fechar bottom sheet no mobile ou ao clicar fora */}
           {activePlan && (
             <div
               className="arvplanos-backdrop"
@@ -375,23 +362,20 @@ export default function SolutionSection() {
                 className="arvplanos-svg"
                 viewBox="0 0 680 610"
                 role="group"
-                aria-label="Árvore interativa dos 4 planos de monitoramento arbóreo"
+                aria-label={solDict.treeAria}
               >
                 <defs>
-                  {/* Gradiente do tronco e galhos (Verde Esmeralda) */}
                   <linearGradient id="arvplanos-trunk-grad" x1="0%" y1="100%" x2="0%" y2="0%">
                     <stop offset="0%" stopColor="#0c8555" />
                     <stop offset="50%" stopColor="#16be7d" />
                     <stop offset="100%" stopColor="#4be3a8" />
                   </linearGradient>
 
-                  {/* Gradiente Dourado para hover e destaque */}
                   <linearGradient id="arvplanos-gold-grad" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#e8be50" />
                     <stop offset="100%" stopColor="#ffdf80" />
                   </linearGradient>
 
-                  {/* Filtro de brilho (Glow) para nós e trilhas ativas */}
                   <filter id="arvplanos-glow" x="-30%" y="-30%" width="160%" height="160%">
                     <feGaussianBlur stdDeviation="4" result="blur" />
                     <feMerge>
@@ -413,7 +397,6 @@ export default function SolutionSection() {
                     strokeWidth="1.2"
                     strokeDasharray="6 6"
                   />
-                  {/* Contorno geométrico estilizado de copa e folhas em circuito */}
                   <path
                     className="arvplanos-foliage-ring"
                     d="M 225 320 C 165 280 170 185 235 140 C 265 85 330 60 340 60 C 350 60 415 85 445 140 C 510 185 515 280 455 320"
@@ -444,13 +427,12 @@ export default function SolutionSection() {
                     fontWeight="700"
                     letterSpacing="0.08em"
                   >
-                    SOLO URBANO
+                    {solDict.soilLabel}
                   </text>
                 </g>
 
-                {/* TRONCO CENTRAL E RAÍZES SECUNDÁRIAS DECORATIVAS (Estilo Circuito 45°/90°) */}
+                {/* TRONCO CENTRAL E RAÍZES SECUNDÁRIAS DECORATIVAS */}
                 <g className="arvplanos-trunk-group" aria-hidden="true">
-                  {/* Trilhas paralelas laterais do tronco */}
                   <path
                     className="arvplanos-draw-path arvplanos-delay-1"
                     d="M 330 435 L 330 190 L 310 170"
@@ -471,7 +453,6 @@ export default function SolutionSection() {
                     strokeLinejoin="round"
                     pathLength="100"
                   />
-                  {/* Eixo principal do tronco */}
                   <path
                     className="arvplanos-draw-path arvplanos-trunk-main"
                     d="M 340 435 L 340 95"
@@ -481,7 +462,6 @@ export default function SolutionSection() {
                     strokeLinecap="round"
                     pathLength="100"
                   />
-                  {/* Raízes secundárias decorativas à direita e centro */}
                   <path
                     className="arvplanos-draw-path arvplanos-delay-2"
                     d="M 340 435 L 340 470 L 385 515 L 445 515"
@@ -513,7 +493,7 @@ export default function SolutionSection() {
                 {plans.map((plan, index) => {
                   const isActive = activePlanIndex === index;
                   const isHovered = hoverPlanId === plan.id;
-                  const isFeatured = featuredPlanId === plan.id;
+                  const isFeatured = FEATURED_PLAN_ID === plan.id;
                   const isRight = plan.side === 'right';
                   const labelX = isRight ? plan.nodeX + 28 : plan.nodeX - 28;
                   const textAnchor = isRight ? 'start' : 'end';
@@ -524,7 +504,6 @@ export default function SolutionSection() {
                       className={`arvplanos-branch-unit arvplanos-unit-${plan.id} ${isActive ? 'is-active' : ''} ${isHovered ? 'is-hovered' : ''}`}
                       data-plan-id={plan.id}
                     >
-                      {/* Caminho base do galho/raiz (desenhado na entrada via stroke-dashoffset) */}
                       <path
                         className={`arvplanos-branch-path arvplanos-delay-${index + 1}`}
                         d={plan.branchPath}
@@ -537,7 +516,6 @@ export default function SolutionSection() {
                         filter={isActive || isHovered ? 'url(#arvplanos-glow)' : undefined}
                       />
 
-                      {/* Pulso de energia fluindo do tronco até o nó quando o plano está ativo */}
                       <path
                         className="arvplanos-energy-pulse"
                         d={plan.branchPath}
@@ -550,13 +528,12 @@ export default function SolutionSection() {
                         filter="url(#arvplanos-glow)"
                       />
 
-                      {/* Nó clicável e acessível + Rótulo sempre visível */}
                       <g
                         ref={(el) => (nodeRefs.current[index] = el)}
                         className="arvplanos-node-group"
                         role="button"
                         tabIndex={0}
-                        aria-label={`Plano ${plan.shortTitle} (${plan.altitudeLabel})`}
+                        aria-label={`${solDict.planWord} ${plan.shortTitle} (${plan.altitudeLabel})`}
                         aria-expanded={isActive}
                         aria-controls="arvplanos-detail-panel"
                         onClick={(e) => {
@@ -574,7 +551,6 @@ export default function SolutionSection() {
                           }
                         }}
                       >
-                        {/* Área de toque generosa (>= 44x44px) cobrindo nó e rótulo */}
                         <rect
                           x={isRight ? plan.nodeX - 26 : plan.nodeX - 205}
                           y={plan.nodeY - 28}
@@ -584,7 +560,6 @@ export default function SolutionSection() {
                           fill="transparent"
                         />
 
-                        {/* Anel pulsante discreto ao redor do nó */}
                         <circle
                           className="arvplanos-node-pulse"
                           cx={plan.nodeX}
@@ -595,7 +570,6 @@ export default function SolutionSection() {
                           strokeWidth="1.8"
                         />
 
-                        {/* Círculo principal do nó (Dourado em repouso, Verde Esmeralda com glow quando ativo) */}
                         <circle
                           className="arvplanos-node-core"
                           cx={plan.nodeX}
@@ -607,7 +581,6 @@ export default function SolutionSection() {
                           filter={isActive ? 'url(#arvplanos-glow)' : undefined}
                         />
 
-                        {/* Ponto central / número */}
                         <text
                           x={plan.nodeX}
                           y={plan.nodeY + 4}
@@ -619,7 +592,6 @@ export default function SolutionSection() {
                           {plan.num}
                         </text>
 
-                        {/* Rótulo sempre visível ao lado do nó */}
                         <text
                           className="arvplanos-node-meta"
                           x={labelX}
@@ -627,7 +599,7 @@ export default function SolutionSection() {
                           textAnchor={textAnchor}
                         >
                           {plan.altitudeLabel.toUpperCase()}
-                          {isFeatured ? ' • MAIS INDICADO' : ''}
+                          {isFeatured ? ` • ${solDict.featuredTag}` : ''}
                         </text>
                         <text
                           className="arvplanos-node-label"
@@ -643,8 +615,8 @@ export default function SolutionSection() {
                 })}
               </svg>
 
-              <p className="arvplanos-hint">
-                Clique em qualquer nó dourado da árvore para inspecionar o plano
+              <p className="arvplanos-hint" data-i18n="solution.treeHint">
+                {solDict.treeHint}
               </p>
             </div>
 
@@ -660,16 +632,15 @@ export default function SolutionSection() {
             >
               {activePlan && (
                 <div className="arvplanos-panel-inner">
-                  {/* Barra superior do painel */}
                   <div className="arvplanos-panel-top">
                     <div className="arvplanos-panel-badges">
                       <span className="arvplanos-panel-altitude">
-                        {activePlan.altitudeLabel} Plano {activePlan.num}
+                        {activePlan.altitudeLabel} • {solDict.planWord} {activePlan.num}
                       </span>
-                      {featuredPlanId === activePlan.id && (
+                      {FEATURED_PLAN_ID === activePlan.id && (
                         <span className="arvplanos-panel-featured">
                           <Icon name="sparkle-duotone" size="sm" className="ic-inline" />
-                          <span>Mais indicado</span>
+                          <span>{solDict.featuredBadge}</span>
                         </span>
                       )}
                     </div>
@@ -678,13 +649,12 @@ export default function SolutionSection() {
                       type="button"
                       className="arvplanos-panel-close ic-btn"
                       onClick={handleClosePanel}
-                      aria-label="Fechar painel do plano"
+                      aria-label={solDict.closePanelAria}
                     >
                       <Icon name="x-duotone" size="md" />
                     </button>
                   </div>
 
-                  {/* Cabeçalho com ícone (.icone-badge) e título */}
                   <div className="arvplanos-panel-header">
                     <div
                       className="arvplanos-panel-icon icone-badge ic-badge-plan is-active"
@@ -700,9 +670,8 @@ export default function SolutionSection() {
                     </div>
                   </div>
 
-                  {/* Como funciona (3 tópicos) */}
                   <div className="arvplanos-panel-section">
-                    <h5 className="arvplanos-panel-subtitle">Como funciona</h5>
+                    <h5 className="arvplanos-panel-subtitle">{solDict.howItWorksTitle}</h5>
                     <ul className="arvplanos-panel-list">
                       {activePlan.howItWorks.map((topic, idx) => (
                         <li key={idx}>
@@ -729,30 +698,28 @@ export default function SolutionSection() {
                     </ul>
                   </div>
 
-                  {/* Metadados: Público-Alvo e Preço */}
                   <div className="arvplanos-panel-meta-grid">
                     <div className="arvplanos-meta-box">
-                      <span className="arvplanos-meta-label">Público-alvo</span>
+                      <span className="arvplanos-meta-label">{solDict.audienceLabel}</span>
                       <strong className="arvplanos-meta-value">
                         {activePlan.audience}
                       </strong>
                     </div>
                     <div className="arvplanos-meta-box">
-                      <span className="arvplanos-meta-label">Investimento</span>
+                      <span className="arvplanos-meta-label">{solDict.priceLabel}</span>
                       <strong className="arvplanos-meta-value arvplanos-price">
                         {activePlan.price}
                       </strong>
                     </div>
                   </div>
 
-                  {/* Ação (CTA) + Navegação Anterior/Próximo */}
                   <div className="arvplanos-panel-footer">
                     <a
-                      href={ctaHref}
+                      href="#contato"
                       className="arvplanos-cta-btn ic-interactive"
                       onClick={() => setActivePlanIndex(null)}
                     >
-                      <span>{ctaText}</span>
+                      <span>{solDict.ctaText}</span>
                       <Icon name="arrow-right-duotone" size="sm" />
                     </a>
 
@@ -761,10 +728,10 @@ export default function SolutionSection() {
                         type="button"
                         className="arvplanos-arrow-btn ic-interactive"
                         onClick={handlePrevPlan}
-                        aria-label="Plano anterior"
+                        aria-label={solDict.prevAria}
                       >
                         <Icon name="arrow-left-duotone" size="sm" />
-                        <span>Anterior</span>
+                        <span>{solDict.prevBtn}</span>
                       </button>
                       <span className="arvplanos-step-indicator">
                         {activePlanIndex + 1} / {plans.length}
@@ -773,9 +740,9 @@ export default function SolutionSection() {
                         type="button"
                         className="arvplanos-arrow-btn ic-interactive"
                         onClick={handleNextPlan}
-                        aria-label="Próximo plano"
+                        aria-label={solDict.nextAria}
                       >
-                        <span>Próximo</span>
+                        <span>{solDict.nextBtn}</span>
                         <Icon name="arrow-right-duotone" size="sm" />
                       </button>
                     </div>
@@ -786,56 +753,41 @@ export default function SolutionSection() {
           </div>
         </div>
 
-        {/* Diferencial & Públicos-Alvo */}
-        <div className="solution-details-grid">
-          <div className="differential-card reveal">
-            <div className="card-kicker">Diferencial Inovador</div>
-            <h3>O que torna a Arborização Inteligente um sistema único?</h3>
-            <p>
-              A <strong>Arborização Inteligente</strong> é a única plataforma que integra <strong>monitoramento em tempo real por sensores IoT</strong>, <strong>inteligência artificial preditiva</strong> e <strong>participação cidadã</strong> para transformar a gestão da arborização urbana em um processo preventivo, inteligente e fundamentado em evidências científicas.
+        {/* =================================================================
+            TAREFA 4: SEÇÃO TECNOLÓGICA MINIMALISTA
+            (Substitui "Públicos-alvo, Beneficiários e Diferencial")
+            ================================================================= */}
+        <div className="tech-segments-block reveal" id="tecnologia">
+          <div className="tech-segments-header text-center">
+            <span className="tech-segments-eyebrow" data-i18n="solution.techSegments.eyebrow">
+              {solDict.techSegments.eyebrow}
+            </span>
+            <h3 className="tech-segments-title" data-i18n="solution.techSegments.title">
+              {solDict.techSegments.title}
+            </h3>
+            <p className="tech-segments-subtitle" data-i18n="solution.techSegments.subtitle">
+              {solDict.techSegments.subtitle}
             </p>
-            <div className="differential-ods-box">
-              <div className="ods-box-header">
-                <Icon name="globe-hemisphere-west-duotone" size="sm" />
-                <strong>Viabilidade e Conformidade com os ODS da ONU</strong>
-              </div>
-              <p>
-                Resolve o impasse de secretarias de meio ambiente e prefeituras por laudos e relatórios técnicos precisos que respaldam tomadas de decisão, garantindo credibilidade pública e cumprimento das metas dos{' '}
-                <a
-                  href="https://brasil.un.org/pt-br/sdgs"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-source-link"
-                  title="Conheça os Objetivos de Desenvolvimento Sustentável da ONU Brasil"
-                >
-                  <span>Objetivos de Desenvolvimento Sustentável (ODS)</span>
-                  <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
-                </a>.
-              </p>
-            </div>
           </div>
 
-          <div className="audience-card reveal">
-            <div className="card-kicker">Impacto Multissetorial</div>
-            <h3>Público-alvo e Beneficiários</h3>
-            <p className="audience-intro">
-              Solução projetada para gerar valor prático a diferentes atores da sociedade e da gestão pública:
-            </p>
-            <div className="audience-segments-grid">
-              {AUDIENCE_SEGMENTS.map((seg) => (
-                <div key={seg.id} className="audience-segment-item">
-                  <div className="segment-top-row">
-                    <span className="segment-badge">{seg.badge}</span>
+          <div className="tech-segments-grid">
+            {solDict.techSegments.items.map((seg, index) => (
+              <article key={seg.id} className="tech-segment-card">
+                <div className="tech-segment-card-top">
+                  <div className="tech-segment-icon-box" aria-hidden="true">
+                    {renderTechLineIcon(seg.id)}
                   </div>
-                  <h4>{seg.title}</h4>
-                  <p>{seg.desc}</p>
+                  <span className="tech-segment-tag">
+                    0{index + 1} • {seg.tag}
+                  </span>
                 </div>
-              ))}
-            </div>
+                <h4 className="tech-segment-card-title">{seg.title}</h4>
+                <p className="tech-segment-card-desc">{seg.desc}</p>
+              </article>
+            ))}
           </div>
         </div>
       </div>
     </section>
   );
 }
-
