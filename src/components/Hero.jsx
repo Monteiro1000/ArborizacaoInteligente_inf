@@ -11,6 +11,7 @@ const HERO_SLIDES = [
     src: '/assets/img/hero-1.jpg',
     fallbackSrc: 'assets/equipe.jpg',
     titleKey: 'hero.slides.slide1.title',
+    highlightKey: 'hero.slides.slide1.highlightWord',
     descKey: 'hero.slides.slide1.desc',
     altKey: 'hero.slides.slide1.alt'
   },
@@ -19,6 +20,7 @@ const HERO_SLIDES = [
     src: '/assets/img/hero-2.jpg',
     fallbackSrc: 'assets/arborizacao-bg.jpg',
     titleKey: 'hero.slides.slide2.title',
+    highlightKey: 'hero.slides.slide2.highlightWord',
     descKey: 'hero.slides.slide2.desc',
     altKey: 'hero.slides.slide2.alt'
   },
@@ -27,10 +29,27 @@ const HERO_SLIDES = [
     src: '/assets/img/hero-3.jpg',
     fallbackSrc: 'assets/eventos/mini-cop.jpg',
     titleKey: 'hero.slides.slide3.title',
+    highlightKey: 'hero.slides.slide3.highlightWord',
     descKey: 'hero.slides.slide3.desc',
     altKey: 'hero.slides.slide3.alt'
   }
 ];
+
+function renderTitleWithGreenWord(titleText, highlightWord) {
+  if (!titleText || !highlightWord) return titleText;
+  const idx = titleText.toLowerCase().lastIndexOf(highlightWord.toLowerCase());
+  if (idx === -1) return titleText;
+  const before = titleText.slice(0, idx);
+  const match = titleText.slice(idx, idx + highlightWord.length);
+  const after = titleText.slice(idx + highlightWord.length);
+  return (
+    <>
+      {before}
+      <span className="hero-title-accent">{match}</span>
+      {after}
+    </>
+  );
+}
 
 export default function Hero() {
   const { t, dict } = useLanguage();
@@ -190,7 +209,7 @@ export default function Hero() {
 
           <div key={activeSlide.id} className="hero-slide-copy" aria-live="polite">
             <h1 className="hero-title" data-i18n={activeSlide.titleKey}>
-              {t(activeSlide.titleKey)}
+              {renderTitleWithGreenWord(t(activeSlide.titleKey), t(activeSlide.highlightKey))}
             </h1>
             <p className="lead hero-slide-desc" data-i18n={activeSlide.descKey}>
               {t(activeSlide.descKey)}

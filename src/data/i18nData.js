@@ -44,16 +44,19 @@ export const TRANSLATIONS = {
       slides: {
         slide1: {
           title: 'Arborização Inteligente',
+          highlightWord: 'Inteligente',
           desc: 'Monitoramento arbóreo que transforma dados em qualidade de vida urbana.',
           alt: 'Equipe da startup Arborização Inteligente apresentando protótipos de monitoramento arbóreo urbano'
         },
         slide2: {
           title: 'Sustentabilidade e Tecnologia',
+          highlightWord: 'Sustentabilidade',
           desc: 'Sensores IoT, drones e satélite unidos para proteger a floresta urbana.',
           alt: 'Vias urbanas arborizadas monitoradas por sensores IoT e sensoriamento remoto para redução de ilhas de calor'
         },
         slide3: {
           title: 'Cidades com mais vida, cidades mais verdes',
+          highlightWord: 'verdes',
           desc: 'Gestão preventiva para reduzir ilhas de calor e preservar a flora nativa.',
           alt: 'Mapeamento aéreo com drones e análise preditiva da cobertura vegetal nas cidades brasileiras'
         }
@@ -733,16 +736,19 @@ export const TRANSLATIONS = {
       slides: {
         slide1: {
           title: 'Smart Urban Forestry',
+          highlightWord: 'Smart',
           desc: 'Smart tree monitoring turning environmental data into urban quality of life.',
           alt: 'Arborização Inteligente startup team presenting urban tree monitoring prototypes'
         },
         slide2: {
           title: 'Sustainability and Technology',
+          highlightWord: 'Sustainability',
           desc: 'IoT sensors, drones, and satellite united to protect the urban forest.',
           alt: 'Tree-lined urban streets monitored by IoT sensors and remote sensing to reduce heat islands'
         },
         slide3: {
           title: 'Cities with more life, greener cities',
+          highlightWord: 'greener',
           desc: 'Preventive management to reduce heat islands and preserve native flora.',
           alt: 'Aerial drone mapping and predictive analysis of canopy cover in Brazilian cities'
         }
@@ -1421,16 +1427,19 @@ export const TRANSLATIONS = {
       slides: {
         slide1: {
           title: 'Arborización Inteligente',
+          highlightWord: 'Inteligente',
           desc: 'Monitoreo arbóreo que transforma datos ambientales en calidad de vida urbana.',
           alt: 'Equipo de la startup Arborização Inteligente presentando prototipos de monitoreo arbóreo urbano'
         },
         slide2: {
           title: 'Sustentabilidad y Tecnología',
+          highlightWord: 'Sustentabilidad',
           desc: 'Sensores IoT, drones y satélite unidos para proteger el bosque urbano.',
           alt: 'Vías urbanas arboladas monitoreadas por sensores IoT y teledetección para reducir islas de calor'
         },
         slide3: {
           title: 'Ciudades con más vida, ciudades más verdes',
+          highlightWord: 'verdes',
           desc: 'Gestión preventiva para reducir islas de calor y preservar la flora nativa.',
           alt: 'Mapeo aéreo con drones y análisis predictivo de la cobertura vegetal en ciudades brasileñas'
         }
