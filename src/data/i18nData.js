@@ -39,7 +39,6 @@ export const TRANSLATIONS = {
       langSelectorAria: 'Selecionar idioma do site'
     },
     hero: {
-      statusPill: 'Tecnologia & Meio Ambiente',
       comingSoonPill: 'Lançamento em breve',
       slides: {
         slide1: {
@@ -332,39 +331,7 @@ export const TRANSLATIONS = {
           audience: 'Secretarias de Meio Ambiente e Obras',
           price: 'Sob consulta'
         }
-      ],
-      techSegments: {
-        eyebrow: 'Frentes Tecnológicas',
-        title: 'Segmentos do Monitoramento Inteligente',
-        subtitle:
-          'Quatro camadas integradas de coleta e inteligência de dados para gestão preventiva da floresta urbana.',
-        items: [
-          {
-            id: 'iot',
-            tag: 'Telemetria 24/7',
-            title: 'Sensores por Árvore (IoT)',
-            desc: 'Estações com ESP32 acopladas às árvores para leitura contínua de microclima, temperatura e umidade do solo.'
-          },
-          {
-            id: 'drones',
-            tag: 'Inspeção Aérea',
-            title: 'Drones',
-            desc: 'Mapeamento óptico de alta precisão e visão computacional para diagnosticar copas, pragas e riscos de queda.'
-          },
-          {
-            id: 'satelite',
-            tag: 'Visão Orbital',
-            title: 'Satélite',
-            desc: 'Análise multiespectral e índice NDVI para identificar ilhas de calor e déficits críticos de cobertura vegetal.'
-          },
-          {
-            id: 'cadastro',
-            tag: 'Gestão Pública',
-            title: 'Cadastro Técnico em Campo',
-            desc: 'Inventário georreferenciado com laudos fitossanitários, histórico de manejo e classificação de espécies.'
-          }
-        ]
-      }
+      ]
     },
     partners: {
       eyebrow: 'Ecossistema & Apoio',
@@ -731,7 +698,6 @@ export const TRANSLATIONS = {
       langSelectorAria: 'Select website language'
     },
     hero: {
-      statusPill: 'Technology & Environment',
       comingSoonPill: 'Coming soon',
       slides: {
         slide1: {
@@ -1024,39 +990,7 @@ export const TRANSLATIONS = {
           audience: 'Departments of Environment and Public Works',
           price: 'Upon request'
         }
-      ],
-      techSegments: {
-        eyebrow: 'Technological Pillars',
-        title: 'Smart Monitoring Segments',
-        subtitle:
-          'Four integrated layers of data collection and intelligence for preventive urban forest management.',
-        items: [
-          {
-            id: 'iot',
-            tag: '24/7 Telemetry',
-            title: 'Tree Sensors (IoT)',
-            desc: 'ESP32 stations attached to trees for continuous readings of microclimate, air temperature, and soil moisture.'
-          },
-          {
-            id: 'drones',
-            tag: 'Aerial Inspection',
-            title: 'Drones',
-            desc: 'High-precision optical mapping and computer vision to diagnose tree canopies, pests, and fall hazards.'
-          },
-          {
-            id: 'satelite',
-            tag: 'Orbital Vision',
-            title: 'Satellite',
-            desc: 'Multispectral imagery and NDVI indices to pinpoint urban heat islands and critical canopy deficits.'
-          },
-          {
-            id: 'cadastro',
-            tag: 'Public Management',
-            title: 'Technical Field Registry',
-            desc: 'Georeferenced inventory with phytosanitary reports, maintenance history, and species classification.'
-          }
-        ]
-      }
+      ]
     },
     partners: {
       eyebrow: 'Ecosystem & Support',
@@ -1422,7 +1356,6 @@ export const TRANSLATIONS = {
       langSelectorAria: 'Seleccionar idioma del sitio'
     },
     hero: {
-      statusPill: 'Tecnología y Medio Ambiente',
       comingSoonPill: 'Próximamente',
       slides: {
         slide1: {
@@ -1715,39 +1648,7 @@ export const TRANSLATIONS = {
           audience: 'Secretarías de Medio Ambiente y Obras Públicas',
           price: 'A consultar'
         }
-      ],
-      techSegments: {
-        eyebrow: 'Frentes Tecnológicos',
-        title: 'Segmentos del Monitoreo Inteligente',
-        subtitle:
-          'Cuatro capas integradas de recolección e inteligencia de datos para la gestión preventiva del bosque urbano.',
-        items: [
-          {
-            id: 'iot',
-            tag: 'Telemetría 24/7',
-            title: 'Sensores por Árbol (IoT)',
-            desc: 'Estaciones con ESP32 instaladas en los árboles para lectura continua de microclima, temperatura y humedad del suelo.'
-          },
-          {
-            id: 'drones',
-            tag: 'Inspección Aérea',
-            title: 'Drones',
-            desc: 'Mapeo óptico de alta precisión y visión artificial para diagnosticar copas, plagas y riesgos de caída.'
-          },
-          {
-            id: 'satelite',
-            tag: 'Visión Orbital',
-            title: 'Satélite',
-            desc: 'Análisis multiespectral e índice NDVI para identificar islas de calor y déficits críticos de cobertura vegetal.'
-          },
-          {
-            id: 'cadastro',
-            tag: 'Gestión Pública',
-            title: 'Registro Técnico en Campo',
-            desc: 'Inventario georreferenciado con informes fitosanitarios, historial de manejo y clasificación de especies.'
-          }
-        ]
-      }
+      ]
     },
     partners: {
       eyebrow: 'Ecosistema y Apoyo',

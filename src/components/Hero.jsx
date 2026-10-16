@@ -198,10 +198,6 @@ export default function Hero() {
       <div className="hero container">
         <div className="hero-copy">
           <div className="hero-badges-row">
-            <span className="hero-status-pill" data-i18n="hero.statusPill">
-              {dict.hero.statusPill}
-            </span>
-
             <span className="hero-launch-badge" data-i18n="hero.comingSoonPill">
               {dict.hero.comingSoonPill}
             </span>

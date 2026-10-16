@@ -38,91 +38,6 @@ const TREE_GEOMETRY = {
 
 const FEATURED_PLAN_ID = 'drones';
 
-/**
- * Ícones SVG de linha minimalistas para os 4 cards da Seção Tecnológica (Tarefa 4)
- */
-function renderTechLineIcon(id) {
-  switch (id) {
-    case 'iot':
-      return (
-        <svg
-          className="tech-seg-line-svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <rect x="6" y="6" width="12" height="12" rx="2.5" />
-          <rect x="9.5" y="9.5" width="5" height="5" rx="1" />
-          <path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4" />
-        </svg>
-      );
-    case 'drones':
-      return (
-        <svg
-          className="tech-seg-line-svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <rect x="9" y="9" width="6" height="6" rx="1.5" />
-          <path d="M9 9L5.5 5.5M15 9l3.5-3.5M9 15l-3.5 3.5M15 15l3.5 3.5" />
-          <circle cx="5" cy="5" r="2.5" />
-          <circle cx="19" cy="5" r="2.5" />
-          <circle cx="5" cy="19" r="2.5" />
-          <circle cx="19" cy="19" r="2.5" />
-        </svg>
-      );
-    case 'satelite':
-      return (
-        <svg
-          className="tech-seg-line-svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M13 7L9 3 5 7l4 4" />
-          <path d="m17 11 4 4-4 4-4-4" />
-          <path d="m8 12 4 4 6-6-4-4Z" />
-          <path d="m16 8 3-3" />
-          <path d="M9 21a6 6 0 0 0-6-6" />
-          <path d="M6 21a3 3 0 0 0-3-3" />
-        </svg>
-      );
-    case 'cadastro':
-    default:
-      return (
-        <svg
-          className="tech-seg-line-svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-          <rect x="8" y="2" width="8" height="4" rx="1" />
-          <path d="M9 12h6" />
-          <path d="M9 16h4" />
-          <circle cx="15.5" cy="16.5" r="1.5" />
-        </svg>
-      );
-  }
-}
-
 export default function SolutionSection() {
   const { dict } = useLanguage();
   const solDict = dict.solution;
@@ -299,6 +214,7 @@ export default function SolutionSection() {
             ================================================================= */}
         <div
           ref={treeSectionRef}
+          id="tecnologia"
           className="arvplanos-wrapper"
           data-tree-grown={treeGrown ? 'true' : 'false'}
           data-active-plan={activePlan ? activePlan.id : 'none'}
@@ -750,41 +666,6 @@ export default function SolutionSection() {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* =================================================================
-            TAREFA 4: SEÇÃO TECNOLÓGICA MINIMALISTA
-            (Substitui "Públicos-alvo, Beneficiários e Diferencial")
-            ================================================================= */}
-        <div className="tech-segments-block reveal" id="tecnologia">
-          <div className="tech-segments-header text-center">
-            <span className="tech-segments-eyebrow" data-i18n="solution.techSegments.eyebrow">
-              {solDict.techSegments.eyebrow}
-            </span>
-            <h3 className="tech-segments-title" data-i18n="solution.techSegments.title">
-              {solDict.techSegments.title}
-            </h3>
-            <p className="tech-segments-subtitle" data-i18n="solution.techSegments.subtitle">
-              {solDict.techSegments.subtitle}
-            </p>
-          </div>
-
-          <div className="tech-segments-grid">
-            {solDict.techSegments.items.map((seg, index) => (
-              <article key={seg.id} className="tech-segment-card">
-                <div className="tech-segment-card-top">
-                  <div className="tech-segment-icon-box" aria-hidden="true">
-                    {renderTechLineIcon(seg.id)}
-                  </div>
-                  <span className="tech-segment-tag">
-                    0{index + 1} • {seg.tag}
-                  </span>
-                </div>
-                <h4 className="tech-segment-card-title">{seg.title}</h4>
-                <p className="tech-segment-card-desc">{seg.desc}</p>
-              </article>
-            ))}
           </div>
         </div>
       </div>
