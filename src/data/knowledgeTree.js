@@ -101,6 +101,15 @@ export const KNOWLEDGE_TREE_GEOMETRY = {
   ]
 };
 
+export const BRANCH_ZOOM_VIEWBOX = {
+  all: [0, 0, 960, 700],
+  beneficios: [20, 340, 480, 340],
+  biodiversidade: [20, 95, 480, 340],
+  'clima-cidade': [240, 10, 480, 340],
+  tecnologia: [460, 95, 480, 340],
+  'como-participar': [460, 340, 480, 340]
+};
+
 export const KNOWLEDGE_TREE_DATA = {
   pt: {
     sectionEyebrow: 'Conhecimento & Ecologia Urbana',
@@ -118,6 +127,9 @@ export const KNOWLEDGE_TREE_DATA = {
     restartBtn: 'Recomeçar',
     restartAria: 'Zerar o progresso de exploração da árvore',
     hintText: 'Clique em um galho para destacá-lo ou selecione uma folha para ler seus dados.',
+    zoomFullTreeBtn: 'Ver Árvore Completa',
+    mobileHintTapBranch: 'Toque em um galho ou filtro para aproximar',
+    mobileZoomingIn: 'Galho em foco:',
     closeModalAria: 'Fechar detalhes da folha',
     prevLeafBtn: 'Anterior',
     nextLeafBtn: 'Próxima',
@@ -318,6 +330,9 @@ export const KNOWLEDGE_TREE_DATA = {
     restartBtn: 'Start Over',
     restartAria: 'Reset tree exploration progress',
     hintText: 'Click on a branch to highlight it or select a leaf to read its insights.',
+    zoomFullTreeBtn: 'View Full Tree',
+    mobileHintTapBranch: 'Tap a branch or filter to zoom in',
+    mobileZoomingIn: 'Focused branch:',
     closeModalAria: 'Close leaf details',
     prevLeafBtn: 'Previous',
     nextLeafBtn: 'Next',
@@ -518,6 +533,9 @@ export const KNOWLEDGE_TREE_DATA = {
     restartBtn: 'Reiniciar',
     restartAria: 'Restablecer progreso de exploración del árbol',
     hintText: 'Haz clic en una rama para resaltarla o selecciona una hoja para leer sus datos.',
+    zoomFullTreeBtn: 'Ver Árbol Completo',
+    mobileHintTapBranch: 'Toca una rama o filtro para hacer zoom',
+    mobileZoomingIn: 'Rama enfocada:',
     closeModalAria: 'Cerrar detalles de la hoja',
     prevLeafBtn: 'Anterior',
     nextLeafBtn: 'Siguiente',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Icon } from './IconSprite';
 import { useLanguage } from '../context/LanguageContext';
-import { KNOWLEDGE_TREE_GEOMETRY, KNOWLEDGE_TREE_DATA } from '../data/knowledgeTree';
+import { KNOWLEDGE_TREE_GEOMETRY, KNOWLEDGE_TREE_DATA, BRANCH_ZOOM_VIEWBOX } from '../data/knowledgeTree';
 
 const STORAGE_KEY = 'arbo_knowledge_progress';
 
@@ -53,10 +53,23 @@ export default function ArborizacaoSection() {
   const [treeGrown, setTreeGrown] = useState(false);
   const [liveAnnouncement, setLiveAnnouncement] = useState('');
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [viewBoxValues, setViewBoxValues] = useState([0, 0, 960, 700]);
 
   const sectionRef = useRef(null);
   const modalCloseBtnRef = useRef(null);
   const lastFocusedElementRef = useRef(null);
+
+  // Detecção de mobile viewport (<= 768px)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Detecção de prefers-reduced-motion
   useEffect(() => {
@@ -68,6 +81,48 @@ export default function ArborizacaoSection() {
     mq.addEventListener('change', listener);
     return () => mq.removeEventListener('change', listener);
   }, []);
+
+  // Interpolação suave do viewBox para Foco Dinâmico no Mobile
+  useEffect(() => {
+    const target =
+      isMobile && activeBranchId && BRANCH_ZOOM_VIEWBOX[activeBranchId]
+        ? BRANCH_ZOOM_VIEWBOX[activeBranchId]
+        : BRANCH_ZOOM_VIEWBOX.all;
+
+    if (prefersReducedMotion) {
+      setViewBoxValues(target);
+      return;
+    }
+
+    let startTime = null;
+    const start = [...viewBoxValues];
+    const duration = 460;
+    let animId;
+
+    const step = (now) => {
+      if (!startTime) startTime = now;
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      // Curva suave cubic ease-out
+      const ease = 1 - Math.pow(1 - progress, 3);
+
+      const next = [
+        start[0] + (target[0] - start[0]) * ease,
+        start[1] + (target[1] - start[1]) * ease,
+        start[2] + (target[2] - start[2]) * ease,
+        start[3] + (target[3] - start[3]) * ease
+      ];
+
+      setViewBoxValues(next);
+
+      if (progress < 1) {
+        animId = requestAnimationFrame(step);
+      }
+    };
+
+    animId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animId);
+  }, [activeBranchId, isMobile, prefersReducedMotion]);
 
   // IntersectionObserver com fallback automático para garantir que a árvore nunca fique invisível
   useEffect(() => {
@@ -323,16 +378,49 @@ export default function ArborizacaoSection() {
             Árvore horizontalmente centralizada com galhos abrindo para os lados
             ================================================================= */}
         <div
-          className="tree-desktop-stage"
+          className={`tree-desktop-stage tree-stage-wrapper ${isMobile ? 'is-mobile-view' : ''}`}
           data-active-branch={activeBranchId || 'all'}
+          data-is-zoomed={isMobile && activeBranchId ? 'true' : 'false'}
           data-progress-tier={progressPercent > 66 ? 'high' : progressPercent > 33 ? 'mid' : 'low'}
         >
-          <svg
-            className="tree-svg"
-            viewBox="0 0 960 700"
-            role="img"
-            aria-label={`${content.sectionTitle} - SVG ilustrado interativo`}
-          >
+          {/* Barra de Controle de Zoom e Foco no Mobile */}
+          {isMobile && (
+            <div className="tree-mobile-zoom-bar">
+              {activeBranchId ? (
+                <>
+                  <div className="tree-mobile-zoom-info">
+                    <span className="tree-zoom-pulse" aria-hidden="true" />
+                    <span className="tree-zoom-text">
+                      {content.mobileZoomingIn}{' '}
+                      <strong>{content.branches.find((b) => b.id === activeBranchId)?.name}</strong>
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className="tree-zoom-reset-btn ic-interactive"
+                    onClick={() => setActiveBranchId(null)}
+                    aria-label={content.zoomFullTreeBtn}
+                  >
+                    <Icon name="arrows-out" size="sm" />
+                    <span>{content.zoomFullTreeBtn}</span>
+                  </button>
+                </>
+              ) : (
+                <div className="tree-mobile-hint-badge">
+                  <Icon name="hand-tap" size="sm" />
+                  <span>{content.mobileHintTapBranch}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="tree-stage-card">
+            <svg
+              className="tree-svg"
+              viewBox={viewBoxValues.map((v) => Math.round(v * 10) / 10).join(' ')}
+              role="img"
+              aria-label={`${content.sectionTitle} - SVG ilustrado interativo`}
+            >
             <defs>
               {/* Sombra suave e sombras realistas sem neon */}
               <filter id="tree-soft-shadow" x="-25%" y="-25%" width="150%" height="150%">
@@ -728,8 +816,15 @@ export default function ArborizacaoSection() {
                     }
                   }}
                 >
-                  {/* Área de toque acessível ampla (56px) para clique perfeito */}
-                  <circle cx="0" cy="0" r="28" fill="#ffffff" opacity="0.001" style={{ pointerEvents: 'all' }} />
+                  {/* Área de toque acessível ampla para clique e toque perfeitos */}
+                  <circle
+                    cx="0"
+                    cy="0"
+                    r={isMobile && activeBranchId ? 36 : 28}
+                    fill="#ffffff"
+                    opacity="0.001"
+                    style={{ pointerEvents: 'all' }}
+                  />
 
                   {/* Conteúdo escalável da folha isolado para evitar conflito com transform do SVG */}
                   <g className="tree-leaf-inner">
@@ -814,6 +909,7 @@ export default function ArborizacaoSection() {
               );
             })}
           </svg>
+          </div>
 
           {/* Dica de interação Desktop */}
           <p className="tree-hint-text">

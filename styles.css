@@ -5683,6 +5683,111 @@ img {
 
 @media (max-width: 768px) {
   .tree-desktop-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto 1.5rem;
+    padding: 0;
+  }
+
+  .tree-stage-card {
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    background: rgba(4, 38, 28, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(52, 211, 153, 0.32);
+    border-radius: 20px;
+    padding: 0.5rem 0.35rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+  }
+
+  .tree-stage-card .tree-svg {
+    border-radius: 14px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 960 / 700;
+    overflow: hidden;
+    touch-action: manipulation;
+  }
+
+  .tree-mobile-zoom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 580px;
+    margin-bottom: 0.65rem;
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
+
+  .tree-mobile-zoom-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8125rem;
+    color: #cbd5e1;
+  }
+
+  .tree-zoom-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px #34d399;
+    animation: treePulse 1.5s infinite;
+  }
+
+  .tree-zoom-text strong {
+    color: #4ade80;
+    font-weight: 700;
+  }
+
+  .tree-zoom-reset-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #04261c;
+    background: #4ade80;
+    border: 1px solid #86efac;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(74, 222, 128, 0.35);
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .tree-zoom-reset-btn:active {
+    transform: scale(0.96);
+  }
+
+  .tree-mobile-hint-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    background: rgba(22, 190, 125, 0.15);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+  }
+
+  @keyframes treePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+  }
+
+  .tree-desktop-stage .tree-hint-text {
     display: none;
   }
 
