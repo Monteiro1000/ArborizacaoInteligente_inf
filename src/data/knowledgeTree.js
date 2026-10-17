@@ -112,7 +112,6 @@ export const BRANCH_ZOOM_VIEWBOX = {
 
 export const KNOWLEDGE_TREE_DATA = {
   pt: {
-    sectionEyebrow: 'Conhecimento & Ecologia Urbana',
     sectionTitle: 'Árvore do Conhecimento: Arborização Urbana',
     sectionSubtitle:
       'Navegue pelos galhos e folhas para descobrir como a infraestrutura verde transforma o clima, a biodiversidade e a qualidade de vida das nossas cidades.',
@@ -315,7 +314,6 @@ export const KNOWLEDGE_TREE_DATA = {
     ]
   },
   en: {
-    sectionEyebrow: 'Knowledge & Urban Ecology',
     sectionTitle: 'Knowledge Tree: Urban Forestry',
     sectionSubtitle:
       'Navigate through the branches and leaves to discover how green infrastructure transforms climate, biodiversity, and urban quality of life.',
@@ -518,7 +516,6 @@ export const KNOWLEDGE_TREE_DATA = {
     ]
   },
   es: {
-    sectionEyebrow: 'Conocimiento y Ecología Urbana',
     sectionTitle: 'Árbol del Conocimiento: Arborización Urbana',
     sectionSubtitle:
       'Navega por las ramas y hojas para descubrir cómo la infraestructura verde transforma el clima, la biodiversidad y la calidad de vida de nuestras ciudades.',

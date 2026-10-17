@@ -289,9 +289,6 @@ export default function ArborizacaoSection() {
       <div className="container">
         {/* Cabeçalho da Seção */}
         <header className="tree-header text-center">
-          <span className="tree-eyebrow" data-i18n="arborizacao.eyebrow">
-            {content.sectionEyebrow}
-          </span>
           <h2 id="tree-section-title" className="tree-title" data-i18n="arborizacao.title">
             {content.sectionTitle}
           </h2>
@@ -389,7 +386,6 @@ export default function ArborizacaoSection() {
               {activeBranchId ? (
                 <>
                   <div className="tree-mobile-zoom-info">
-                    <span className="tree-zoom-pulse" aria-hidden="true" />
                     <span className="tree-zoom-text">
                       {content.mobileZoomingIn}{' '}
                       <strong>{content.branches.find((b) => b.id === activeBranchId)?.name}</strong>
@@ -957,14 +953,6 @@ export default function ArborizacaoSection() {
                         onClick={() => handleSelectLeaf(leaf.id)}
                         aria-label={`${leaf.title} (${branch.name}) - ${isVisited ? content.leafExploredBadge : content.leafNewBadge}`}
                       >
-                        <span className="tree-mobile-leaf-icon" aria-hidden="true">
-                          {isVisited ? (
-                            <Icon name="check-circle" size="sm" />
-                          ) : (
-                            <span className="tree-mobile-leaf-dot" />
-                          )}
-                        </span>
-
                         <span className="tree-mobile-leaf-title">{leaf.title}</span>
 
                         <span className="tree-mobile-leaf-status">
