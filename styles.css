@@ -5434,17 +5434,22 @@ img {
 .tree-desktop-stage {
   position: relative;
   width: 100%;
-  max-width: 960px;
+  max-width: 1120px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.tree-stage-card {
+  width: 100%;
+  max-width: 1120px;
+}
+
 .tree-svg {
   width: 100%;
   height: auto;
-  max-width: 960px;
+  max-width: 1120px;
   aspect-ratio: 960 / 700;
   display: block;
   overflow: visible;

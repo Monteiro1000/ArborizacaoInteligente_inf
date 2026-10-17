@@ -413,6 +413,8 @@ export default function ArborizacaoSection() {
           <div className="tree-stage-card">
             <svg
               className="tree-svg"
+              width="960"
+              height="700"
               viewBox={viewBoxValues.map((v) => Math.round(v * 10) / 10).join(' ')}
               role="img"
               aria-label={`${content.sectionTitle} - SVG ilustrado interativo`}
