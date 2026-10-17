@@ -222,9 +222,19 @@ export default function Footer() {
       </div>
 
       <div className="container footer-bottom">
-        <p className="copy-text" data-i18n="footer.copyright">
-          {footerDict.copyright}
-        </p>
+        <div>
+          <p className="copy-text" data-i18n="footer.copyright">
+            {footerDict.copyright}
+          </p>
+          <p className="footer-credits-note">
+            <small>
+              Fotos dos cards sob licenças livres (Wikimedia Commons / CC-BY / Domínio Público).{' '}
+              <a href="CREDITS.md" target="_blank" rel="noopener noreferrer" className="footer-credits-link">
+                Ver Créditos
+              </a>
+            </small>
+          </p>
+        </div>
         <div className="footer-bottom-badges">
           <a
             href="https://brasil.un.org/pt-br/sdgs/11"

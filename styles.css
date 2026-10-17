@@ -4195,6 +4195,23 @@ img {
   margin: 0;
 }
 
+.footer-credits-note {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0.35rem 0 0;
+}
+
+.footer-credits-link {
+  color: #34d399;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.footer-credits-link:hover {
+  color: #86efac;
+}
+
 .footer-bottom-badges {
   display: flex;
   gap: 1.4rem;
@@ -6214,6 +6231,109 @@ img {
 
   .tree-progress-fill {
     transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   CARD IMAGE COMPONENT (PADRÃO UNIFICADO DE IMAGENS NOS CARDS)
+   ========================================================================== */
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(4, 38, 28, 0.45);
+  display: block;
+}
+
+.card-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card-image-wrapper:hover .card-image-img {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-image-img,
+  .card-image-wrapper:hover .card-image-img {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Fallback do CardImage caso falte imagem */
+.card-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(4, 38, 28, 0.95) 0%, rgba(7, 56, 40, 0.9) 100%);
+  border: 1px dashed rgba(52, 211, 153, 0.35);
+  color: #a7f3d0;
+}
+
+.card-image-placeholder-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.card-image-placeholder-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(22, 190, 125, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #34d399;
+}
+
+.card-image-placeholder-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+/* Wrapper no painel de detalhes dos Planos */
+.arvplanos-panel-image-wrapper {
+  width: 100%;
+  margin-bottom: 1.15rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(232, 190, 80, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.arvplanos-panel-image-wrapper .card-image-wrapper {
+  max-height: 200px;
+}
+
+/* Wrapper no modal / popover da folha na Árvore do Conhecimento */
+.tree-modal-image-wrapper {
+  width: 100%;
+  margin-bottom: 1.1rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.tree-modal-image-wrapper .card-image-wrapper {
+  max-height: 220px;
+}
+
+@media (max-width: 768px) {
+  .tree-modal-image-wrapper .card-image-wrapper {
+    max-height: 180px;
   }
 }
 

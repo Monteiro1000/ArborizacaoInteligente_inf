@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Icon } from './IconSprite';
+import CardImage from './CardImage';
 import { useLanguage } from '../context/LanguageContext';
 
 /**
@@ -577,6 +578,18 @@ export default function SolutionSection() {
                     >
                       <Icon name="x-duotone" size="md" />
                     </button>
+                  </div>
+
+                  <div className="arvplanos-panel-image-wrapper">
+                    <CardImage
+                      src={activePlan.image?.src || `images/cards/plano-${activePlan.id}.webp`}
+                      alt={activePlan.image?.alt || activePlan.title}
+                      placeholderTitle={activePlan.title}
+                      aspectRatio="16/9"
+                      width={800}
+                      height={450}
+                      loading="lazy"
+                    />
                   </div>
 
                   <div className="arvplanos-panel-header">

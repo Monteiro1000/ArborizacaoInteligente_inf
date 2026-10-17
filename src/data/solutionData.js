@@ -75,7 +75,11 @@ export const PLANS_DATA = [
     idealFor: "Diagnóstico inicial para municípios",
     isFeatured: false,
     delay: "0s"
-  },
+  ,
+    image: {
+      src: 'images/cards/plano-satelite.webp',
+      alt: 'Imagem orbital de satélite multiespectral monitorando a cobertura vegetal e índice NDVI urbano'
+    }},
   {
     id: "plano-2",
     num: "02",
@@ -107,7 +111,11 @@ export const PLANS_DATA = [
     idealFor: "Secretarias de Meio Ambiente e Obras",
     isFeatured: false,
     delay: "0.1s"
-  },
+  ,
+    image: {
+      src: 'images/cards/plano-cadastro.webp',
+      alt: 'Técnico ambiental realizando medição de tronco e inventário fitossanitário em campo'
+    }},
   {
     id: "plano-3",
     num: "03",
@@ -139,7 +147,11 @@ export const PLANS_DATA = [
     idealFor: "Grandes avenidas, praças e corredores verdes",
     isFeatured: true,
     delay: "0.2s"
-  },
+  ,
+    image: {
+      src: 'images/cards/plano-drones.webp',
+      alt: 'Drone de precisão realizando voo sobre copas de árvores urbanas para modelagem e mapeamento'
+    }},
   {
     id: "plano-4",
     num: "04",
@@ -172,7 +184,11 @@ export const PLANS_DATA = [
     idealFor: "Locais críticos com ilhas de calor e árvores históricas",
     isFeatured: false,
     delay: "0.3s"
-  }
+  ,
+    image: {
+      src: 'images/cards/plano-sensores.webp',
+      alt: 'Sensor IoT de microclima e dendrômetro acoplado a tronco de árvore monitorando parâmetros vitais'
+    }}
 ];
 
 export const AUDIENCE_SEGMENTS = [

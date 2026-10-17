@@ -151,14 +151,22 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Redução comprovada de 2°C a 5°C na temperatura dos microclimas urbanos arborizados.',
             sourceLabel: 'Embrapa Florestas',
             sourceUrl: 'https://www.embrapa.br/florestas'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-conforto-termico.webp',
+              alt: 'Sombreamento natural projetado por copas frondosas sobre via urbana amenizando o microclima'
+            }},
           {
             id: 'qualidade-ar',
             title: 'Qualidade do Ar Respirável',
             text: 'A superfície foliar atua como biofiltro eficiente, retendo material particulado nocivo emitido por veículos e absorvendo gases como dióxido de enxofre e óxidos de nitrogênio.',
             curiosity: 'Árvores adultas e saudáveis chegam a reter toneladas de particulados suspensos por quilômetro quadrado a cada ano.',
             sourceLabel: 'OMS (Organização Mundial da Saúde)',
-            sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health'
+            sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health',
+            image: {
+              src: 'images/cards/folha-qualidade-ar.webp',
+              alt: 'Avenida arborizada com árvores filtrando material particulado e purificando o ar urbano'
+            }
           },
           {
             id: 'saude-bem-estar',
@@ -167,7 +175,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Estudos apontam redução de até 30% em biomarcadores de estresse para pedestres que caminham em vias com vegetação densa.',
             sourceLabel: 'ONU-Habitat (Cidades Sustentáveis)',
             sourceUrl: 'https://brasil.un.org/pt-br/sdgs/11'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-saude-bem-estar.webp',
+              alt: 'Caminho sereno em parque urbano arborizado proporcionando tranquilidade e contato com a natureza'
+            }},
           {
             id: 'drenagem-solo',
             title: 'Drenagem e Solo Permeável',
@@ -175,7 +187,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Solos com cobertura arbórea aumentam em até 4 vezes a velocidade de infiltração da água da chuva em comparação a solos compactados.',
             sourceLabel: 'ANA (Agência Nacional de Águas)',
             sourceUrl: 'https://www.gov.br/ana/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-drenagem-solo.webp',
+              alt: 'Canteiro de chuva e solo permeável com vegetação absorvendo água pluvial e prevenindo alagamentos'
+            }}
         ]
       },
       {
@@ -190,7 +206,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Plantas exóticas invasoras competem por água e nutrientes e muitas vezes danificam estruturas urbanas por falta de raízes adequadas ao solo local.',
             sourceLabel: 'ICMBio / Instituto Hórus',
             sourceUrl: 'https://www.gov.br/icmbio/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-nativas-exoticas.webp',
+              alt: 'Florada dourada de Ipê Amarelo destacando a beleza e a resiliência das espécies nativas'
+            }},
           {
             id: 'refugio-fauna',
             title: 'Refúgio para a Fauna Urbana',
@@ -198,7 +218,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Corredores verdes contínuos aumentam em mais de 60% o trânsito seguro de pássaros nativos entre parques urbanos e áreas rurais.',
             sourceLabel: 'Flora do Brasil 2020',
             sourceUrl: 'http://floradobrasil.jbrj.gov.br/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-refugio-fauna.webp',
+              alt: 'Pássaro pousado em galho de árvore urbana demonstrando a importância do refúgio para a fauna'
+            }},
           {
             id: 'porte-calcadas',
             title: 'Porte e Compatibilidade',
@@ -206,7 +230,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'A escolha da espécie correta para cada largura de calçada evita podas drásticas e impede quebras mecânicas em tempestades.',
             sourceLabel: 'Ministério do Meio Ambiente (MMA)',
             sourceUrl: 'https://www.gov.br/mma/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-porte-calcadas.webp',
+              alt: 'Poda técnica e manejo cuidadoso de árvore urbana compatibilizando copas com calçadas e redes'
+            }}
         ]
       },
       {
@@ -221,7 +249,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Bairros sem arborização chegam a registrar até 8°C a mais de temperatura no solo quando comparados a ruas arborizadas vizinhas.',
             sourceLabel: 'INPE / Sensoriamento Remoto',
             sourceUrl: 'https://earthobservatory.nasa.gov/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-ilhas-calor.webp',
+              alt: 'Túnel verde de árvores gerando sombra densa e quebra térmica contra o calor do asfalto'
+            }},
           {
             id: 'desafio-sergipe',
             title: 'O Desafio Crítico em Sergipe',
@@ -229,7 +261,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'TODO: validar fonte — Menor taxa de arborização no entorno de domicílios do país conforme Censo Demográfico 2022 do IBGE.',
             sourceLabel: 'Censo Demográfico IBGE 2022 (TODO: validar fonte)',
             sourceUrl: 'https://censo2022.ibge.gov.br/',
-            isTodo: true
+            isTodo: true,
+            image: {
+              src: 'images/cards/folha-desafio-sergipe.webp',
+              alt: 'Rua residencial arborizada exemplificando a necessidade de expansão da cobertura arbórea urbana'
+            }
           },
           {
             id: 'chuvas-umidade',
@@ -238,7 +274,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Uma árvore de grande porte pode bombear diariamente centenas de litros de água do solo para a atmosfera em forma de vapor limpo.',
             sourceLabel: 'Embrapa Solos',
             sourceUrl: 'https://www.embrapa.br/solos'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-chuvas-umidade.webp',
+              alt: 'Luz solar transpassando copas verdes densas durante o ciclo contínuo de evapotranspiração'
+            }}
         ]
       },
       {
@@ -253,7 +293,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Permite monitorar a evolução histórica da cobertura vegetal de municípios inteiros sem depender exclusivamente de vistorias manuais.',
             sourceLabel: 'INPE / Sensoriamento Remoto',
             sourceUrl: 'https://earthobservatory.nasa.gov/features/MeasuringVegetation'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-visao-satelite.webp',
+              alt: 'Mapeamento orbital multiespectral com índice de vegetação NDVI realçando áreas verdes urbanas'
+            }},
           {
             id: 'drones-ia',
             title: 'Drones e Visão Computacional',
@@ -261,7 +305,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Gera modelos tridimensionais (ortomosaicos) para avaliar a volumetria e a saúde fitossanitária de cada indivíduo arbóreo.',
             sourceLabel: 'MCTI / Inovação Tecnológica',
             sourceUrl: 'https://www.gov.br/mcti/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-drones-ia.webp',
+              alt: 'Voo de drone aéreo captando detalhes de copas e gerando ortomosaicos para inteligência artificial'
+            }},
           {
             id: 'sensores-iot',
             title: 'Telemetria IoT em Tempo Real',
@@ -269,7 +317,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Sensores com hardware dedicado (ESP32) transmitem telemetria contínua com baixo consumo e conectividade de longo alcance.',
             sourceLabel: 'Espressif Systems IoT',
             sourceUrl: 'https://www.espressif.com/en/products/socs/esp32'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-sensores-iot.webp',
+              alt: 'Estação de telemetria ambiental e sensor acoplado para monitoramento microclimático 24 horas'
+            }},
           {
             id: 'cadastro-tecnico',
             title: 'Inventário Digital Fitossanitário',
@@ -277,7 +329,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Substitui papéis por relatórios digitais integrados com histórico fitossanitário e alertas para equipes de poda técnica.',
             sourceLabel: 'IBGE Cidades',
             sourceUrl: 'https://cidades.ibge.gov.br/'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-cadastro-tecnico.webp',
+              alt: 'Inspeção detalhada de casca e tronco de árvore para diagnóstico fitossanitário digital'
+            }}
         ]
       },
       {
@@ -292,7 +348,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Deixar canteiros permeáveis ao redor das árvores garante água e oxigênio para as raízes e evita rachaduras nas calçadas.',
             sourceLabel: 'Sociedade Brasileira de Arborização Urbana (SBAU)',
             sourceUrl: 'https://sbau.org.br/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-cidadao-bairros.webp',
+              alt: 'Mãos de moradores e voluntários plantando muda de árvore na terra durante ação comunitária'
+            }},
           {
             id: 'escolas-educacao',
             title: 'Educação e Ciência Cidadã',
@@ -300,7 +360,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Atividades práticas de plantio geram vínculos de pertencimento e reduzem significativamente o vandalismo contra mudas urbanas.',
             sourceLabel: 'MEC / Educação Ambiental',
             sourceUrl: 'https://www.gov.br/mec/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-escolas-educacao.webp',
+              alt: 'Identificação botânica e estudo de árvore em atividade prática de ciência cidadã e educação ambiental'
+            }},
           {
             id: 'poder-publico',
             title: 'Gestão Pública e Planejamento',
@@ -308,7 +372,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Cidades que legislam sobre diretrizes arborizadas reduzem gastos em saúde pública relacionados a doenças respiratórias e hipertermia.',
             sourceLabel: 'Ministério do Meio Ambiente (MMA)',
             sourceUrl: 'https://www.gov.br/mma/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-poder-publico.webp',
+              alt: 'Florada urbana com polinizador simbolizando a integração de áreas verdes no planejamento municipal'
+            }}
         ]
       }
     ]
@@ -353,7 +421,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Proven 2°C to 5°C reduction in ambient temperature across tree-lined urban corridors.',
             sourceLabel: 'Embrapa Forestry',
             sourceUrl: 'https://www.embrapa.br/florestas'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-conforto-termico.webp',
+              alt: 'Natural tree canopy shade cast over urban street cooling the microclimate'
+            }},
           {
             id: 'qualidade-ar',
             title: 'Breathable Air Quality',
@@ -361,7 +433,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Mature urban trees capture tons of particulate matter per square kilometer every year.',
             sourceLabel: 'WHO (World Health Organization)',
             sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-qualidade-ar.webp',
+              alt: 'Tree-lined avenue with trees filtering particulate matter and purifying urban air'
+            }},
           {
             id: 'saude-bem-estar',
             title: 'Mental Health & Well-Being',
@@ -369,7 +445,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Pedestrians walking down leafy avenues experience up to 30% lower cortisol and anxiety biomarkers.',
             sourceLabel: 'UN-Habitat (Sustainable Cities)',
             sourceUrl: 'https://brasil.un.org/pt-br/sdgs/11'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-saude-bem-estar.webp',
+              alt: 'Serene walkway in urban park providing tranquility and connection with nature'
+            }},
           {
             id: 'drenagem-solo',
             title: 'Drainage & Soil Health',
@@ -377,7 +457,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Tree-covered soils increase rainwater infiltration rates up to 4 times compared to compacted dirt or bare asphalt.',
             sourceLabel: 'ANA (National Water Agency)',
             sourceUrl: 'https://www.gov.br/ana/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-drenagem-solo.webp',
+              alt: 'Rain garden and permeable soil with vegetation absorbing stormwater and preventing floods'
+            }}
         ]
       },
       {
@@ -392,7 +476,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Invasive species disrupt local food webs and often damage sidewalks due to root types ill-suited for local ground conditions.',
             sourceLabel: 'ICMBio / Hórus Institute',
             sourceUrl: 'https://www.gov.br/icmbio/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-nativas-exoticas.webp',
+              alt: 'Golden blooming of native Yellow Ipe highlighting the beauty and resilience of native flora'
+            }},
           {
             id: 'refugio-fauna',
             title: 'Refuge for Urban Wildlife',
@@ -400,7 +488,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Green corridors boost safe native bird transit between parks and rural reserves by over 60%.',
             sourceLabel: 'Flora do Brasil 2020',
             sourceUrl: 'http://floradobrasil.jbrj.gov.br/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-refugio-fauna.webp',
+              alt: 'Bird perched on urban tree branch demonstrating the essential shelter for urban fauna'
+            }},
           {
             id: 'porte-calcadas',
             title: 'Tree Scale & Street Compatibility',
@@ -408,7 +500,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Strategic species selection prevents over 90% of structural conflicts with sidewalk paving and electrical wires.',
             sourceLabel: 'Ministry of Environment (MMA)',
             sourceUrl: 'https://www.gov.br/mma/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-porte-calcadas.webp',
+              alt: 'Technical pruning and careful tree management balancing canopies with sidewalks and utility lines'
+            }}
         ]
       },
       {
@@ -423,7 +519,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Canopy-deprived neighborhoods can be up to 8°C hotter at ground level than adjacent tree-lined streets.',
             sourceLabel: 'INPE / Remote Sensing',
             sourceUrl: 'https://earthobservatory.nasa.gov/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-ilhas-calor.webp',
+              alt: 'Green tree tunnel providing dense shade and thermal break against asphalt heat'
+            }},
           {
             id: 'desafio-sergipe',
             title: 'The Critical Challenge in Sergipe',
@@ -431,7 +531,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'TODO: validar fonte — Lowest street-tree coverage per household in Brazil based on IBGE 2022 Demographic Census.',
             sourceLabel: 'IBGE 2022 Demographic Census (TODO: validar fonte)',
             sourceUrl: 'https://censo2022.ibge.gov.br/',
-            isTodo: true
+            isTodo: true,
+            image: {
+              src: 'images/cards/folha-desafio-sergipe.webp',
+              alt: 'Tree-lined residential street exemplifying the need to expand urban canopy cover'
+            }
           },
           {
             id: 'chuvas-umidade',
@@ -440,7 +544,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'A mature tree can cycle hundreds of liters of water daily from soil into clean atmospheric vapor.',
             sourceLabel: 'Embrapa Soils',
             sourceUrl: 'https://www.embrapa.br/solos'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-chuvas-umidade.webp',
+              alt: 'Sunlight piercing through dense green leaves during continuous evapotranspiration cycle'
+            }}
         ]
       },
       {
@@ -455,7 +563,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Enables continuous historical monitoring of municipal green coverage without relying solely on manual field surveys.',
             sourceLabel: 'INPE / Remote Sensing',
             sourceUrl: 'https://earthobservatory.nasa.gov/features/MeasuringVegetation'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-visao-satelite.webp',
+              alt: 'Multispectral orbital mapping with NDVI vegetation index highlighting urban green spaces'
+            }},
           {
             id: 'drones-ia',
             title: 'Drones & Computer Vision',
@@ -463,7 +575,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Builds georeferenced 3D orthomosaic models to assess volume and phytosanitary vitality per tree specimen.',
             sourceLabel: 'MCTI / Technological Innovation',
             sourceUrl: 'https://www.gov.br/mcti/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-drones-ia.webp',
+              alt: 'Aerial drone flight capturing canopy details and generating orthomosaics for artificial intelligence'
+            }},
           {
             id: 'sensores-iot',
             title: '24/7 Real-Time IoT Telemetry',
@@ -471,7 +587,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'ESP32 devices deliver continuous telemetry with ultra-low power consumption and long-range connectivity.',
             sourceLabel: 'Espressif Systems IoT',
             sourceUrl: 'https://www.espressif.com/en/products/socs/esp32'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-sensores-iot.webp',
+              alt: 'Environmental telemetry station and sensor unit for 24/7 microclimate monitoring'
+            }},
           {
             id: 'cadastro-tecnico',
             title: 'Phytosanitary Digital Inventory',
@@ -479,7 +599,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Replaces paper clipboards with cloud-based dashboards accessible to public works and environmental crews.',
             sourceLabel: 'IBGE Cities',
             sourceUrl: 'https://cidades.ibge.gov.br/'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-cadastro-tecnico.webp',
+              alt: 'Detailed inspection of tree bark and trunk for digital phytosanitary diagnostics'
+            }}
         ]
       },
       {
@@ -494,7 +618,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Keeping permeable soil basins around sidewalk trees delivers water to roots and prevents sidewalk pavement buckling.',
             sourceLabel: 'Brazilian Society of Urban Forestry (SBAU)',
             sourceUrl: 'https://sbau.org.br/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-cidadao-bairros.webp',
+              alt: 'Hands of residents and volunteers planting a tree sapling in soil during community action'
+            }},
           {
             id: 'escolas-educacao',
             title: 'Education & Citizen Science',
@@ -502,7 +630,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Hands-on student planting days build civic pride and dramatically reduce vandalism against young trees.',
             sourceLabel: 'Ministry of Education (MEC)',
             sourceUrl: 'https://www.gov.br/mec/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-escolas-educacao.webp',
+              alt: 'Botanical identification and tree study during citizen science and environmental education fieldwork'
+            }},
           {
             id: 'poder-publico',
             title: 'Public Policy & Urban Masterplans',
@@ -510,7 +642,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Cities with structured forestry laws see lower public healthcare costs related to heatstroke and respiratory disease.',
             sourceLabel: 'Ministry of Environment (MMA)',
             sourceUrl: 'https://www.gov.br/mma/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-poder-publico.webp',
+              alt: 'Urban tree blossom with pollinator symbolizing green space integration in city master plans'
+            }}
         ]
       }
     ]
@@ -555,7 +691,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Reducción comprobada de 2°C a 5°C en la temperatura ambiente de calles y avenidas arboladas.',
             sourceLabel: 'Embrapa Florestas',
             sourceUrl: 'https://www.embrapa.br/florestas'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-conforto-termico.webp',
+              alt: 'Sombra natural proyectada por copas frondosas sobre calle urbana refrescando el microclima'
+            }},
           {
             id: 'qualidade-ar',
             title: 'Calidad del Aire Respirable',
@@ -563,7 +703,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Árboles maduros retienen toneladas de partículas suspendidas por kilómetro cuadrado anualmente.',
             sourceLabel: 'OMS (Organización Mundial de la Salud)',
             sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-qualidade-ar.webp',
+              alt: 'Avenida arbolada con árboles filtrando material particulado y purificando el aire urbano'
+            }},
           {
             id: 'saude-bem-estar',
             title: 'Salud Mental y Bienestar',
@@ -571,7 +715,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Caminar por calles con arbolado denso disminuye hasta un 30% los biomarcadores de cortisol y ansiedad.',
             sourceLabel: 'ONU-Hábitat (Ciudades Sostenibles)',
             sourceUrl: 'https://brasil.un.org/pt-br/sdgs/11'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-saude-bem-estar.webp',
+              alt: 'Sendero sereno en parque urbano arbolado proporcionando tranquilidad y conexión con la naturaleza'
+            }},
           {
             id: 'drenagem-solo',
             title: 'Drenaje y Suelo Permeable',
@@ -579,7 +727,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Suelos con cobertura arbórea aumentan hasta 4 veces la velocidad de infiltración de lluvias frente a suelos compactados.',
             sourceLabel: 'ANA (Agencia Nacional de Aguas)',
             sourceUrl: 'https://www.gov.br/ana/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-drenagem-solo.webp',
+              alt: 'Jardín de lluvia y suelo permeable con vegetación absorbiendo agua pluvial y previniendo inundaciones'
+            }}
         ]
       },
       {
@@ -594,7 +746,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Especies exóticas invasoras alteran redes tróficas y suelen dañar aceras por carecer de raíces adaptadas al suelo local.',
             sourceLabel: 'ICMBio / Instituto Hórus',
             sourceUrl: 'https://www.gov.br/icmbio/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-nativas-exoticas.webp',
+              alt: 'Floración dorada de Ipê Amarillo destacando la belleza y resiliencia de las especies nativas'
+            }},
           {
             id: 'refugio-fauna',
             title: 'Refugio para la Fauna Urbana',
@@ -602,7 +758,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Corredores verdes continuos elevan en más del 60% el tránsito seguro de aves nativas entre parques y reservas.',
             sourceLabel: 'Flora do Brasil 2020',
             sourceUrl: 'http://floradobrasil.jbrj.gov.br/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-refugio-fauna.webp',
+              alt: 'Ave posada en rama de árbol urbano demostrando la importancia del refugio para la fauna'
+            }},
           {
             id: 'porte-calcadas',
             title: 'Porte y Compatibilidad Urbana',
@@ -610,7 +770,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Seleccionar la especie correcta para cada espacio evita podas agresivas y quiebres durante vendavales.',
             sourceLabel: 'Ministerio del Medio Ambiente (MMA)',
             sourceUrl: 'https://www.gov.br/mma/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-porte-calcadas.webp',
+              alt: 'Poda técnica y manejo cuidadoso de árbol urbano compatibilizando copas con aceras y redes eléctricas'
+            }}
         ]
       },
       {
@@ -625,7 +789,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Barrios sin árboles registran hasta 8°C más de temperatura en el asfalto en comparación con calles arboladas contiguas.',
             sourceLabel: 'INPE / Teledetección',
             sourceUrl: 'https://earthobservatory.nasa.gov/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-ilhas-calor.webp',
+              alt: 'Túnel verde de árboles generando sombra densa y alivio térmico contra el calor del asfalto'
+            }},
           {
             id: 'desafio-sergipe',
             title: 'El Desafío Crítico en Sergipe',
@@ -633,7 +801,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'TODO: validar fonte — Menor tasa de arbolado urbano del país según el Censo Demográfico 2022 del IBGE.',
             sourceLabel: 'Censo Demográfico IBGE 2022 (TODO: validar fonte)',
             sourceUrl: 'https://censo2022.ibge.gov.br/',
-            isTodo: true
+            isTodo: true,
+            image: {
+              src: 'images/cards/folha-desafio-sergipe.webp',
+              alt: 'Calle residencial arbolada ejemplificando la necesidad de expandir la cobertura arbórea urbana'
+            }
           },
           {
             id: 'chuvas-umidade',
@@ -642,7 +814,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Un árbol maduro bombea a diario cientos de litros de agua del subsuelo hacia la atmósfera en forma de vapor limpio.',
             sourceLabel: 'Embrapa Solos',
             sourceUrl: 'https://www.embrapa.br/solos'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-chuvas-umidade.webp',
+              alt: 'Luz solar atravesando copas verdes densas durante el ciclo continuo de evapotranspiración'
+            }}
         ]
       },
       {
@@ -657,7 +833,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Permite monitorear la evolución histórica de la cobertura vegetal municipal sin depender solo de visitas en campo.',
             sourceLabel: 'INPE / Teledetección',
             sourceUrl: 'https://earthobservatory.nasa.gov/features/MeasuringVegetation'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-visao-satelite.webp',
+              alt: 'Mapeo orbital multiespectral con índice de vegetación NDVI resaltando áreas verdes urbanas'
+            }},
           {
             id: 'drones-ia',
             title: 'Drones y Visión Artificial',
@@ -665,7 +845,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Genera ortomosaicos 3D para calcular la volumetría y el vigor fitosanitario de cada ejemplar.',
             sourceLabel: 'MCTI / Innovación Tecnológica',
             sourceUrl: 'https://www.gov.br/mcti/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-drones-ia.webp',
+              alt: 'Vuelo de dron aéreo captando detalles de copas y generando ortomosaicos para inteligencia artificial'
+            }},
           {
             id: 'sensores-iot',
             title: 'Telemetría IoT en Tiempo Real',
@@ -673,7 +857,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Dispositivos con ESP32 transmiten telemetría continua con mínimo consumo y largo alcance de comunicación.',
             sourceLabel: 'Espressif Systems IoT',
             sourceUrl: 'https://www.espressif.com/en/products/socs/esp32'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-sensores-iot.webp',
+              alt: 'Estación de telemetría ambiental y sensor para monitoreo microclimático las 24 horas'
+            }},
           {
             id: 'cadastro-tecnico',
             title: 'Inventario Digital Fitosanitario',
@@ -681,7 +869,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Reemplaza registros en papel por paneles en la nube accesibles a técnicos y cuadrillas de manejo.',
             sourceLabel: 'IBGE Ciudades',
             sourceUrl: 'https://cidades.ibge.gov.br/'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-cadastro-tecnico.webp',
+              alt: 'Inspección detallada de corteza y tronco de árbol para diagnóstico fitosanitario digital'
+            }}
         ]
       },
       {
@@ -696,7 +888,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Preservar tierra absorbente alrededor del tronco asegura agua y oxígeno a las raíces y evita quiebres en las veredas.',
             sourceLabel: 'Sociedad Brasileña de Arborización Urbana (SBAU)',
             sourceUrl: 'https://sbau.org.br/'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-cidadao-bairros.webp',
+              alt: 'Manos de vecinos y voluntarios plantando una plántula de árbol en la tierra durante acción comunitaria'
+            }},
           {
             id: 'escolas-educacao',
             title: 'Educación y Ciencia Ciudadana',
@@ -704,7 +900,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Proyectos de plantación participativa crean arraigo y reducen notablemente el vandalismo en el arbolado público.',
             sourceLabel: 'Ministerio de Educación (MEC)',
             sourceUrl: 'https://www.gov.br/mec/pt-br'
-          },
+          ,
+            image: {
+              src: 'images/cards/folha-escolas-educacao.webp',
+              alt: 'Identificación botánica y estudio de árbol en actividad práctica de ciencia ciudadana y educación ambiental'
+            }},
           {
             id: 'poder-publico',
             title: 'Gestión Pública y Planificación',
@@ -712,7 +912,11 @@ export const KNOWLEDGE_TREE_DATA = {
             curiosity: 'Ciudades con planes silvícolas estructurados reducen costos en salud pública vinculados a golpes de calor y afecciones respiratorias.',
             sourceLabel: 'Ministerio del Medio Ambiente (MMA)',
             sourceUrl: 'https://www.gov.br/mma/pt-br'
-          }
+          ,
+            image: {
+              src: 'images/cards/folha-poder-publico.webp',
+              alt: 'Floración urbana con polinizador simbolizando la integración de áreas verdes en la planificación municipal'
+            }}
         ]
       }
     ]

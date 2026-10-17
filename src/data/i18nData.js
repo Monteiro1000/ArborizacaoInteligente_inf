@@ -134,7 +134,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Diagnóstico inicial para municípios',
-          price: 'Sob consulta'
+          price: 'Sob consulta',
+          image: {
+            src: 'images/cards/plano-satelite.webp',
+            alt: 'Imagem orbital de satélite multiespectral monitorando a cobertura vegetal e índice NDVI urbano'
+          }
         },
         {
           id: 'drones',
@@ -162,7 +166,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Grandes avenidas, praças e corredores verdes',
-          price: 'Sob consulta'
+          price: 'Sob consulta',
+          image: {
+            src: 'images/cards/plano-drones.webp',
+            alt: 'Drone profissional sobrevoando copa de árvores em parque urbano para inspeção fitossanitária'
+          }
         },
         {
           id: 'sensores',
@@ -190,7 +198,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Locais críticos com ilhas de calor e árvores históricas',
-          price: 'Sob consulta'
+          price: 'Sob consulta',
+          image: {
+            src: 'images/cards/plano-sensores.webp',
+            alt: 'Sensor ambiental IoT e telemetria instalado no tronco de uma árvore para monitoramento de microclima'
+          }
         },
         {
           id: 'cadastro',
@@ -218,7 +230,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Secretarias de Meio Ambiente e Obras',
-          price: 'Sob consulta'
+          price: 'Sob consulta',
+          image: {
+            src: 'images/cards/plano-cadastro.webp',
+            alt: 'Técnico de meio ambiente realizando medição de campo e cadastro técnico de árvore urbana'
+          }
         }
       ]
     },
@@ -662,7 +678,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Initial diagnosis for municipalities',
-          price: 'Upon request'
+          price: 'Upon request',
+          image: {
+            src: 'images/cards/plano-satelite.webp',
+            alt: 'Multispectral orbital satellite imagery monitoring urban vegetation canopy and NDVI index'
+          }
         },
         {
           id: 'drones',
@@ -690,7 +710,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Major avenues, squares, and green corridors',
-          price: 'Upon request'
+          price: 'Upon request',
+          image: {
+            src: 'images/cards/plano-drones.webp',
+            alt: 'Professional drone flying over tree canopies in an urban park for phytosanitary inspection'
+          }
         },
         {
           id: 'sensores',
@@ -718,7 +742,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Critical heat island spots and heritage trees',
-          price: 'Upon request'
+          price: 'Upon request',
+          image: {
+            src: 'images/cards/plano-sensores.webp',
+            alt: 'IoT environmental sensor and telemetry installed on a tree trunk for microclimate monitoring'
+          }
         },
         {
           id: 'cadastro',
@@ -746,7 +774,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Departments of Environment and Public Works',
-          price: 'Upon request'
+          price: 'Upon request',
+          image: {
+            src: 'images/cards/plano-cadastro.webp',
+            alt: 'Environmental technician conducting field measurements and technical urban tree inventory'
+          }
         }
       ]
     },
@@ -1189,7 +1221,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Diagnóstico inicial para municipios',
-          price: 'A consultar'
+          price: 'A consultar',
+          image: {
+            src: 'images/cards/plano-satelite.webp',
+            alt: 'Imagen satelital orbital multiespectral monitoreando la cobertura vegetal urbana y el índice NDVI'
+          }
         },
         {
           id: 'drones',
@@ -1217,7 +1253,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Grandes avenidas, plazas y corredores verdes',
-          price: 'A consultar'
+          price: 'A consultar',
+          image: {
+            src: 'images/cards/plano-drones.webp',
+            alt: 'Dron profesional sobrevolando copas de árboles en un parque urbano para inspección fitosanitaria'
+          }
         },
         {
           id: 'sensores',
@@ -1245,7 +1285,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Puntos críticos con islas de calor y árboles históricos',
-          price: 'A consultar'
+          price: 'A consultar',
+          image: {
+            src: 'images/cards/plano-sensores.webp',
+            alt: 'Sensor ambiental IoT y telemetría instalado en el tronco de un árbol para monitoreo microclimático'
+          }
         },
         {
           id: 'cadastro',
@@ -1273,7 +1317,11 @@ export const TRANSLATIONS = {
             }
           ],
           audience: 'Secretarías de Medio Ambiente y Obras Públicas',
-          price: 'A consultar'
+          price: 'A consultar',
+          image: {
+            src: 'images/cards/plano-cadastro.webp',
+            alt: 'Técnico ambiental realizando mediciones de campo y registro técnico de árbol urbano'
+          }
         }
       ]
     },

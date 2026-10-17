@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Icon } from './IconSprite';
+import CardImage from './CardImage';
 import { useLanguage } from '../context/LanguageContext';
 import { KNOWLEDGE_TREE_GEOMETRY, KNOWLEDGE_TREE_DATA, BRANCH_ZOOM_VIEWBOX } from '../data/knowledgeTree';
 
@@ -81,6 +82,17 @@ export default function ArborizacaoSection() {
     mq.addEventListener('change', listener);
     return () => mq.removeEventListener('change', listener);
   }, []);
+
+  // Pré-carregamento leve das imagens do galho ativo (quando selecionado)
+  useEffect(() => {
+    if (!activeBranchId || typeof window === 'undefined') return;
+    const branchLeaves = allLeaves.filter((l) => l.branchId === activeBranchId);
+    branchLeaves.forEach((leaf) => {
+      const src = leaf.image?.src || `images/cards/folha-${leaf.id}.webp`;
+      const img = new Image();
+      img.src = src;
+    });
+  }, [activeBranchId, allLeaves]);
 
   // Interpolação suave do viewBox para Foco Dinâmico no Mobile
   useEffect(() => {
@@ -1013,6 +1025,18 @@ export default function ArborizacaoSection() {
               </div>
 
               <div className="tree-modal-body">
+                <div className="tree-modal-image-wrapper">
+                  <CardImage
+                    src={selectedLeaf.image?.src || `images/cards/folha-${selectedLeaf.id}.webp`}
+                    alt={selectedLeaf.image?.alt || selectedLeaf.title}
+                    placeholderTitle={selectedLeaf.title}
+                    aspectRatio="16/9"
+                    width={800}
+                    height={450}
+                    loading="lazy"
+                  />
+                </div>
+
                 <h3 id="tree-modal-title" className="tree-modal-title">
                   {selectedLeaf.title}
                 </h3>
