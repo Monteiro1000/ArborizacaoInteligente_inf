@@ -140,14 +140,14 @@ function AppContent() {
         <SectionDivider
           variant="circuit"
           topColor="var(--bg-azul-1)"
-          bottomColor="#f8fafc"
+          bottomColor="var(--bg-verde-1)"
         />
 
         <ArborizacaoSection />
 
         <SectionDivider
           variant="wave"
-          topColor="#f8fafc"
+          topColor="var(--bg-verde-1)"
           bottomColor="var(--bg-azul-1)"
           flip
         />

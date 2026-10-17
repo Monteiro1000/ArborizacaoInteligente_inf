@@ -334,99 +334,269 @@ export default function ArborizacaoSection() {
             aria-label={`${content.sectionTitle} - SVG ilustrado interativo`}
           >
             <defs>
-              {/* Gradiente do Tronco */}
-              <linearGradient id="tree-trunk-grad" x1="0%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stopColor="#02183f" />
-                <stop offset="50%" stopColor="#061e73" />
-                <stop offset="100%" stopColor="#105ca2" />
+              {/* Sombra suave e sombras realistas sem neon */}
+              <filter id="tree-soft-shadow" x="-25%" y="-25%" width="150%" height="150%">
+                <feDropShadow dx="0" dy="4" stdDeviation="4.5" floodColor="#01140e" floodOpacity="0.45" />
+              </filter>
+
+              {/* Brilho botânico suave para folhas ativas e visitadas */}
+              <filter id="tree-leaf-glow" x="-35%" y="-35%" width="170%" height="170%">
+                <feDropShadow dx="0" dy="0" stdDeviation="4.5" floodColor="#34d399" floodOpacity="0.75" />
+              </filter>
+
+              {/* Madeira / Casca do Tronco - Volume Cilíndrico Realista */}
+              <linearGradient id="tree-bark-cylindrical" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#1a110a" />
+                <stop offset="16%" stopColor="#2e1d13" />
+                <stop offset="42%" stopColor="#4a3120" />
+                <stop offset="58%" stopColor="#5c3e29" />
+                <stop offset="84%" stopColor="#2c1c11" />
+                <stop offset="100%" stopColor="#150d07" />
               </linearGradient>
 
-              {/* Gradiente dos Galhos Primários */}
-              <linearGradient id="tree-branch-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#061e73" />
-                <stop offset="60%" stopColor="#105ca2" />
-                <stop offset="100%" stopColor="#12b674" />
+              {/* Gradiente Vertical do Tronco (Da terra escura à copa viva) */}
+              <linearGradient id="tree-bark-vert" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#140d07" />
+                <stop offset="35%" stopColor="#3b271a" />
+                <stop offset="70%" stopColor="#2e2b1c" />
+                <stop offset="100%" stopColor="#1f462c" />
               </linearGradient>
 
-              {/* Gradiente das Folhas Ativas/Visitadas */}
-              <linearGradient id="tree-leaf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#12b674" />
+              {/* Ramo Principal - Madeira que se estende em galho vivo */}
+              <linearGradient id="tree-branch-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#452e1d" />
+                <stop offset="45%" stopColor="#293d2b" />
+                <stop offset="100%" stopColor="#168048" />
+              </linearGradient>
+
+              {/* Ramo Selecionado - Iluminação Vibrante com Acento Esmeralda */}
+              <linearGradient id="tree-branch-active-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#34d399" />
+                <stop offset="60%" stopColor="#16be7d" />
+                <stop offset="100%" stopColor="#059669" />
+              </linearGradient>
+
+              {/* Feixe de Luz Solar na Copa */}
+              <radialGradient id="tree-canopy-sunburst" cx="50%" cy="30%" r="65%">
+                <stop offset="0%" stopColor="rgba(74, 222, 128, 0.22)" />
+                <stop offset="45%" stopColor="rgba(22, 190, 125, 0.12)" />
+                <stop offset="100%" stopColor="rgba(4, 38, 28, 0)" />
+              </radialGradient>
+
+              {/* Camadas Orgânicas da Copa de Folhagem com Profundidade */}
+              <linearGradient id="tree-foliage-deep" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#031e15" />
+                <stop offset="60%" stopColor="#063525" />
+                <stop offset="100%" stopColor="#0a4631" />
+              </linearGradient>
+
+              <linearGradient id="tree-foliage-mid" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#083e2b" />
+                <stop offset="50%" stopColor="#0e5e3f" />
+                <stop offset="100%" stopColor="#137f54" />
+              </linearGradient>
+
+              <linearGradient id="tree-foliage-sun" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#106843" />
+                <stop offset="50%" stopColor="#16a34a" />
+                <stop offset="100%" stopColor="#22c55e" />
+              </linearGradient>
+
+              {/* Folha Visitada / Explorada (Verde Botânico Luminoso com Nervuras Mint) */}
+              <linearGradient id="tree-leaf-visited-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#4ade80" />
+                <stop offset="45%" stopColor="#16a34a" />
                 <stop offset="100%" stopColor="#0b5c3b" />
               </linearGradient>
 
-              {/* Sombra suave sem neon */}
-              <filter id="tree-soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="3" stdDeviation="3.5" floodColor="#02183f" floodOpacity="0.14" />
-              </filter>
+              {/* Folha Não Visitada (Vidro Esmeralda Escuro Translúcido com Brilho) */}
+              <linearGradient id="tree-leaf-unvisited-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="rgba(22, 190, 125, 0.35)" />
+                <stop offset="100%" stopColor="rgba(4, 38, 28, 0.95)" />
+              </linearGradient>
             </defs>
 
-            {/* Aura de Folhagem Suave no Fundo (Copa Arbórea) */}
+            {/* 1. AURA DE LUZ SOLAR E COPA BOTÂNICA REALISTA COM PROFUNDIDADE */}
             <g className="tree-canopy-backdrop" aria-hidden="true" style={{ pointerEvents: 'none' }}>
-              <ellipse cx="480" cy="310" rx="360" ry="240" fill="rgba(18, 182, 116, 0.08)" />
-              <circle cx="320" cy="280" r="140" fill="rgba(16, 92, 162, 0.05)" />
-              <circle cx="640" cy="280" r="140" fill="rgba(16, 92, 162, 0.05)" />
-              <circle cx="480" cy="180" r="160" fill="rgba(18, 182, 116, 0.07)" />
+              <ellipse cx="480" cy="270" rx="420" ry="250" fill="url(#tree-canopy-sunburst)" />
+
+              {/* Camada 1: Silhueta de folhagem profunda (volume escuro de floresta) */}
+              <g className="tree-canopy-silhouette" fill="url(#tree-foliage-deep)" opacity="0.9">
+                <circle cx="480" cy="180" r="150" />
+                <circle cx="340" cy="220" r="140" />
+                <circle cx="620" cy="220" r="140" />
+                <circle cx="230" cy="310" r="130" />
+                <circle cx="730" cy="310" r="130" />
+                <circle cx="210" cy="460" r="120" />
+                <circle cx="750" cy="460" r="120" />
+                <ellipse cx="480" cy="330" rx="360" ry="180" />
+              </g>
+
+              {/* Camada 2: Folhagem média com copas volumétricas */}
+              <g className="tree-canopy-mid" fill="url(#tree-foliage-mid)" opacity="0.8">
+                <circle cx="480" cy="160" r="125" />
+                <circle cx="350" cy="190" r="115" />
+                <circle cx="610" cy="190" r="115" />
+                <circle cx="250" cy="280" r="110" />
+                <circle cx="710" cy="280" r="110" />
+                <circle cx="220" cy="430" r="105" />
+                <circle cx="740" cy="430" r="105" />
+              </g>
+
+              {/* Camada 3: Copas superiores com luz solar dapple */}
+              <g className="tree-canopy-sunlit" fill="url(#tree-foliage-sun)" opacity="0.45">
+                <circle cx="480" cy="135" r="95" />
+                <circle cx="360" cy="170" r="85" />
+                <circle cx="600" cy="170" r="85" />
+                <circle cx="270" cy="250" r="80" />
+                <circle cx="690" cy="250" r="80" />
+                <circle cx="240" cy="410" r="75" />
+                <circle cx="720" cy="410" r="75" />
+              </g>
             </g>
 
-            {/* LINHA DO SOLO E RAÍZES */}
+            {/* 2. SOLO NATURAL, MONTÍCULO DE TERRA E RAÍZES PODEROSAS */}
             <g className="tree-ground-group" aria-hidden="true" style={{ pointerEvents: 'none' }}>
-              <line x1="260" y1="660" x2="700" y2="660" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="6 6" />
+              <ellipse cx="480" cy="670" rx="340" ry="24" fill="#031f17" opacity="0.8" />
+              <path
+                d="M 220 675 Q 480 658 740 675 Q 480 684 220 675 Z"
+                fill="#073828"
+                opacity="0.85"
+              />
+
+              {/* Raízes Sapé / Buttress Roots com Volume */}
               <path
                 className="tree-draw-path tree-delay-root"
-                d={geometry.trunk.rootsPath}
+                d="M 445 610 C 420 635 390 655 350 675 C 335 682 315 686 290 688"
                 fill="none"
-                stroke="#02183f"
-                strokeWidth="4"
+                stroke="url(#tree-bark-cylindrical)"
+                strokeWidth="9"
                 strokeLinecap="round"
                 pathLength="100"
+              />
+              <path
+                className="tree-draw-path tree-delay-root"
+                d="M 430 635 C 405 655 370 670 330 682"
+                fill="none"
+                stroke="url(#tree-bark-cylindrical)"
+                strokeWidth="5"
+                strokeLinecap="round"
+                pathLength="100"
+              />
+              <path
+                className="tree-draw-path tree-delay-root"
+                d="M 515 610 C 540 635 570 655 610 675 C 625 682 645 686 670 688"
+                fill="none"
+                stroke="url(#tree-bark-cylindrical)"
+                strokeWidth="9"
+                strokeLinecap="round"
+                pathLength="100"
+              />
+              <path
+                className="tree-draw-path tree-delay-root"
+                d="M 530 635 C 555 655 590 670 630 682"
+                fill="none"
+                stroke="url(#tree-bark-cylindrical)"
+                strokeWidth="5"
+                strokeLinecap="round"
+                pathLength="100"
+              />
+              <path
+                className="tree-draw-path tree-delay-root"
+                d="M 480 640 L 480 690"
+                fill="none"
+                stroke="url(#tree-bark-cylindrical)"
+                strokeWidth="6"
+                strokeLinecap="round"
+                pathLength="100"
+              />
+
+              {/* Tufos de grama na base */}
+              <path
+                d="M 380 672 Q 385 660 390 672 M 410 674 Q 416 662 422 674 M 540 674 Q 546 662 552 674 M 570 672 Q 575 660 580 672"
+                fill="none"
+                stroke="#34d399"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.8"
               />
             </g>
 
-            {/* TRONCO CENTRAL */}
+            {/* 3. TRONCO ESCULPIDO REALISTA COM CASCA E VOLUME */}
             <g className="tree-trunk-group" aria-hidden="true" style={{ pointerEvents: 'none' }}>
+              {/* Corpo Sólido Orgânico do Tronco */}
               <path
-                className="tree-draw-path tree-trunk-main"
-                d={geometry.trunk.path}
+                d="M 425 665
+                   C 440 640 452 610 456 550
+                   C 460 480 460 420 466 360
+                   C 470 330 475 315 480 300
+                   C 485 315 490 330 494 360
+                   C 500 420 500 480 504 550
+                   C 508 610 520 640 535 665
+                   Z"
+                fill="url(#tree-bark-cylindrical)"
+                filter="url(#tree-soft-shadow)"
+              />
+
+              {/* Estrias e Textura de Casca Realista */}
+              <path
+                d="M 466 650 C 470 590 472 510 474 420 C 476 370 478 330 479 305"
                 fill="none"
-                stroke="url(#tree-trunk-grad)"
-                strokeWidth="20"
+                stroke="#5c3e29"
+                strokeWidth="1.8"
+                opacity="0.6"
                 strokeLinecap="round"
-                pathLength="100"
               />
               <path
-                className="tree-draw-path tree-trunk-inner"
-                d={geometry.trunk.path}
+                d="M 494 650 C 490 590 488 510 486 420 C 484 370 482 330 481 305"
                 fill="none"
-                stroke="#12b674"
-                strokeWidth="4"
+                stroke="#1e130c"
+                strokeWidth="2.2"
+                opacity="0.65"
                 strokeLinecap="round"
-                opacity="0.75"
-                pathLength="100"
+              />
+              <path
+                d="M 480 655 C 480 570 480 460 480 340"
+                fill="none"
+                stroke="#735036"
+                strokeWidth="1.2"
+                opacity="0.45"
+                strokeLinecap="round"
+              />
+
+              {/* Musgo e Pátina Verde no Tronco */}
+              <path
+                d="M 436 645 C 448 615 455 565 458 505 C 460 470 460 435 463 390"
+                fill="none"
+                stroke="#16a34a"
+                strokeWidth="3.2"
+                opacity="0.35"
+                strokeLinecap="round"
               />
 
               {/* Emblema Temático do Tronco */}
               <g className="tree-trunk-badge" transform="translate(480, 530)">
                 <rect
-                  x="-110"
+                  x="-112"
                   y="-22"
-                  width="220"
+                  width="224"
                   height="44"
                   rx="22"
-                  fill="#ffffff"
-                  stroke="#105ca2"
-                  strokeWidth="2"
+                  fill="rgba(4, 38, 28, 0.94)"
+                  stroke="#16be7d"
+                  strokeWidth="1.8"
                   filter="url(#tree-soft-shadow)"
                 />
-                <text x="0" y="-3" textAnchor="middle" fill="#02183f" fontSize="12" fontWeight="800" letterSpacing="0.06em">
+                <text x="0" y="-3" textAnchor="middle" fill="#ffffff" fontSize="12" fontWeight="800" letterSpacing="0.06em">
                   {content.trunkTitle.toUpperCase()}
                 </text>
-                <text x="0" y="13" textAnchor="middle" fill="#12b674" fontSize="9.5" fontWeight="700">
+                <text x="0" y="13" textAnchor="middle" fill="#34d399" fontSize="9.5" fontWeight="700">
                   {content.trunkSubtitle}
                 </text>
               </g>
             </g>
 
-            {/* OS 5 GALHOS COM SUAS SUB-RAMIFICAÇÕES E RÓTULOS */}
+            {/* 4. OS 5 GALHOS ROBUSTOS COM SUAS SUB-RAMIFICAÇÕES E RÓTULOS */}
             {geometry.branches.map((b, idx) => {
               const branchData = content.branches.find((item) => item.id === b.id);
               const isBranchActive = activeBranchId === b.id;
@@ -437,24 +607,25 @@ export default function ArborizacaoSection() {
                   key={b.id}
                   className={`tree-branch-group ${isBranchActive ? 'is-active' : ''} ${isOtherActive ? 'is-dimmed' : ''}`}
                 >
-                  {/* Ramo Principal Visível */}
+                  {/* Ramo Principal Visível - Musculoso e Orgânico */}
                   <path
                     className={`tree-draw-path tree-branch-path tree-delay-${idx + 1}`}
                     d={b.branchPath}
                     fill="none"
-                    stroke={isBranchActive ? '#12b674' : 'url(#tree-branch-grad)'}
-                    strokeWidth={isBranchActive ? '7' : '5'}
+                    stroke={isBranchActive ? 'url(#tree-branch-active-grad)' : 'url(#tree-branch-grad)'}
+                    strokeWidth={isBranchActive ? '9' : '7'}
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     pathLength="100"
+                    filter="url(#tree-soft-shadow)"
                   />
                   {/* Sub-ramificações Visíveis */}
                   <path
                     className={`tree-draw-path tree-branch-sub tree-delay-${idx + 1}`}
                     d={b.subBranch1}
                     fill="none"
-                    stroke={isBranchActive ? '#12b674' : '#105ca2'}
-                    strokeWidth={isBranchActive ? '4.2' : '3.2'}
+                    stroke={isBranchActive ? '#34d399' : '#1e6844'}
+                    strokeWidth={isBranchActive ? '5' : '3.8'}
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     pathLength="100"
@@ -463,20 +634,20 @@ export default function ArborizacaoSection() {
                     className={`tree-draw-path tree-branch-sub tree-delay-${idx + 1}`}
                     d={b.subBranch2}
                     fill="none"
-                    stroke={isBranchActive ? '#12b674' : '#105ca2'}
-                    strokeWidth={isBranchActive ? '4.2' : '3.2'}
+                    stroke={isBranchActive ? '#34d399' : '#1e6844'}
+                    strokeWidth={isBranchActive ? '5' : '3.8'}
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     pathLength="100"
                   />
 
-                  {/* Caminho Invisível Amplo para Clique Fácil (strokeWidth: 28, pointerEvents: stroke) */}
+                  {/* Caminho Invisível Amplo para Clique Fácil (strokeWidth: 32, pointerEvents: stroke) */}
                   <path
                     className="tree-branch-hitarea"
                     d={`${b.branchPath} ${b.subBranch1} ${b.subBranch2}`}
                     fill="none"
                     stroke="transparent"
-                    strokeWidth="28"
+                    strokeWidth="32"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     style={{ cursor: 'pointer', pointerEvents: 'stroke' }}
@@ -509,16 +680,16 @@ export default function ArborizacaoSection() {
                       width="140"
                       height="28"
                       rx="14"
-                      fill={isBranchActive ? '#02183f' : '#ffffff'}
-                      stroke={isBranchActive ? '#12b674' : '#105ca2'}
-                      strokeWidth={isBranchActive ? '2.2' : '1.6'}
+                      fill={isBranchActive ? '#16be7d' : 'rgba(4, 38, 28, 0.92)'}
+                      stroke={isBranchActive ? '#34d399' : 'rgba(52, 211, 153, 0.45)'}
+                      strokeWidth={isBranchActive ? '2.2' : '1.5'}
                       filter="url(#tree-soft-shadow)"
                     />
                     <text
                       x="0"
                       y="4"
                       textAnchor="middle"
-                      fill={isBranchActive ? '#ffffff' : '#02183f'}
+                      fill={isBranchActive ? '#04261c' : '#ffffff'}
                       fontSize="10.5"
                       fontWeight="700"
                       style={{ userSelect: 'none', pointerEvents: 'none' }}
@@ -530,7 +701,7 @@ export default function ArborizacaoSection() {
               );
             })}
 
-            {/* AS 17 FOLHAS / NÓS INTERATIVOS NO DESKTOP */}
+            {/* 5. AS 17 FOLHAS BOTÂNICAS REALISTAS NO DESKTOP */}
             {allLeaves.map((leaf) => {
               const isVisited = visitedLeaves.includes(leaf.id);
               const isSelected = selectedLeafId === leaf.id;
@@ -564,46 +735,73 @@ export default function ArborizacaoSection() {
                   <g className="tree-leaf-inner">
                     {/* Halo de foco/seleção */}
                     {isSelected && (
-                      <circle cx="0" cy="0" r="24" fill="none" stroke="#12b674" strokeWidth="2.5" strokeDasharray="4 3" />
+                      <circle cx="0" cy="0" r="28" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeDasharray="4 3" />
                     )}
 
-                    {/* Forma da Folha com Sombreamento Suave */}
+                    {/* Forma Orgânica Realista da Folha (silhueta botânica natural com curvatura e ápice afilado) */}
                     <path
                       className="tree-leaf-shape"
-                      d="M 0 -17 C 12 -12 17 0 0 17 C -17 0 -12 -12 0 -17 Z"
-                      fill={isVisited ? 'url(#tree-leaf-grad)' : '#ffffff'}
-                      stroke={isVisited ? '#0b5c3b' : isBranchActive ? '#12b674' : '#105ca2'}
-                      strokeWidth={isSelected ? '2.5' : isBranchActive ? '2.2' : '1.8'}
-                      filter="url(#tree-soft-shadow)"
+                      d="M 0 -22 C 16 -16 20 4 0 24 C -20 4 -16 -16 0 -22 Z"
+                      fill={isVisited ? 'url(#tree-leaf-visited-grad)' : 'url(#tree-leaf-unvisited-grad)'}
+                      stroke={isVisited ? '#86efac' : isBranchActive ? '#4ade80' : '#34d399'}
+                      strokeWidth={isSelected ? '2.8' : isBranchActive ? '2.2' : '1.8'}
+                      filter={isVisited || isSelected ? 'url(#tree-leaf-glow)' : 'url(#tree-soft-shadow)'}
                     />
 
-                    {/* Nervura da Folha ou Ícone de Visitada */}
-                    {isVisited ? (
-                      <path d="M 0 -10 L 0 10 M -4 -3 L 0 0 M 4 -3 L 0 0" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
-                    ) : (
-                      <circle cx="0" cy="0" r="3.2" fill={isBranchActive ? '#12b674' : '#105ca2'} />
-                    )}
+                    {/* Pecíolo / Caule da Folha */}
+                    <path
+                      d="M 0 24 Q 2 28 3 32"
+                      fill="none"
+                      stroke={isVisited ? '#15803d' : '#1b5a38'}
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                    />
 
-                    {/* Rótulo da Folha - Legível, com fundo pill anti-colisão */}
+                    {/* Nervura Central da Folha (Midrib) */}
+                    <path
+                      d="M 0 -17 L 0 17"
+                      fill="none"
+                      stroke={isVisited ? '#dcfce7' : '#34d399'}
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      opacity="0.9"
+                    />
+
+                    {/* Nervuras Secundárias Laterais */}
+                    <path
+                      d="M -5 -9 C -2 -7 0 -5 0 -5
+                         M 5 -9 C 2 -7 0 -5 0 -5
+                         M -7 1 C -3 0 0 4 0 4
+                         M 7 1 C 3 0 0 4 0 4
+                         M -5 10 C -2 9 0 12 0 12
+                         M 5 10 C 2 9 0 12 0 12"
+                      fill="none"
+                      stroke={isVisited ? '#bbf7d0' : '#22c55e'}
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      opacity="0.8"
+                    />
+
+                    {/* Rótulo da Folha - Legível, com fundo pill anti-colisão em vidro escuro esmeralda */}
                     <g className="tree-leaf-label-group">
                       <rect
                         className="tree-leaf-label-bg"
                         x={- Math.min(leaf.title.length * 3.8 + 10, 75)}
-                        y="21"
+                        y="24"
                         width={Math.min(leaf.title.length * 7.6 + 20, 150)}
                         height="18"
                         rx="9"
-                        fill="#ffffff"
-                        stroke={isVisited ? '#12b674' : '#cbd5e1'}
-                        strokeWidth="1"
+                        fill="rgba(4, 38, 28, 0.92)"
+                        stroke={isVisited ? '#4ade80' : isBranchActive ? '#34d399' : 'rgba(52, 211, 153, 0.45)'}
+                        strokeWidth={isBranchActive || isSelected ? '1.8' : '1'}
                         filter="url(#tree-soft-shadow)"
                       />
                       <text
                         x="0"
-                        y="33.5"
+                        y="36.5"
                         textAnchor="middle"
                         className="tree-leaf-label"
-                        fill={isVisited ? '#0b5c3b' : '#1e293b'}
+                        fill="#f8fafc"
                         fontSize="9"
                         fontWeight="700"
                         style={{ userSelect: 'none', pointerEvents: 'none' }}
