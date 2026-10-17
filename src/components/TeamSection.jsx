@@ -75,21 +75,11 @@ export default function TeamSection() {
           })}
         </div>
 
-        {/* Metas, Objetivos e ODS */}
-        <div className="goals-container reveal">
+        {/* Compromisso com os ODS */}
+        <div className="goals-container ods-container reveal">
           <div className="goals-header">
             <h3 data-i18n="team.goalsTitle">{teamDict.goalsTitle}</h3>
             <p data-i18n="team.goalsSubtitle">{teamDict.goalsSubtitle}</p>
-          </div>
-
-          <div className="goals-grid">
-            {teamDict.goals.map((goal) => (
-              <div key={goal.id} className="goal-item">
-                <div className="goal-badge">{goal.badge}</div>
-                <h4>{goal.title}</h4>
-                <p>{goal.desc}</p>
-              </div>
-            ))}
           </div>
 
           {/* Selos ODS */}

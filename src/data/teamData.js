@@ -100,27 +100,6 @@ export const TEAM_MEMBERS = [
   }
 ];
 
-export const TEAM_GOALS = [
-  {
-    id: "curto-prazo",
-    badge: "Curto Prazo",
-    title: "Pilotos & Validação em Sergipe",
-    desc: "Instalação de estações de sensores em vias críticas sergipanas, validação dos modelos preditivos e realização de oficinas educativas em escolas parceiras."
-  },
-  {
-    id: "medio-prazo",
-    badge: "Médio Prazo",
-    title: "Expansão para Municípios do Nordeste",
-    desc: "Firmar termos de cooperação com prefeituras municipais, implantando o Plano Técnico e o monitoramento integrado com drones para suporte a decisões públicas."
-  },
-  {
-    id: "longo-prazo",
-    badge: "Longo Prazo",
-    title: "Referência Nacional em Cidade Inteligente",
-    desc: "Consolidar a maior base de inteligência arbórea do Brasil, reduzindo em grande escala ilhas de calor e valorizando espécies nativas em cidades de todo o país."
-  }
-];
-
 export const ODS_ITEMS = [
   {
     id: "ods-11",

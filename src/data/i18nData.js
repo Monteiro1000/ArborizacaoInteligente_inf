@@ -66,7 +66,7 @@ export const TRANSLATIONS = {
         aiVal: 'IA & Drones',
         aiLbl: 'Diagnóstico Preventivo',
         odsVal: 'ODS ONU',
-        odsLbl: 'Metas 11, 13 e 15'
+        odsLbl: 'ODS 11, 13 e 15'
       },
       carousel: {
         regionAria: 'Carrossel de imagens de destaque no cabeçalho',
@@ -244,15 +244,15 @@ export const TRANSLATIONS = {
       ]
     },
     team: {
-      title: 'Equipe, Metas e Objetivos',
+      title: 'Nossa Equipe',
       subtitle:
         'Conheça o time de estudantes, pesquisadores e inovadores sergipanos dedicado a construir cidades sustentáveis e inteligentes.',
       photoAltPrefix: 'Foto de',
       linkedinAriaPrefix: 'LinkedIn de',
       instagramAriaPrefix: 'Instagram de',
-      goalsTitle: 'Metas, Objetivos e Compromisso com os ODS',
+      goalsTitle: 'Compromisso com os ODS da ONU',
       goalsSubtitle:
-        'Trabalhamos orientados por indicadores claros de curto, médio e longo prazo:',
+        'Nosso projeto está diretamente alinhado às diretrizes globais da Organização das Nações Unidas para um futuro urbano sustentável e resiliente:',
       odsLabelPrefix: 'Alinhamento Estratégico com os',
       odsLinkText: 'Objetivos de Desenvolvimento Sustentável (ONU Brasil',
       odsLinkTitle: 'Acessar página oficial dos ODS na ONU Brasil',
@@ -295,26 +295,6 @@ export const TRANSLATIONS = {
           desc: 'Responsável pela narrativa, assessoria editorial e divulgação estratégica do projeto. Graduanda em Jornalismo pela UFS.'
         }
       },
-      goals: [
-        {
-          id: 'curto-prazo',
-          badge: 'Curto Prazo',
-          title: 'Pilotos & Validação em Sergipe',
-          desc: 'Instalação de estações de sensores em vias críticas sergipanas, validação dos modelos preditivos e realização de oficinas educativas em escolas parceiras.'
-        },
-        {
-          id: 'medio-prazo',
-          badge: 'Médio Prazo',
-          title: 'Expansão para Municípios do Nordeste',
-          desc: 'Firmar termos de cooperação com prefeituras municipais, implantando o Plano Técnico e o monitoramento integrado com drones para suporte a decisões públicas.'
-        },
-        {
-          id: 'longo-prazo',
-          badge: 'Longo Prazo',
-          title: 'Referência Nacional em Cidade Inteligente',
-          desc: 'Consolidar a maior base de inteligência arbórea do Brasil, reduzindo em grande escala ilhas de calor e valorizando espécies nativas em cidades de todo o país.'
-        }
-      ],
       ods: [
         {
           id: 'ods-11',
@@ -538,7 +518,7 @@ export const TRANSLATIONS = {
       navSolucao: 'Nossa Solução & Planos',
       navTecnologia: 'Segmentos Tecnológicos',
       navParceiros: 'Parceiros Institucionais',
-      navQuemSomos: 'Quem Somos & Metas',
+      navQuemSomos: 'Quem Somos',
       navDestaques: 'Destaques do Projeto',
       navBlog: 'Blog do Projeto',
       navContato: 'Fale Conosco',
@@ -614,7 +594,7 @@ export const TRANSLATIONS = {
         aiVal: 'AI & Drones',
         aiLbl: 'Preventive Diagnostics',
         odsVal: 'UN SDGs',
-        odsLbl: 'Goals 11, 13 & 15'
+        odsLbl: 'SDGs 11, 13 & 15'
       },
       carousel: {
         regionAria: 'Header featured image carousel',
@@ -792,15 +772,15 @@ export const TRANSLATIONS = {
       ]
     },
     team: {
-      title: 'Team, Goals & Objectives',
+      title: 'Our Team',
       subtitle:
         'Meet the team of students, researchers, and innovators from Sergipe dedicated to building sustainable, smart cities.',
       photoAltPrefix: 'Photo of',
       linkedinAriaPrefix: 'LinkedIn of',
       instagramAriaPrefix: 'Instagram of',
-      goalsTitle: 'Goals, Objectives & Commitment to UN SDGs',
+      goalsTitle: 'Commitment to the UN SDGs',
       goalsSubtitle:
-        'We work guided by clear short-, medium-, and long-term indicators:',
+        'Our project is directly aligned with the global guidelines of the United Nations for a sustainable and resilient urban future:',
       odsLabelPrefix: 'Strategic Alignment with the',
       odsLinkText: 'Sustainable Development Goals (UN Brazil',
       odsLinkTitle: 'Visit the official UN SDGs page',
@@ -843,26 +823,6 @@ export const TRANSLATIONS = {
           desc: 'Responsible for institutional narrative, editorial press, and strategic outreach. Journalism undergraduate at UFS.'
         }
       },
-      goals: [
-        {
-          id: 'curto-prazo',
-          badge: 'Short Term',
-          title: 'Pilots & Validation in Sergipe',
-          desc: 'Deployment of sensor stations on critical streets in Sergipe, validation of predictive models, and educational workshops in partner schools.'
-        },
-        {
-          id: 'medio-prazo',
-          badge: 'Medium Term',
-          title: 'Expansion Across Northeastern Municipalities',
-          desc: 'Establish cooperation agreements with city halls, deploying the Technical Plan and drone-integrated monitoring to support public policy.'
-        },
-        {
-          id: 'longo-prazo',
-          badge: 'Long Term',
-          title: 'National Benchmark in Smart Cities',
-          desc: 'Consolidate the largest urban forestry intelligence database in Brazil, reducing heat islands at scale and promoting native species nationwide.'
-        }
-      ],
       ods: [
         {
           id: 'ods-11',
@@ -1085,7 +1045,7 @@ export const TRANSLATIONS = {
       navSolucao: 'Our Solution & Plans',
       navTecnologia: 'Technology Segments',
       navParceiros: 'Institutional Partners',
-      navQuemSomos: 'About Us & Goals',
+      navQuemSomos: 'About Us',
       navDestaques: 'Project Highlights',
       navBlog: 'Project Blog',
       navContato: 'Contact Us',
@@ -1161,7 +1121,7 @@ export const TRANSLATIONS = {
         aiVal: 'IA y Drones',
         aiLbl: 'Diagnóstico Preventivo',
         odsVal: 'ODS ONU',
-        odsLbl: 'Metas 11, 13 y 15'
+        odsLbl: 'ODS 11, 13 y 15'
       },
       carousel: {
         regionAria: 'Carrusel de imágenes destacadas en el encabezado',
@@ -1339,15 +1299,15 @@ export const TRANSLATIONS = {
       ]
     },
     team: {
-      title: 'Equipo, Metas y Objetivos',
+      title: 'Nuestro Equipo',
       subtitle:
         'Conozca al equipo de estudiantes, investigadores e innovadores de Sergipe dedicado a construir ciudades sostenibles e inteligentes.',
       photoAltPrefix: 'Foto de',
       linkedinAriaPrefix: 'LinkedIn de',
       instagramAriaPrefix: 'Instagram de',
-      goalsTitle: 'Metas, Objetivos y Compromiso con los ODS',
+      goalsTitle: 'Compromiso con los ODS de la ONU',
       goalsSubtitle:
-        'Trabajamos orientados por indicadores claros de corto, mediano y largo plazo:',
+        'Nuestro proyecto está directamente alineado con las directrices globales de la Organización de las Naciones Unidas para un futuro urbano sostenible y resiliente:',
       odsLabelPrefix: 'Alineación Estratégica con los',
       odsLinkText: 'Objetivos de Desarrollo Sostenible (ONU Brasil',
       odsLinkTitle: 'Acceder a la página oficial de los ODS en ONU Brasil',
@@ -1390,26 +1350,6 @@ export const TRANSLATIONS = {
           desc: 'Responsable de la narrativa institucional, asesoría editorial y divulgación estratégica del proyecto. Estudiante de Periodismo en la UFS.'
         }
       },
-      goals: [
-        {
-          id: 'curto-prazo',
-          badge: 'Corto Plazo',
-          title: 'Pilotos y Validación en Sergipe',
-          desc: 'Instalación de estaciones de sensores en vías críticas de Sergipe, validación de modelos predictivos y talleres educativos en escuelas asociadas.'
-        },
-        {
-          id: 'medio-prazo',
-          badge: 'Mediano Plazo',
-          title: 'Expansión a Municipios del Nordeste',
-          desc: 'Firmar convenios de cooperación con alcaldías municipales, implementando el Plan Técnico y el monitoreo integrado con drones para apoyar decisiones públicas.'
-        },
-        {
-          id: 'longo-prazo',
-          badge: 'Largo Plazo',
-          title: 'Referencia Nacional en Ciudad Inteligente',
-          desc: 'Consolidar la mayor base de inteligencia arbórea de Brasil, reduciendo a gran escala las islas de calor y valorizando especies nativas en todo el país.'
-        }
-      ],
       ods: [
         {
           id: 'ods-11',
@@ -1632,7 +1572,7 @@ export const TRANSLATIONS = {
       navSolucao: 'Nuestra Solución y Planes',
       navTecnologia: 'Segmentos Tecnológicos',
       navParceiros: 'Socios Institucionales',
-      navQuemSomos: 'Quiénes Somos y Metas',
+      navQuemSomos: 'Quiénes Somos',
       navDestaques: 'Destacados del Proyecto',
       navBlog: 'Blog del Proyecto',
       navContato: 'Contáctenos',
