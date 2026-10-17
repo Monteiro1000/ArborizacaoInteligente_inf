@@ -71,20 +71,28 @@ export default function SolutionSection() {
       return;
     }
 
+    const timer = setTimeout(() => {
+      setTreeGrown(true);
+    }, 600);
+
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            clearTimeout(timer);
             setTreeGrown(true);
             obs.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
   }, []);
 
   // Selecionar ou alternar um nó da árvore

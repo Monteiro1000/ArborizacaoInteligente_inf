@@ -1,410 +1,788 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Icon } from './IconSprite';
 import { useLanguage } from '../context/LanguageContext';
+import { KNOWLEDGE_TREE_GEOMETRY, KNOWLEDGE_TREE_DATA } from '../data/knowledgeTree';
 
-/**
- * Seção Arborização - Dinâmica Interativa de Cartas de Baralho
- * Máquina de estados:
- * - 'stacked' (Estado 1): Baralho empilhado com carta-convite no topo
- * - 'fanned'  (Estado 2): Carta-convite sai e as 3 cartas abrem em leque (desktop) / pilha (mobile)
- * - 'reading' (Estado 3): Uma carta vira em Flip 3D e exibe o conteúdo completo; apenas 1 aberta por vez
- */
+const STORAGE_KEY = 'arbo_knowledge_progress';
+
 export default function ArborizacaoSection() {
-  const { dict } = useLanguage();
-  const arborDict = dict.arborizacao;
-  const cards = arborDict.cards;
+  const { lang } = useLanguage();
+  const currentLang = KNOWLEDGE_TREE_DATA[lang] ? lang : 'pt';
+  const content = KNOWLEDGE_TREE_DATA[currentLang];
+  const geometry = KNOWLEDGE_TREE_GEOMETRY;
 
-  const [deckState, setDeckState] = useState('stacked'); // 'stacked' | 'fanned' | 'reading'
-  const [openCardIndex, setOpenCardIndex] = useState(null); // null | 0 | 1 | 2
+  // Flatten all leaves for navigation and progress calculations
+  const allLeaves = useMemo(() => {
+    const list = [];
+    content.branches.forEach((branch) => {
+      branch.leaves.forEach((leaf) => {
+        const geoBranch = geometry.branches.find((b) => b.id === branch.id);
+        const geoLeaf = geoBranch?.leaves.find((l) => l.id === leaf.id);
+        list.push({
+          ...leaf,
+          branchId: branch.id,
+          branchName: branch.name,
+          cx: geoLeaf?.cx ?? 480,
+          cy: geoLeaf?.cy ?? 360,
+          iconType: geoLeaf?.icon ?? 'tree'
+        });
+      });
+    });
+    return list;
+  }, [content, geometry]);
+
+  const totalLeaves = allLeaves.length;
+
+  // Estado do progresso salvo no localStorage com try/catch
+  const [visitedLeaves, setVisitedLeaves] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {
+      // Ignora erro em ambientes restritos/privados
+    }
+    return [];
+  });
+
+  const [activeBranchId, setActiveBranchId] = useState(null); // null | branchId
+  const [selectedLeafId, setSelectedLeafId] = useState(null); // null | leafId
   const [inView, setInView] = useState(false);
-  const [liveAnnouncement, setLiveAnnouncement] = useState(arborDict.liveStacked);
+  const [treeGrown, setTreeGrown] = useState(false);
+  const [liveAnnouncement, setLiveAnnouncement] = useState('');
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   const sectionRef = useRef(null);
-  const inviteBtnRef = useRef(null);
-  const cardBtnRefs = useRef([]);
-  const closeBtnRefs = useRef([]);
+  const modalCloseBtnRef = useRef(null);
+  const lastFocusedElementRef = useRef(null);
 
-  // IntersectionObserver para disparar a entrada da seção apenas uma vez
+  // Detecção de prefers-reduced-motion
   useEffect(() => {
-    const sectionEl = sectionRef.current;
-    if (!sectionEl) return;
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
 
-    if (!('IntersectionObserver' in window)) {
+    const listener = (e) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener('change', listener);
+    return () => mq.removeEventListener('change', listener);
+  }, []);
+
+  // IntersectionObserver com fallback automático para garantir que a árvore nunca fique invisível
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
       setInView(true);
+      setTreeGrown(true);
       return;
     }
+
+    // Fallback de segurança: se o observer demorar mais de 500ms, aciona o crescimento
+    const fallbackTimer = setTimeout(() => {
+      setInView(true);
+      setTreeGrown(true);
+    }, 500);
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            clearTimeout(fallbackTimer);
             setInView(true);
+            setTimeout(() => setTreeGrown(true), 120);
             obs.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
 
-    observer.observe(sectionEl);
-    return () => observer.disconnect();
+    observer.observe(el);
+    return () => {
+      clearTimeout(fallbackTimer);
+      observer.disconnect();
+    };
+  }, [prefersReducedMotion]);
+
+  // Travar o scroll da página enquanto o modal/bottom-sheet estiver aberto
+  useEffect(() => {
+    if (selectedLeafId) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [selectedLeafId]);
+
+  // Persistir progresso no localStorage
+  const markLeafVisited = useCallback((leafId) => {
+    setVisitedLeaves((prev) => {
+      if (prev.includes(leafId)) return prev;
+      const updated = [...prev, leafId];
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      } catch {
+        // Ignora erro de cota ou modo privado
+      }
+      return updated;
+    });
   }, []);
 
-  // Transição Estado 1 -> Estado 2 (Distribuir cartas em leque)
-  const handleDealCards = useCallback(() => {
-    setDeckState('fanned');
-    setOpenCardIndex(null);
-    setLiveAnnouncement(arborDict.liveFanned);
-    setTimeout(() => {
-      cardBtnRefs.current[0]?.focus();
-    }, 320);
-  }, [arborDict.liveFanned]);
+  // Selecionar folha
+  const handleSelectLeaf = useCallback(
+    (leafId, isModalNav = false) => {
+      if (!isModalNav) {
+        lastFocusedElementRef.current = document.activeElement;
+      }
+      setSelectedLeafId(leafId);
+      markLeafVisited(leafId);
 
-  // Transição Estado 2 -> Estado 3 (Abrir/virar uma carta específica)
-  const handleSelectCard = useCallback(
-    (index) => {
-      setOpenCardIndex((prevIndex) => {
-        if (prevIndex === index) {
-          setDeckState('fanned');
-          setLiveAnnouncement(`${cards[index].title} ${arborDict.liveClosedSuffix}`);
-          setTimeout(() => {
-            cardBtnRefs.current[index]?.focus();
-          }, 50);
-          return null;
-        }
-        setDeckState('reading');
-        setLiveAnnouncement(`${arborDict.liveOpenedPrefix} ${cards[index].title}.`);
-        setTimeout(() => {
-          closeBtnRefs.current[index]?.focus();
-        }, 150);
-        return index;
-      });
-    },
-    [arborDict.liveClosedSuffix, arborDict.liveOpenedPrefix, cards]
-  );
+      const leaf = allLeaves.find((l) => l.id === leafId);
+      if (leaf) {
+        setLiveAnnouncement(`${leaf.title} - ${leaf.branchName}. ${leaf.text}`);
+      }
 
-  // Fechar a carta ativa e voltar ao Estado 2 (Leque)
-  const handleCloseActiveCard = useCallback(
-    (e) => {
-      if (e) e.stopPropagation();
-      const lastIndex = openCardIndex;
-      setOpenCardIndex(null);
-      setDeckState('fanned');
-      setLiveAnnouncement(arborDict.liveBackToFan);
-      if (lastIndex !== null) {
+      if (!isModalNav) {
         setTimeout(() => {
-          cardBtnRefs.current[lastIndex]?.focus();
-        }, 50);
+          modalCloseBtnRef.current?.focus();
+        }, 80);
       }
     },
-    [openCardIndex, arborDict.liveBackToFan]
+    [allLeaves, markLeafVisited]
   );
 
-  // Botão Reembaralhar -> Volta tudo ao Estado 1 (Pilha inicial)
-  const handleReshuffle = useCallback(() => {
-    setOpenCardIndex(null);
-    setDeckState('stacked');
-    setLiveAnnouncement(arborDict.liveReshuffled);
-    setTimeout(() => {
-      inviteBtnRef.current?.focus();
-    }, 250);
-  }, [arborDict.liveReshuffled]);
+  // Fechar detalhes da folha
+  const handleCloseLeafModal = useCallback(() => {
+    setSelectedLeafId(null);
+    if (lastFocusedElementRef.current && typeof lastFocusedElementRef.current.focus === 'function') {
+      lastFocusedElementRef.current.focus();
+    }
+  }, []);
 
-  // Fechar carta com tecla ESC
+  // Navegar entre folhas dentro do popover/modal
+  const handlePrevLeaf = useCallback(() => {
+    if (!selectedLeafId) return;
+    const currentIndex = allLeaves.findIndex((l) => l.id === selectedLeafId);
+    const prevIndex = (currentIndex - 1 + allLeaves.length) % allLeaves.length;
+    handleSelectLeaf(allLeaves[prevIndex].id, true);
+  }, [allLeaves, selectedLeafId, handleSelectLeaf]);
+
+  const handleNextLeaf = useCallback(() => {
+    if (!selectedLeafId) return;
+    const currentIndex = allLeaves.findIndex((l) => l.id === selectedLeafId);
+    const nextIndex = (currentIndex + 1) % allLeaves.length;
+    handleSelectLeaf(allLeaves[nextIndex].id, true);
+  }, [allLeaves, selectedLeafId, handleSelectLeaf]);
+
+  // Resetar progresso
+  const handleResetProgress = useCallback(() => {
+    setVisitedLeaves([]);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Ignora erro
+    }
+    setSelectedLeafId(null);
+    setLiveAnnouncement(`${content.progressExplored} 0 ${content.progressOf} ${totalLeaves}`);
+  }, [content, totalLeaves]);
+
+  // Teclado: Fechar modal ao pressionar ESC
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && deckState === 'reading') {
-        handleCloseActiveCard();
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape' && selectedLeafId) {
+        handleCloseLeafModal();
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [deckState, handleCloseActiveCard]);
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [selectedLeafId, handleCloseLeafModal]);
 
-  // Logo oficial do projeto no topo da carta-convite e no verso das 3 cartas
-  const renderCircuitTreeEmblem = () => (
-    <img
-      src="assets/logo.png"
-      alt={dict.nav.logoAlt}
-      data-i18n-alt="nav.logoAlt"
-      className="arb-emblem-logo"
-      decoding="async"
-      loading="lazy"
-    />
-  );
+  // Folha atualmente aberta
+  const selectedLeaf = useMemo(() => {
+    return allLeaves.find((l) => l.id === selectedLeafId) || null;
+  }, [allLeaves, selectedLeafId]);
 
-  // Mapeamento semântico de ícones das 3 cartas (@phosphor-icons/core Duotone)
-  const renderCardIcon = (type) => {
-    switch (type) {
-      case 'tree':
-        return <Icon name="tree-duotone" size="md" />;
-      case 'warning':
-        return <Icon name="thermometer-hot-duotone" size="md" />;
-      case 'danger':
-        return <Icon name="map-pin-area-duotone" size="md" />;
-      default:
-        return <Icon name="tree-duotone" size="md" />;
-    }
-  };
+  // Métricas de progresso
+  const exploredCount = visitedLeaves.length;
+  const progressPercent = Math.min(100, Math.round((exploredCount / totalLeaves) * 100));
+  const isComplete = exploredCount === totalLeaves;
+
+  // Galhos filtrados para a visão mobile
+  const visibleBranches = useMemo(() => {
+    if (!activeBranchId) return content.branches;
+    return content.branches.filter((b) => b.id === activeBranchId);
+  }, [content.branches, activeBranchId]);
 
   return (
     <section
       ref={sectionRef}
-      className="arb-section"
+      className="arb-section tree-section"
       id="arborizacao"
-      data-deck-state={deckState}
       data-in-view={inView ? 'true' : 'false'}
-      aria-labelledby="arb-section-title"
+      data-tree-grown={treeGrown ? 'true' : 'false'}
+      aria-labelledby="tree-section-title"
     >
-      {/* Região aria-live para leitores de tela anunciarem mudanças de estado */}
-      <div className="arb-sr-only" aria-live="polite" aria-atomic="true">
+      {/* Região aria-live para acessibilidade */}
+      <div className="tree-sr-only" aria-live="polite" aria-atomic="true">
         {liveAnnouncement}
       </div>
 
-      {/* Backdrop invisível para fechar ao clicar fora quando uma carta está aberta (Estado 3) */}
-      {deckState === 'reading' && (
-        <div
-          className="arb-reading-backdrop"
-          onClick={handleCloseActiveCard}
-          aria-hidden="true"
-        />
-      )}
-
-      <div className="container arb-container">
-        <header className="arb-header">
-          <h2 id="arb-section-title" className="arb-title" data-i18n="arborizacao.title">
-            {arborDict.title}
+      <div className="container">
+        {/* Cabeçalho da Seção */}
+        <header className="tree-header text-center">
+          <span className="tree-eyebrow" data-i18n="arborizacao.eyebrow">
+            {content.sectionEyebrow}
+          </span>
+          <h2 id="tree-section-title" className="tree-title" data-i18n="arborizacao.title">
+            {content.sectionTitle}
           </h2>
-          <p className="arb-subtitle" data-i18n="arborizacao.subtitle">
-            {arborDict.subtitle}
+          <p className="tree-subtitle" data-i18n="arborizacao.subtitle">
+            {content.sectionSubtitle}
           </p>
         </header>
 
-        {/* Barra de controle quando o baralho está aberto (Estados 2 e 3) */}
-        <div
-          className={`arb-controls ${deckState !== 'stacked' ? 'is-visible' : ''}`}
-        >
-          <p className="arb-instruction">
-            {deckState === 'fanned'
-              ? arborDict.instructionFanned
-              : arborDict.instructionReading}
-          </p>
-          <button
-            type="button"
-            className="arb-reshuffle-btn ic-interactive"
-            onClick={handleReshuffle}
-            aria-label={arborDict.reshuffleAria}
-            data-i18n-aria-label="arborizacao.reshuffleAria"
+        {/* Barra de Progresso e Controle */}
+        <div className="tree-progress-card">
+          <div className="tree-progress-info">
+            <span className="tree-progress-label">
+              <Icon name="sparkle" size="sm" className="tree-progress-sparkle" />
+              <strong>{content.progressExplored}</strong>{' '}
+              <span className="tree-progress-count">
+                {exploredCount} {content.progressOf} {totalLeaves} {content.progressLeaves}
+              </span>{' '}
+              ({progressPercent}%)
+            </span>
+
+            <button
+              type="button"
+              className="tree-reset-btn ic-interactive"
+              onClick={handleResetProgress}
+              aria-label={content.restartAria}
+              title={content.restartAria}
+            >
+              <Icon name="arrows-clockwise" size="sm" />
+              <span>{content.restartBtn}</span>
+            </button>
+          </div>
+
+          <div
+            className="tree-progress-track"
+            role="progressbar"
+            aria-valuenow={progressPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={content.progressTitle}
           >
-            <Icon name="shuffle-duotone" size="sm" />
-            <span data-i18n="arborizacao.reshuffleBtn">{arborDict.reshuffleBtn}</span>
-          </button>
+            <div className="tree-progress-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
+
+          {isComplete && (
+            <div className="tree-complete-banner" role="status">
+              <Icon name="check-circle" size="md" className="tree-complete-icon" />
+              <span>{content.progressCompleteMsg}</span>
+            </div>
+          )}
         </div>
 
-        {/* Palco do Baralho */}
-        <div className="arb-stage">
-          {/* CARTA-CONVITE (Topo da pilha no Estado 1) */}
+        {/* Filtro / Navegador Rápido de Galhos (Acessível em Desktop e Mobile) */}
+        <div className="tree-branch-filter" role="tablist" aria-label="Filtrar galhos da árvore">
           <button
-            ref={inviteBtnRef}
             type="button"
-            className={`arb-invite-card ${deckState !== 'stacked' ? 'is-dismissed' : ''}`}
-            onClick={handleDealCards}
-            aria-expanded={deckState !== 'stacked'}
-            aria-controls="arb-cards-deck"
-            tabIndex={deckState === 'stacked' ? 0 : -1}
+            className={`tree-filter-pill ${activeBranchId === null ? 'active' : ''}`}
+            onClick={() => setActiveBranchId(null)}
           >
-            <span className="arb-card-corner arb-corner-tl" aria-hidden="true">
-              <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
-            </span>
-            <span className="arb-card-corner arb-corner-tr" aria-hidden="true">
-              <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
-            </span>
-            <div className="arb-invite-emblem">{renderCircuitTreeEmblem()}</div>
-            <span className="arb-invite-badge" data-i18n="arborizacao.inviteBadge">
-              {arborDict.inviteBadge}
-            </span>
-            <strong className="arb-invite-text" data-i18n="arborizacao.inviteText">
-              {arborDict.inviteText}
-            </strong>
-            <span className="arb-invite-cta ic-interactive">
-              <span data-i18n="arborizacao.inviteCta">{arborDict.inviteCta}</span>
-              <Icon name="arrow-right-duotone" size="sm" />
-            </span>
-            <span className="arb-card-corner arb-corner-bl" aria-hidden="true">
-              <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
-            </span>
-            <span className="arb-card-corner arb-corner-br" aria-hidden="true">
-              <Icon name="sparkle-duotone" size="sm" className="ic-corner-sparkle" />
-            </span>
+            {content.branchSelectorAll}
           </button>
+          {content.branches.map((b, idx) => {
+            const isActive = activeBranchId === b.id;
+            const branchLeaves = allLeaves.filter((l) => l.branchId === b.id);
+            const branchVisitedCount = branchLeaves.filter((l) => visitedLeaves.includes(l.id)).length;
+            return (
+              <button
+                key={b.id}
+                type="button"
+                className={`tree-filter-pill ${isActive ? 'active' : ''}`}
+                onClick={() => setActiveBranchId(isActive ? null : b.id)}
+              >
+                <span className="tree-filter-num">0{idx + 1}</span>
+                <span>{b.name}</span>
+                <span className="tree-filter-badge">
+                  {branchVisitedCount}/{branchLeaves.length}
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
-          {/* AS 3 CARTAS DE CONTEÚDO */}
-          <div className="arb-deck" id="arb-cards-deck" role="list">
-            {cards.map((card, index) => {
-              const isOpen = openCardIndex === index;
-              const isOtherOpen = openCardIndex !== null && openCardIndex !== index;
+        {/* =================================================================
+            1. VISUALIZAÇÃO DESKTOP: ÁRVORE ILUSTRADA EM SVG (.tree-desktop-stage)
+            Árvore horizontalmente centralizada com galhos abrindo para os lados
+            ================================================================= */}
+        <div
+          className="tree-desktop-stage"
+          data-active-branch={activeBranchId || 'all'}
+          data-progress-tier={progressPercent > 66 ? 'high' : progressPercent > 33 ? 'mid' : 'low'}
+        >
+          <svg
+            className="tree-svg"
+            viewBox="0 0 960 700"
+            role="img"
+            aria-label={`${content.sectionTitle} - SVG ilustrado interativo`}
+          >
+            <defs>
+              {/* Gradiente do Tronco */}
+              <linearGradient id="tree-trunk-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#02183f" />
+                <stop offset="50%" stopColor="#061e73" />
+                <stop offset="100%" stopColor="#105ca2" />
+              </linearGradient>
+
+              {/* Gradiente dos Galhos Primários */}
+              <linearGradient id="tree-branch-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#061e73" />
+                <stop offset="60%" stopColor="#105ca2" />
+                <stop offset="100%" stopColor="#12b674" />
+              </linearGradient>
+
+              {/* Gradiente das Folhas Ativas/Visitadas */}
+              <linearGradient id="tree-leaf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#12b674" />
+                <stop offset="100%" stopColor="#0b5c3b" />
+              </linearGradient>
+
+              {/* Sombra suave sem neon */}
+              <filter id="tree-soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="3" stdDeviation="3.5" floodColor="#02183f" floodOpacity="0.14" />
+              </filter>
+            </defs>
+
+            {/* Aura de Folhagem Suave no Fundo (Copa Arbórea) */}
+            <g className="tree-canopy-backdrop" aria-hidden="true" style={{ pointerEvents: 'none' }}>
+              <ellipse cx="480" cy="310" rx="360" ry="240" fill="rgba(18, 182, 116, 0.08)" />
+              <circle cx="320" cy="280" r="140" fill="rgba(16, 92, 162, 0.05)" />
+              <circle cx="640" cy="280" r="140" fill="rgba(16, 92, 162, 0.05)" />
+              <circle cx="480" cy="180" r="160" fill="rgba(18, 182, 116, 0.07)" />
+            </g>
+
+            {/* LINHA DO SOLO E RAÍZES */}
+            <g className="tree-ground-group" aria-hidden="true" style={{ pointerEvents: 'none' }}>
+              <line x1="260" y1="660" x2="700" y2="660" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="6 6" />
+              <path
+                className="tree-draw-path tree-delay-root"
+                d={geometry.trunk.rootsPath}
+                fill="none"
+                stroke="#02183f"
+                strokeWidth="4"
+                strokeLinecap="round"
+                pathLength="100"
+              />
+            </g>
+
+            {/* TRONCO CENTRAL */}
+            <g className="tree-trunk-group" aria-hidden="true" style={{ pointerEvents: 'none' }}>
+              <path
+                className="tree-draw-path tree-trunk-main"
+                d={geometry.trunk.path}
+                fill="none"
+                stroke="url(#tree-trunk-grad)"
+                strokeWidth="20"
+                strokeLinecap="round"
+                pathLength="100"
+              />
+              <path
+                className="tree-draw-path tree-trunk-inner"
+                d={geometry.trunk.path}
+                fill="none"
+                stroke="#12b674"
+                strokeWidth="4"
+                strokeLinecap="round"
+                opacity="0.75"
+                pathLength="100"
+              />
+
+              {/* Emblema Temático do Tronco */}
+              <g className="tree-trunk-badge" transform="translate(480, 530)">
+                <rect
+                  x="-110"
+                  y="-22"
+                  width="220"
+                  height="44"
+                  rx="22"
+                  fill="#ffffff"
+                  stroke="#105ca2"
+                  strokeWidth="2"
+                  filter="url(#tree-soft-shadow)"
+                />
+                <text x="0" y="-3" textAnchor="middle" fill="#02183f" fontSize="12" fontWeight="800" letterSpacing="0.06em">
+                  {content.trunkTitle.toUpperCase()}
+                </text>
+                <text x="0" y="13" textAnchor="middle" fill="#12b674" fontSize="9.5" fontWeight="700">
+                  {content.trunkSubtitle}
+                </text>
+              </g>
+            </g>
+
+            {/* OS 5 GALHOS COM SUAS SUB-RAMIFICAÇÕES E RÓTULOS */}
+            {geometry.branches.map((b, idx) => {
+              const branchData = content.branches.find((item) => item.id === b.id);
+              const isBranchActive = activeBranchId === b.id;
+              const isOtherActive = activeBranchId !== null && !isBranchActive;
 
               return (
-                <div
-                  key={card.id}
-                  role="listitem"
-                  className={`arb-card-slot arb-slot-${index + 1} ${isOpen ? 'is-open' : ''} ${isOtherOpen ? 'is-dimmed' : ''}`}
-                  data-card-index={index}
-                  data-card-open={isOpen ? 'true' : 'false'}
+                <g
+                  key={b.id}
+                  className={`tree-branch-group ${isBranchActive ? 'is-active' : ''} ${isOtherActive ? 'is-dimmed' : ''}`}
                 >
-                  <div className="arb-card-flipper">
-                    {/* VERSO / CAPA DA CARTA */}
-                    <button
-                      ref={(el) => (cardBtnRefs.current[index] = el)}
-                      type="button"
-                      className="arb-card-face arb-card-back"
-                      onClick={() =>
-                        deckState === 'stacked'
-                          ? handleDealCards()
-                          : handleSelectCard(index)
+                  {/* Ramo Principal Visível */}
+                  <path
+                    className={`tree-draw-path tree-branch-path tree-delay-${idx + 1}`}
+                    d={b.branchPath}
+                    fill="none"
+                    stroke={isBranchActive ? '#12b674' : 'url(#tree-branch-grad)'}
+                    strokeWidth={isBranchActive ? '7' : '5'}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    pathLength="100"
+                  />
+                  {/* Sub-ramificações Visíveis */}
+                  <path
+                    className={`tree-draw-path tree-branch-sub tree-delay-${idx + 1}`}
+                    d={b.subBranch1}
+                    fill="none"
+                    stroke={isBranchActive ? '#12b674' : '#105ca2'}
+                    strokeWidth={isBranchActive ? '4.2' : '3.2'}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    pathLength="100"
+                  />
+                  <path
+                    className={`tree-draw-path tree-branch-sub tree-delay-${idx + 1}`}
+                    d={b.subBranch2}
+                    fill="none"
+                    stroke={isBranchActive ? '#12b674' : '#105ca2'}
+                    strokeWidth={isBranchActive ? '4.2' : '3.2'}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    pathLength="100"
+                  />
+
+                  {/* Caminho Invisível Amplo para Clique Fácil (strokeWidth: 28, pointerEvents: stroke) */}
+                  <path
+                    className="tree-branch-hitarea"
+                    d={`${b.branchPath} ${b.subBranch1} ${b.subBranch2}`}
+                    fill="none"
+                    stroke="transparent"
+                    strokeWidth="28"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ cursor: 'pointer', pointerEvents: 'stroke' }}
+                    onClick={() => setActiveBranchId((prev) => (prev === b.id ? null : b.id))}
+                    aria-label={`Galho ${idx + 1}: ${branchData?.name}`}
+                  />
+
+                  {/* Rótulo / Botão Interativo do Galho no SVG */}
+                  <g
+                    className="tree-branch-tag"
+                    transform={`translate(${b.badgeX}, ${b.badgeY})`}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Galho ${idx + 1}: ${branchData?.name}`}
+                    style={{ cursor: 'pointer', pointerEvents: 'all' }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveBranchId((prev) => (prev === b.id ? null : b.id));
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveBranchId((prev) => (prev === b.id ? null : b.id));
                       }
-                      aria-expanded={isOpen}
-                      aria-controls={`arb-card-content-${card.id}`}
-                      tabIndex={deckState === 'stacked' ? -1 : 0}
+                    }}
+                  >
+                    <rect
+                      x="-70"
+                      y="-14"
+                      width="140"
+                      height="28"
+                      rx="14"
+                      fill={isBranchActive ? '#02183f' : '#ffffff'}
+                      stroke={isBranchActive ? '#12b674' : '#105ca2'}
+                      strokeWidth={isBranchActive ? '2.2' : '1.6'}
+                      filter="url(#tree-soft-shadow)"
+                    />
+                    <text
+                      x="0"
+                      y="4"
+                      textAnchor="middle"
+                      fill={isBranchActive ? '#ffffff' : '#02183f'}
+                      fontSize="10.5"
+                      fontWeight="700"
+                      style={{ userSelect: 'none', pointerEvents: 'none' }}
                     >
-                      <div className="arb-card-back-frame">
-                        <div className="arb-card-back-top">
-                          <span className="arb-card-number">0{index + 1} / 03</span>
-                          <span className="arb-card-suit icone-badge ic-badge-card" aria-hidden="true">
-                            {renderCardIcon(card.iconType)}
-                          </span>
-                        </div>
-
-                        <div className="arb-card-back-center">
-                          {renderCircuitTreeEmblem()}
-                          <h3 className="arb-card-back-title">{card.title}</h3>
-                        </div>
-
-                        <div className="arb-card-back-bottom">
-                          <span className="arb-card-flip-prompt">
-                            <span data-i18n="arborizacao.flipPrompt">{arborDict.flipPrompt}</span>
-                            <Icon name="arrows-clockwise-duotone" size="sm" className="ic-inline" />
-                          </span>
-                        </div>
-                      </div>
-                    </button>
-
-                    {/* FRENTE DE LEITURA DA CARTA */}
-                    <article
-                      id={`arb-card-content-${card.id}`}
-                      className="arb-card-face arb-card-front"
-                    >
-                      <div className="arb-card-front-header">
-                        <div className="arb-card-front-meta">
-                          <span
-                            className={`arb-card-icon icone-badge ic-badge-card ${isOpen ? 'is-active' : ''}`}
-                            aria-hidden="true"
-                          >
-                            {renderCardIcon(card.iconType)}
-                          </span>
-                          <span className="arb-card-step">
-                            {arborDict.cardStepPrefix} 0{index + 1}
-                          </span>
-                        </div>
-                        <button
-                          ref={(el) => (closeBtnRefs.current[index] = el)}
-                          type="button"
-                          className="arb-card-close ic-btn"
-                          onClick={handleCloseActiveCard}
-                          aria-label={`${arborDict.closeCardAriaPrefix} ${card.title}`}
-                          tabIndex={isOpen ? 0 : -1}
-                        >
-                          <Icon name="x-duotone" size="md" />
-                        </button>
-                      </div>
-
-                      <div className="arb-card-front-body">
-                        <h3 className="arb-card-front-title">{card.title}</h3>
-
-                        {card.isHighlight && card.statNum && (
-                          <div className="arb-stat-highlight">
-                            <span className="arb-stat-num">{card.statNum}</span>
-                            <span className="arb-stat-label">
-                              {card.statLabel}{' '}
-                              {card.statSourceUrl && (
-                                <a
-                                  href={card.statSourceUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="arb-stat-source"
-                                  tabIndex={isOpen ? 0 : -1}
-                                >
-                                  <span>({card.statSourceLabel}</span>
-                                  <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
-                                  <span>)</span>
-                                </a>
-                              )}
-                            </span>
-                          </div>
-                        )}
-
-                        {card.desc && <p className="arb-card-desc">{card.desc}</p>}
-
-                        {card.bullets && (
-                          <ul className="arb-card-list">
-                            {card.bullets.map((b, idx) => (
-                              <li key={idx}>
-                                <strong>{b.label}:</strong> {b.text}{' '}
-                                {b.sourceUrl && (
-                                  <a
-                                    href={b.sourceUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="arb-source-badge"
-                                    tabIndex={isOpen ? 0 : -1}
-                                  >
-                                    <span>
-                                      [{arborDict.sourcePrefix}: {b.sourceLabel}
-                                    </span>
-                                    <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
-                                    <span>]</span>
-                                  </a>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-
-                        {card.paragraphs &&
-                          card.paragraphs.map((p, idx) => (
-                            <p key={idx} className="arb-card-desc">
-                              {p}
-                            </p>
-                          ))}
-
-                        {card.officialSource && (
-                          <div className="arb-official-source">
-                            <span className="arb-official-label">
-                              {arborDict.officialSourceLabel}
-                            </span>
-                            <a
-                              href={card.officialSource.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="arb-official-link"
-                              tabIndex={isOpen ? 0 : -1}
-                            >
-                              <strong>{card.officialSource.name}</strong>
-                              <span className="ic-inline-group">
-                                <span>{card.officialSource.doc}</span>
-                                <Icon name="arrow-square-out-duotone" size="sm" className="ic-inline-ext" />
-                              </span>
-                            </a>
-                          </div>
-                        )}
-                      </div>
-                    </article>
-                  </div>
-                </div>
+                      {branchData?.name}
+                    </text>
+                  </g>
+                </g>
               );
             })}
-          </div>
+
+            {/* AS 17 FOLHAS / NÓS INTERATIVOS NO DESKTOP */}
+            {allLeaves.map((leaf) => {
+              const isVisited = visitedLeaves.includes(leaf.id);
+              const isSelected = selectedLeafId === leaf.id;
+              const isBranchActive = activeBranchId === leaf.branchId;
+              const isOtherBranch = activeBranchId !== null && !isBranchActive;
+
+              return (
+                <g
+                  key={leaf.id}
+                  className={`tree-leaf-node ${isVisited ? 'is-visited' : 'is-unvisited'} ${isSelected ? 'is-selected' : ''} ${isBranchActive ? 'is-branch-active' : ''} ${isOtherBranch ? 'is-dimmed' : ''}`}
+                  transform={`translate(${leaf.cx}, ${leaf.cy})`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${leaf.title} (${leaf.branchName}) - ${isVisited ? content.leafExploredBadge : content.leafNewBadge}`}
+                  style={{ cursor: 'pointer', pointerEvents: 'all' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelectLeaf(leaf.id);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleSelectLeaf(leaf.id);
+                    }
+                  }}
+                >
+                  {/* Área de toque acessível ampla (56px) para clique perfeito */}
+                  <circle cx="0" cy="0" r="28" fill="#ffffff" opacity="0.001" style={{ pointerEvents: 'all' }} />
+
+                  {/* Conteúdo escalável da folha isolado para evitar conflito com transform do SVG */}
+                  <g className="tree-leaf-inner">
+                    {/* Halo de foco/seleção */}
+                    {isSelected && (
+                      <circle cx="0" cy="0" r="24" fill="none" stroke="#12b674" strokeWidth="2.5" strokeDasharray="4 3" />
+                    )}
+
+                    {/* Forma da Folha com Sombreamento Suave */}
+                    <path
+                      className="tree-leaf-shape"
+                      d="M 0 -17 C 12 -12 17 0 0 17 C -17 0 -12 -12 0 -17 Z"
+                      fill={isVisited ? 'url(#tree-leaf-grad)' : '#ffffff'}
+                      stroke={isVisited ? '#0b5c3b' : isBranchActive ? '#12b674' : '#105ca2'}
+                      strokeWidth={isSelected ? '2.5' : isBranchActive ? '2.2' : '1.8'}
+                      filter="url(#tree-soft-shadow)"
+                    />
+
+                    {/* Nervura da Folha ou Ícone de Visitada */}
+                    {isVisited ? (
+                      <path d="M 0 -10 L 0 10 M -4 -3 L 0 0 M 4 -3 L 0 0" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
+                    ) : (
+                      <circle cx="0" cy="0" r="3.2" fill={isBranchActive ? '#12b674' : '#105ca2'} />
+                    )}
+
+                    {/* Rótulo da Folha - Legível, com fundo pill anti-colisão */}
+                    <g className="tree-leaf-label-group">
+                      <rect
+                        className="tree-leaf-label-bg"
+                        x={- Math.min(leaf.title.length * 3.8 + 10, 75)}
+                        y="21"
+                        width={Math.min(leaf.title.length * 7.6 + 20, 150)}
+                        height="18"
+                        rx="9"
+                        fill="#ffffff"
+                        stroke={isVisited ? '#12b674' : '#cbd5e1'}
+                        strokeWidth="1"
+                        filter="url(#tree-soft-shadow)"
+                      />
+                      <text
+                        x="0"
+                        y="33.5"
+                        textAnchor="middle"
+                        className="tree-leaf-label"
+                        fill={isVisited ? '#0b5c3b' : '#1e293b'}
+                        fontSize="9"
+                        fontWeight="700"
+                        style={{ userSelect: 'none', pointerEvents: 'none' }}
+                      >
+                        {leaf.title.length > 20 ? leaf.title.slice(0, 18) + '…' : leaf.title}
+                      </text>
+                    </g>
+                  </g>
+                </g>
+              );
+            })}
+          </svg>
+
+          {/* Dica de interação Desktop */}
+          <p className="tree-hint-text">
+            <Icon name="magnifying-glass" size="sm" className="tree-hint-icon" />
+            <span>{content.hintText}</span>
+          </p>
         </div>
+
+        {/* =================================================================
+            2. VISUALIZAÇÃO MOBILE: LAYOUT VERTICAL DA ÁRVORE (.tree-mobile-flow)
+            Layout vertical otimizado para toque (mínimo 44px), sem scroll horizontal
+            ================================================================= */}
+        <div className="tree-mobile-flow">
+          <div className="tree-mobile-stem" aria-hidden="true" />
+
+          {visibleBranches.map((branch, bIdx) => {
+            const branchLeaves = allLeaves.filter((l) => l.branchId === branch.id);
+            const branchVisitedCount = branchLeaves.filter((l) => visitedLeaves.includes(l.id)).length;
+            const isBranchDone = branchVisitedCount === branchLeaves.length;
+
+            return (
+              <div key={branch.id} className="tree-mobile-branch-card">
+                <div className="tree-mobile-branch-header">
+                  <div className="tree-mobile-branch-tag">
+                    <span className="tree-mobile-branch-num">0{bIdx + 1}</span>
+                    <h3 className="tree-mobile-branch-title">{branch.name}</h3>
+                  </div>
+                  <span className={`tree-mobile-branch-badge ${isBranchDone ? 'is-complete' : ''}`}>
+                    {branchVisitedCount} / {branchLeaves.length}
+                  </span>
+                </div>
+                <p className="tree-mobile-branch-desc">{branch.shortDesc}</p>
+
+                <div className="tree-mobile-leaves-grid" role="list">
+                  {branchLeaves.map((leaf) => {
+                    const isVisited = visitedLeaves.includes(leaf.id);
+                    const isSelected = selectedLeafId === leaf.id;
+
+                    return (
+                      <button
+                        key={leaf.id}
+                        type="button"
+                        role="listitem"
+                        className={`tree-mobile-leaf-btn ic-interactive ${isVisited ? 'is-visited' : ''} ${isSelected ? 'is-selected' : ''}`}
+                        onClick={() => handleSelectLeaf(leaf.id)}
+                        aria-label={`${leaf.title} (${branch.name}) - ${isVisited ? content.leafExploredBadge : content.leafNewBadge}`}
+                      >
+                        <span className="tree-mobile-leaf-icon" aria-hidden="true">
+                          {isVisited ? (
+                            <Icon name="check-circle" size="sm" />
+                          ) : (
+                            <span className="tree-mobile-leaf-dot" />
+                          )}
+                        </span>
+
+                        <span className="tree-mobile-leaf-title">{leaf.title}</span>
+
+                        <span className="tree-mobile-leaf-status">
+                          {isVisited ? content.leafExploredBadge : content.leafNewBadge}
+                        </span>
+
+                        <Icon name="arrow-right" size="sm" className="tree-mobile-leaf-arrow" />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* =================================================================
+            POPOVER ANCORADO (DESKTOP) / BOTTOM SHEET (MOBILE)
+            ================================================================= */}
+        {selectedLeaf && (
+          <>
+            <div className="tree-modal-backdrop" onClick={handleCloseLeafModal} aria-hidden="true" />
+
+            <div
+              className="tree-leaf-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="tree-modal-title"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="tree-modal-header">
+                <div className="tree-modal-badges">
+                  <span className="tree-badge-branch">{selectedLeaf.branchName}</span>
+                  <span className={`tree-badge-status ${visitedLeaves.includes(selectedLeaf.id) ? 'is-visited' : ''}`}>
+                    {visitedLeaves.includes(selectedLeaf.id) ? (
+                      <>
+                        <Icon name="check-circle" size="sm" />
+                        <span>{content.leafExploredBadge}</span>
+                      </>
+                    ) : (
+                      <span>{content.leafNewBadge}</span>
+                    )}
+                  </span>
+                  {selectedLeaf.isTodo && <span className="tree-badge-todo">{content.todoTag}</span>}
+                </div>
+
+                <button
+                  ref={modalCloseBtnRef}
+                  type="button"
+                  className="tree-modal-close-btn ic-btn ic-interactive"
+                  onClick={handleCloseLeafModal}
+                  aria-label={content.closeModalAria}
+                >
+                  <Icon name="x" size="md" />
+                </button>
+              </div>
+
+              <div className="tree-modal-body">
+                <h3 id="tree-modal-title" className="tree-modal-title">
+                  {selectedLeaf.title}
+                </h3>
+                <p className="tree-modal-desc">{selectedLeaf.text}</p>
+
+                {selectedLeaf.curiosity && (
+                  <div className="tree-curiosity-box">
+                    <div className="tree-curiosity-header">
+                      <Icon name="sparkle" size="sm" className="tree-curiosity-icon" />
+                      <strong>{content.curiosityBadge}</strong>
+                    </div>
+                    <p className="tree-curiosity-text">{selectedLeaf.curiosity}</p>
+                    {selectedLeaf.sourceLabel && (
+                      <p className="tree-source-line">
+                        <span className="tree-source-lbl">{content.sourceLabel}</span>{' '}
+                        {selectedLeaf.sourceUrl ? (
+                          <a
+                            href={selectedLeaf.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="tree-source-link"
+                          >
+                            <span>{selectedLeaf.sourceLabel}</span>
+                            <Icon name="arrow-square-out" size="sm" className="ic-inline-ext" />
+                          </a>
+                        ) : (
+                          <span className="tree-source-name">{selectedLeaf.sourceLabel}</span>
+                        )}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div className="tree-modal-footer">
+                <div className="tree-modal-nav">
+                  <button type="button" className="tree-nav-btn ic-interactive" onClick={handlePrevLeaf}>
+                    <Icon name="arrow-left" size="sm" />
+                    <span>{content.prevLeafBtn}</span>
+                  </button>
+
+                  <span className="tree-step-indicator">
+                    {allLeaves.findIndex((l) => l.id === selectedLeaf.id) + 1} / {totalLeaves}
+                  </span>
+
+                  <button type="button" className="tree-nav-btn ic-interactive" onClick={handleNextLeaf}>
+                    <span>{content.nextLeafBtn}</span>
+                    <Icon name="arrow-right" size="sm" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

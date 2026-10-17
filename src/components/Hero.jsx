@@ -180,7 +180,7 @@ export default function Hero() {
                 src={slide.src}
                 alt={t(slide.altKey)}
                 loading={idx === 0 ? 'eager' : 'lazy'}
-                fetchPriority={idx === 0 ? 'high' : 'auto'}
+                fetchpriority={idx === 0 ? 'high' : 'auto'}
                 decoding="async"
                 onError={(e) => {
                   if (slide.fallbackSrc && !e.currentTarget.dataset.fallbackApplied) {
@@ -213,22 +213,6 @@ export default function Hero() {
           </div>
 
           <div className="hero-metrics-strip">
-            <div className="hero-metric-item">
-              <span className="metric-val" data-i18n="hero.metrics.iotVal">
-                {dict.hero.metrics.iotVal}
-              </span>
-              <span className="metric-lbl" data-i18n="hero.metrics.iotLbl">
-                {dict.hero.metrics.iotLbl}
-              </span>
-            </div>
-            <div className="hero-metric-item">
-              <span className="metric-val" data-i18n="hero.metrics.aiVal">
-                {dict.hero.metrics.aiVal}
-              </span>
-              <span className="metric-lbl" data-i18n="hero.metrics.aiLbl">
-                {dict.hero.metrics.aiLbl}
-              </span>
-            </div>
             <div className="hero-metric-item">
               <span className="metric-val" data-i18n="hero.metrics.odsVal">
                 {dict.hero.metrics.odsVal}
